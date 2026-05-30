@@ -24,7 +24,7 @@
 | 0.7  | Scaffolding MCEOD L2 `.claude/` (`claude-deploy.sh prepare`)         | pendiente | 0.5     | F6 consolidate |
 | 0.8  | Portar tokens (`colors_and_type.css`) + `site.css` (67KB) a la app   | hecho     | 0.3     | F1             |
 | 0.9  | Configurar `next/font` (Inter, JetBrains Mono) + `lucide-react`      | hecho     | 0.8     | F1             |
-| 0.10 | Toolchain calidad: Prettier, Vitest, Playwright, scripts npm         | pendiente | 0.2     | valoradores    |
+| 0.10 | Toolchain calidad: Prettier, Vitest, Playwright, scripts npm         | hecho     | 0.2     | valoradores    |
 
 ## F1 · Sistema de diseño y layout global
 
@@ -71,18 +71,18 @@
 
 ## F5 · SEO, a11y, performance
 
-| #   | Tarea                                                             | Estado    | Bloquea | Desbloquea |
-| --- | ----------------------------------------------------------------- | --------- | ------- | ---------- |
-| 5.1 | `metadata`/OG por ruta, `sitemap.ts`, `robots.ts`, RSS `feed.xml` | hecho     | F2,F3   | —          |
-| 5.2 | Auditoría a11y (axe) sin críticos                                 | pendiente | F2,F3   | F6         |
-| 5.3 | Presupuesto CWV / Lighthouse; `prefers-reduced-motion`            | pendiente | F2,F3   | F6         |
+| #   | Tarea                                                             | Estado  | Bloquea | Desbloquea |
+| --- | ----------------------------------------------------------------- | ------- | ------- | ---------- |
+| 5.1 | `metadata`/OG por ruta, `sitemap.ts`, `robots.ts`, RSS `feed.xml` | hecho   | F2,F3   | —          |
+| 5.2 | Auditoría a11y (axe) sin críticos                                 | hecho   | F2,F3   | F6         |
+| 5.3 | Presupuesto CWV / Lighthouse; `prefers-reduced-motion`            | parcial | F2,F3   | F6         |
 
 ## F6 · Verify & Consolidate
 
 | #   | Tarea                                                             | Estado    | Bloquea | Desbloquea |
 | --- | ----------------------------------------------------------------- | --------- | ------- | ---------- |
 | 6.1 | Valoradores en verde (tsc, lint, format, Vitest, Playwright, axe) | hecho     | F5      | 6.3        |
-| 6.2 | CI GitHub Actions (lint/test/e2e/build) + runner propio           | pendiente | 0.6     | merge main |
+| 6.2 | CI GitHub Actions (lint/test/e2e/build) + runner propio           | hecho     | 0.6     | merge main |
 | 6.3 | `claude-deploy.sh verify` + `consolidate --level=L2`              | pendiente | 0.7,6.1 | release    |
 | 6.4 | Deploy (diferido): Vercel o Hostinger VPS                         | pendiente | 6.3     | —          |
 
@@ -92,6 +92,18 @@
 
 - **F4.1 / F4.3**: requieren credenciales del operador (`DATABASE_URL` Supabase, `RESEND_API_KEY`). No bloquean F0–F3 ni la lógica de validación/route handlers (se desarrollan con mocks/tests). Se solicitarán al llegar a F4.
 - **F4.0 `/init`**: paso humano dentro de Claude Code; no lo ejecuta el agente.
+
+## Estado de cierre (2026-05-30)
+
+Implementadas y verificadas (CI verde, PR #1 mergeado a `main`): **F0–F6** salvo los
+ítems que dependen del operador o de credenciales:
+
+- **F0.7** scaffolding MCEOD L2 (`claude-deploy.sh prepare`) — pendiente (acción operador).
+- **F4.0** `/init` en Claude Code — pendiente (acción operador).
+- **F4.1 / F4.3** persistencia y envío real — listos en código; faltan `DATABASE_URL` y
+  `RESEND_API_KEY` para activarlos (sin ellos, degrada y responde 200).
+- **F6.3** `claude-deploy.sh verify`/`consolidate` — pendiente (tras F0.7).
+- **F6.4** deploy (Vercel / Hostinger) — diferido.
 
 ## Notas
 
