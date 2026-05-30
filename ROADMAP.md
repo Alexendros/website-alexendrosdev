@@ -41,19 +41,19 @@
 | # | Tarea | Estado | Bloquea | Desbloquea |
 |---|---|---|---|---|
 | 2.1 | `/` Home (hero, terminal, marquee, zigzag, servicios, blog, testimonios, CTA) | hecho | F1 | — |
-| 2.2 | `/sobre-mi` (timeline, principios, stack diario) | pendiente | F1 | — |
-| 2.3 | `/servicios` (tiers, toggle, comparativa, FAQ) | pendiente | F1 | — |
+| 2.2 | `/sobre-mi` (timeline, principios, stack diario) | hecho | F1 | — |
+| 2.3 | `/servicios` (tiers, toggle, comparativa, FAQ) | hecho | F1 | — |
 
 ## F3 · Contenido dinámico
 
 | # | Tarea | Estado | Bloquea | Desbloquea |
 |---|---|---|---|---|
-| 3.1 | `/proyectos` (filtros, búsqueda, orden, masonry) | pendiente | F1,1.5 | 3.2 |
-| 3.2 | `/proyectos/[slug]` caso de estudio (SSG) | pendiente | 3.1 | — |
-| 3.3 | Pipeline MDX (`content/blog/*.mdx`, TOC, código, callouts) | pendiente | 0.8 | 3.4,3.5 |
-| 3.4 | `/blog` (destacado, grid, tags, paginación) | pendiente | 3.3 | — |
-| 3.5 | `/blog/[slug]` post MDX (SSG) | pendiente | 3.3 | — |
-| 3.6 | `/stack` grafo radial interactivo (pan/zoom/hover/click) | pendiente | F1,1.5 | — |
+| 3.1 | `/proyectos` (filtros, búsqueda, orden, masonry) | hecho | F1,1.5 | 3.2 |
+| 3.2 | `/proyectos/[slug]` caso de estudio (SSG) | hecho | 3.1 | — |
+| 3.3 | Pipeline MDX (`content/blog/*.mdx`, TOC, código, callouts) | hecho | 0.8 | 3.4,3.5 |
+| 3.4 | `/blog` (destacado, grid, tags, paginación) | hecho | 3.3 | — |
+| 3.5 | `/blog/[slug]` post MDX (SSG) | hecho | 3.3 | — |
+| 3.6 | `/stack` grafo radial interactivo (pan/zoom/hover/click) | hecho | F1,1.5 | — |
 
 ## F4 · Backend (Init)
 
