@@ -1,0 +1,21 @@
+@import "tailwindcss";
+@import "../styles/design-tokens.css";
+@import "../styles/site.css";
+
+/* Puente de tokens Arctic Ocean → utilidades Tailwind v4.
+   Permite usar p. ej. `font-sans`, `text-primary`, `bg-base` desde código nuevo
+   sin perder el sistema de tokens HSL del diseño portado. */
+@theme inline {
+  --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), "JetBrains Mono", ui-monospace, monospace;
+
+  --color-primary: hsl(var(--primary-400));
+  --color-bg-base: hsl(var(--bg-base));
+  --color-bg-elevated: hsl(var(--bg-elevated));
+  --color-text-primary: hsl(var(--text-primary));
+  --color-text-secondary: hsl(var(--text-secondary));
+  --color-border: hsl(var(--border));
+  --color-success: hsl(var(--success));
+  --color-warning: hsl(var(--warning));
+  --color-error: hsl(var(--error));
+}
