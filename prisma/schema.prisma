@@ -1,0 +1,28 @@
+// Esquema de datos — Postgres (Supabase). Modelos para leads de contacto y suscriptores.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  type      String?
+  message   String
+  source    String   @default("web")
+  createdAt DateTime @default(now())
+
+  @@index([email])
+}
+
+model Subscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  confirmed Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

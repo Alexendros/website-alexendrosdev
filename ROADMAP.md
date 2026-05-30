@@ -61,9 +61,13 @@
 |---|---|---|---|---|
 | 4.0 | `/init` en Claude Code → `CLAUDE.md` repo (**ACCIÓN OPERADOR**) | pendiente | 0.6 | 4.x consolidate |
 | 4.1 | Prisma + Supabase: `schema.prisma` (`Lead`, `Subscriber`), migración | bloqueado | `DATABASE_URL` (operador) | 4.3 |
-| 4.2 | `POST /api/contact` + `/api/newsletter`: zod, rate-limit, honeypot | pendiente | F2 | 4.4 |
-| 4.3 | Resend + React Email (notif. lead, bienvenida) | bloqueado | `RESEND_API_KEY` (operador) | 4.4 |
-| 4.4 | Conectar formularios reales (contacto multi-step, newsletter) | pendiente | 4.2,4.3 | — |
+| 4.2 | `POST /api/contact` + `/api/newsletter`: zod, rate-limit, honeypot | hecho | F2 | 4.4 |
+| 4.3 | Resend + React Email (notif. lead, bienvenida) | parcial | `RESEND_API_KEY` (operador) | 4.4 |
+| 4.4 | Conectar formularios reales (contacto multi-step, newsletter) | hecho | 4.2 | — |
+
+> 4.3 parcial: plantillas React Email y envío vía Resend implementados; el envío real
+> se activa al definir `RESEND_API_KEY`. Sin clave, degrada (log) y la API responde 200.
+> 4.1 bloqueado: cliente Prisma + adapter listos; falta `DATABASE_URL` para migrar/persistir.
 
 ## F5 · SEO, a11y, performance
 
