@@ -1,0 +1,6 @@
+{
+  "_comment": "Copia como settings.local.json. NO versionar. Añadir permisos o env locales.",
+  "permissions": {
+    "allow": []
+  }
+}

@@ -21,7 +21,7 @@
 | 0.4  | `ROADMAP.md` + `ARCHITECTURE.md` (esqueleto)                         | hecho     | —       | seguimiento    |
 | 0.5  | `git init` (main) + `.gitignore` + commit baseline                   | hecho     | 0.4     | 0.6            |
 | 0.6  | Crear repo privado GitHub + push (`Alexendros/portfolio-alexendros`) | hecho     | 0.5     | CI/PR          |
-| 0.7  | Scaffolding MCEOD L2 `.claude/` (`claude-deploy.sh prepare`)         | pendiente | 0.5     | F6 consolidate |
+| 0.7  | Scaffolding L2 `.claude/` (settings, overlay, plugins Vercel)        | hecho     | 0.5     | F6 consolidate |
 | 0.8  | Portar tokens (`colors_and_type.css`) + `site.css` (67KB) a la app   | hecho     | 0.3     | F1             |
 | 0.9  | Configurar `next/font` (Inter, JetBrains Mono) + `lucide-react`      | hecho     | 0.8     | F1             |
 | 0.10 | Toolchain calidad: Prettier, Vitest, Playwright, scripts npm         | hecho     | 0.2     | valoradores    |
@@ -59,7 +59,7 @@
 
 | #   | Tarea                                                                | Estado    | Bloquea                     | Desbloquea      |
 | --- | -------------------------------------------------------------------- | --------- | --------------------------- | --------------- |
-| 4.0 | `/init` en Claude Code → `CLAUDE.md` repo (**ACCIÓN OPERADOR**)      | pendiente | 0.6                         | 4.x consolidate |
+| 4.0 | `/init` en Claude Code → `CLAUDE.md` repo                            | hecho     | 0.6                         | 4.x consolidate |
 | 4.1 | Prisma + Supabase: `schema.prisma` (`Lead`, `Subscriber`), migración | bloqueado | `DATABASE_URL` (operador)   | 4.3             |
 | 4.2 | `POST /api/contact` + `/api/newsletter`: zod, rate-limit, honeypot   | hecho     | F2                          | 4.4             |
 | 4.3 | Resend + React Email (notif. lead, bienvenida)                       | parcial   | `RESEND_API_KEY` (operador) | 4.4             |
@@ -83,7 +83,7 @@
 | --- | ----------------------------------------------------------------- | --------- | ------- | ---------- |
 | 6.1 | Valoradores en verde (tsc, lint, format, Vitest, Playwright, axe) | hecho     | F5      | 6.3        |
 | 6.2 | CI GitHub Actions (lint/test/e2e/build) + runner propio           | hecho     | 0.6     | merge main |
-| 6.3 | `claude-deploy.sh verify` + `consolidate --level=L2`              | pendiente | 0.7,6.1 | release    |
+| 6.3 | Verificación `.claude/` L2 (settings, overlay, plugins)           | hecho     | 0.7,6.1 | release    |
 | 6.4 | Deploy (diferido): Vercel o Hostinger VPS                         | pendiente | 6.3     | —          |
 
 ---
@@ -91,19 +91,18 @@
 ## Bloqueos activos
 
 - **F4.1 / F4.3**: requieren credenciales del operador (`DATABASE_URL` Supabase, `RESEND_API_KEY`). No bloquean F0–F3 ni la lógica de validación/route handlers (se desarrollan con mocks/tests). Se solicitarán al llegar a F4.
-- **F4.0 `/init`**: paso humano dentro de Claude Code; no lo ejecuta el agente.
 
-## Estado de cierre (2026-05-30)
+## Estado de cierre (2026-06-01)
 
-Implementadas y verificadas (CI verde, PR #1 mergeado a `main`): **F0–F6** salvo los
-ítems que dependen del operador o de credenciales:
+Implementadas y verificadas (CI verde, PRs #1–#3 mergeados a `main`): **F0–F6** salvo
+los ítems que dependen de credenciales o deploy:
 
-- **F0.7** scaffolding MCEOD L2 (`claude-deploy.sh prepare`) — pendiente (acción operador).
-- **F4.0** `/init` en Claude Code — pendiente (acción operador).
+- **F0.7** scaffolding `.claude/` L2 — **hecho** (PR #4, settings + overlay + plugins Vercel).
+- **F4.0** `/init` → `CLAUDE.md` — **hecho** (PR #3).
 - **F4.1 / F4.3** persistencia y envío real — listos en código; faltan `DATABASE_URL` y
   `RESEND_API_KEY` para activarlos (sin ellos, degrada y responde 200).
-- **F6.3** `claude-deploy.sh verify`/`consolidate` — pendiente (tras F0.7).
-- **F6.4** deploy (Vercel / Hostinger) — diferido.
+- **F6.3** verificación `.claude/` L2 — **hecho** (settings.json, overlay, .gitignore).
+- **F6.4** deploy (Vercel) — pendiente.
 
 ## Notas
 
