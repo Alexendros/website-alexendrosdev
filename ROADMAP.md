@@ -13,18 +13,18 @@
 
 ## F0 · Prepare — cimientos, docs y repo
 
-| #    | Tarea                                                                | Estado    | Bloquea | Desbloquea     |
-| ---- | -------------------------------------------------------------------- | --------- | ------- | -------------- |
-| 0.1  | Scaffold Next.js 16 (TS, App Router, Tailwind v4, ESLint, src/)      | hecho     | —       | todo           |
-| 0.2  | Instalar deps + build scripts nativos (sharp, oxide)                 | hecho     | 0.1     | build/dev      |
-| 0.3  | Build baseline verde (`pnpm build`)                                  | hecho     | 0.2     | F1             |
-| 0.4  | `ROADMAP.md` + `ARCHITECTURE.md` (esqueleto)                         | hecho     | —       | seguimiento    |
-| 0.5  | `git init` (main) + `.gitignore` + commit baseline                   | hecho     | 0.4     | 0.6            |
-| 0.6  | Crear repo privado GitHub + push (`Alexendros/portfolio-alexendros`) | hecho     | 0.5     | CI/PR          |
-| 0.7  | Scaffolding L2 `.claude/` (settings, overlay, plugins Vercel)        | hecho     | 0.5     | F6 consolidate |
-| 0.8  | Portar tokens (`colors_and_type.css`) + `site.css` (67KB) a la app   | hecho     | 0.3     | F1             |
-| 0.9  | Configurar `next/font` (Inter, JetBrains Mono) + `lucide-react`      | hecho     | 0.8     | F1             |
-| 0.10 | Toolchain calidad: Prettier, Vitest, Playwright, scripts npm         | hecho     | 0.2     | valoradores    |
+| #    | Tarea                                                                | Estado | Bloquea | Desbloquea     |
+| ---- | -------------------------------------------------------------------- | ------ | ------- | -------------- |
+| 0.1  | Scaffold Next.js 16 (TS, App Router, Tailwind v4, ESLint, src/)      | hecho  | —       | todo           |
+| 0.2  | Instalar deps + build scripts nativos (sharp, oxide)                 | hecho  | 0.1     | build/dev      |
+| 0.3  | Build baseline verde (`pnpm build`)                                  | hecho  | 0.2     | F1             |
+| 0.4  | `ROADMAP.md` + `ARCHITECTURE.md` (esqueleto)                         | hecho  | —       | seguimiento    |
+| 0.5  | `git init` (main) + `.gitignore` + commit baseline                   | hecho  | 0.4     | 0.6            |
+| 0.6  | Crear repo privado GitHub + push (`Alexendros/portfolio-alexendros`) | hecho  | 0.5     | CI/PR          |
+| 0.7  | Scaffolding L2 `.claude/` (settings, overlay, plugins Vercel)        | hecho  | 0.5     | F6 consolidate |
+| 0.8  | Portar tokens (`colors_and_type.css`) + `site.css` (67KB) a la app   | hecho  | 0.3     | F1             |
+| 0.9  | Configurar `next/font` (Inter, JetBrains Mono) + `lucide-react`      | hecho  | 0.8     | F1             |
+| 0.10 | Toolchain calidad: Prettier, Vitest, Playwright, scripts npm         | hecho  | 0.2     | valoradores    |
 
 ## F1 · Sistema de diseño y layout global
 

@@ -25,9 +25,10 @@ El pipeline de CI (`.github/workflows/ci.yml`, job `quality`) corre en orden: `f
 
 ## Arquitectura
 
-Portfolio fullstack en **Next.js 16 (App Router, Turbopack) · React 19 · TS estricto**, migración de un prototipo HTML/CSS/JS (sistema de diseño *Arctic Ocean*) a app real con backend propio.
+Portfolio fullstack en **Next.js 16 (App Router, Turbopack) · React 19 · TS estricto**, migración de un prototipo HTML/CSS/JS (sistema de diseño _Arctic Ocean_) a app real con backend propio.
 
 **Degradación sin credenciales** — patrón central y no obvio. El sitio arranca y responde 200 aunque falten `DATABASE_URL` y `RESEND_API_KEY`:
+
 - `src/lib/db.ts`: `prisma` es `PrismaClient | null` — `null` si no hay `DATABASE_URL`.
 - `src/lib/email.ts`: `resend` es `Resend | null` — `null` si no hay `RESEND_API_KEY`.
 - Los Route Handlers (`src/app/api/{contact,newsletter}/route.ts`) comprueban `if (prisma)` / `if (resend)` antes de usarlos; sin ambos, registran un aviso en log y devuelven `{ ok: true }`. **No asumas que estos clientes son no-nulos**: cualquier acceso debe ir guardado.
@@ -48,6 +49,6 @@ Portfolio fullstack en **Next.js 16 (App Router, Turbopack) · React 19 · TS es
 
 - `ARCHITECTURE.md` describe en parte el **árbol objetivo**, no el real. Donde diverja, **manda el código**: p. ej. el tema usa `localStorage`/script (no cookie SSR `ao-theme`), `lib/db` y `lib/validation` son ficheros planos (no carpetas), `emails/` está en `src/emails/`, y el `Lead` real usa `type` (no `company`/`budget`).
 - El contenido ("Alejandro Vargas" y datos de ejemplo) es **seed/marcador** pendiente de personalizar; edítalo en `src/lib/content/` y `content/blog/`.
-- El panel de *Tweaks* del prototipo se descartó en producción.
+- El panel de _Tweaks_ del prototipo se descartó en producción.
 - `ROADMAP.md` es la fuente de verdad del avance: consúltalo antes de retomar trabajo y actualízalo en cada PR.
 - Las variables de entorno (`DATABASE_URL`, `RESEND_API_KEY`, `EMAIL_FROM`, `CONTACT_TO_EMAIL`) van en `.env.local`; nunca versionar `.env*` con valores reales.
