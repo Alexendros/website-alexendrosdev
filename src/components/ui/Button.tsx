@@ -10,6 +10,7 @@ interface ButtonProps {
   onClick?: MouseEventHandler;
   style?: CSSProperties;
   type?: "button" | "submit" | "reset";
+  disabled?: boolean;
   className?: string;
   "aria-label"?: string;
 }
@@ -21,6 +22,7 @@ export function Button({
   onClick,
   style,
   type,
+  disabled,
   className = "",
   ...rest
 }: ButtonProps) {
@@ -43,7 +45,14 @@ export function Button({
   }
 
   return (
-    <button className={cls} onClick={onClick} style={style} type={type} {...rest}>
+    <button
+      className={cls}
+      onClick={onClick}
+      style={style}
+      type={type}
+      disabled={disabled}
+      {...rest}
+    >
       {children}
     </button>
   );

@@ -21,6 +21,15 @@ export const newsletterSchema = z.object({
 
 export type NewsletterInput = z.infer<typeof newsletterSchema>;
 
+// Checkout: el cliente solo envía el id del item; el precio lo resuelve el
+// servidor desde el catálogo (`lib/content/checkout.ts`). Nunca confíes en un
+// importe enviado por el cliente.
+export const checkoutSchema = z.object({
+  item: z.string().trim().min(1, "Falta el item.").max(80),
+});
+
+export type CheckoutInput = z.infer<typeof checkoutSchema>;
+
 /** Aplana errores de zod a `{ campo: mensaje }` para devolver al cliente. */
 export function flattenErrors(error: z.ZodError): Record<string, string> {
   const out: Record<string, string> = {};

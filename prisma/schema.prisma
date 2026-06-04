@@ -26,3 +26,16 @@ model Subscriber {
   confirmed Boolean  @default(false)
   createdAt DateTime @default(now())
 }
+
+model Order {
+  id              String   @id @default(cuid())
+  stripeSessionId String   @unique
+  item            String
+  amount          Int // céntimos
+  currency        String   @default("eur")
+  email           String?
+  status          String   @default("paid")
+  createdAt       DateTime @default(now())
+
+  @@index([email])
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { contactSchema, newsletterSchema, flattenErrors } from "@/lib/validation";
+import { contactSchema, newsletterSchema, checkoutSchema, flattenErrors } from "@/lib/validation";
 
 describe("contactSchema", () => {
   const base = {
@@ -43,5 +43,19 @@ describe("newsletterSchema", () => {
   });
   it("rechaza honeypot relleno", () => {
     expect(newsletterSchema.safeParse({ email: "a@b.com", website: "bot" }).success).toBe(false);
+  });
+});
+
+describe("checkoutSchema", () => {
+  it("acepta un id de item", () => {
+    expect(checkoutSchema.safeParse({ item: "auditoria-tecnica" }).success).toBe(true);
+  });
+  it("rechaza item vacío", () => {
+    expect(checkoutSchema.safeParse({ item: "" }).success).toBe(false);
+  });
+  it("ignora cualquier precio enviado por el cliente", () => {
+    const r = checkoutSchema.safeParse({ item: "auditoria-tecnica", amount: 1 });
+    expect(r.success).toBe(true);
+    if (r.success) expect(r.data).not.toHaveProperty("amount");
   });
 });

@@ -4,6 +4,7 @@ export * from "./case-studies";
 export * from "./posts";
 export * from "./testimonials";
 export * from "./services";
+export * from "./checkout";
 export * from "./about";
 export * from "./stack";
 export * from "./site";

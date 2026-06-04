@@ -79,12 +79,29 @@
 
 ## F6 · Verify & Consolidate
 
-| #   | Tarea                                                             | Estado    | Bloquea | Desbloquea |
-| --- | ----------------------------------------------------------------- | --------- | ------- | ---------- |
-| 6.1 | Valoradores en verde (tsc, lint, format, Vitest, Playwright, axe) | hecho     | F5      | 6.3        |
-| 6.2 | CI GitHub Actions (lint/test/e2e/build) + runner propio           | hecho     | 0.6     | merge main |
-| 6.3 | Verificación `.claude/` L2 (settings, overlay, plugins)           | hecho     | 0.7,6.1 | release    |
-| 6.4 | Deploy (diferido): Vercel o Hostinger VPS                         | pendiente | 6.3     | —          |
+| #   | Tarea                                                             | Estado   | Bloquea | Desbloquea |
+| --- | ----------------------------------------------------------------- | -------- | ------- | ---------- |
+| 6.1 | Valoradores en verde (tsc, lint, format, Vitest, Playwright, axe) | hecho    | F5      | 6.3        |
+| 6.2 | CI GitHub Actions (lint/test/e2e/build) + runner propio           | hecho    | 0.6     | merge main |
+| 6.3 | Verificación `.claude/` L2 (settings, overlay, plugins)           | hecho    | 0.7,6.1 | release    |
+| 6.4 | Deploy (diferido): Vercel o Hostinger VPS                         | en curso | 6.3     | F8         |
+
+## F7 · Pagos (Stripe Checkout)
+
+| #   | Tarea                                                               | Estado    | Bloquea                  | Desbloquea |
+| --- | ------------------------------------------------------------------- | --------- | ------------------------ | ---------- |
+| 7.1 | Cliente `lib/stripe.ts` null-safe + catálogo server-trusted         | hecho     | —                        | 7.2        |
+| 7.2 | `POST /api/checkout` (zod, rate-limit, precio del servidor)         | hecho     | 7.1                      | 7.4        |
+| 7.3 | `POST /api/stripe/webhook` (firma) + modelo `Order` Prisma          | hecho     | 7.1                      | 7.4        |
+| 7.4 | UI: addons comprables en `/servicios` + página `/checkout/success`  | hecho     | 7.2                      | —          |
+| 7.5 | Activar pagos reales (`STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`) | bloqueado | claves Stripe (operador) | —          |
+
+## F8 · Deploy automatizado (Vercel)
+
+| #   | Tarea                                                                | Estado    | Bloquea                    | Desbloquea |
+| --- | -------------------------------------------------------------------- | --------- | -------------------------- | ---------- |
+| 8.1 | `deploy.yml` (workflow_run tras CI) + `vercel.json` + `.env.example` | hecho     | 6.2                        | 8.2        |
+| 8.2 | Activar despliegue real (secretos `VERCEL_TOKEN`/`ORG`/`PROJECT`)    | bloqueado | proyecto Vercel + secretos | —          |
 
 ---
 

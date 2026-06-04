@@ -94,6 +94,19 @@ export interface Addon {
   price: string;
 }
 
+/**
+ * Item comprable vía Stripe Checkout. El precio (`amount`, en la unidad mínima
+ * de la moneda — céntimos) es la **fuente de verdad del servidor**: el cliente
+ * solo envía el `id`, nunca el importe. Ver `lib/content/checkout.ts`.
+ */
+export interface PurchasableItem {
+  id: string;
+  name: string;
+  desc: string;
+  amount: number; // céntimos (EUR)
+  currency: string;
+}
+
 export interface FaqItem {
   q: string;
   a: string;

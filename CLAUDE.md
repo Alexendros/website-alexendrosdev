@@ -31,7 +31,9 @@ Portfolio fullstack en **Next.js 16 (App Router, Turbopack) · React 19 · TS es
 
 - `src/lib/db.ts`: `prisma` es `PrismaClient | null` — `null` si no hay `DATABASE_URL`.
 - `src/lib/email.ts`: `resend` es `Resend | null` — `null` si no hay `RESEND_API_KEY`.
-- Los Route Handlers (`src/app/api/{contact,newsletter}/route.ts`) comprueban `if (prisma)` / `if (resend)` antes de usarlos; sin ambos, registran un aviso en log y devuelven `{ ok: true }`. **No asumas que estos clientes son no-nulos**: cualquier acceso debe ir guardado.
+- `src/lib/stripe.ts`: `stripe` es `Stripe | null` — `null` si no hay `STRIPE_SECRET_KEY`. `POST /api/checkout` responde 503 (la UI ofrece contacto como fallback) y `POST /api/stripe/webhook` acusa recibo sin procesar cuando falta la clave o `STRIPE_WEBHOOK_SECRET`.
+- Los Route Handlers (`src/app/api/{contact,newsletter,checkout}/route.ts` y `api/stripe/webhook`) comprueban `if (prisma)` / `if (resend)` / `if (stripe)` antes de usarlos; sin ellos, registran un aviso en log y degradan. **No asumas que estos clientes son no-nulos**: cualquier acceso debe ir guardado.
+- **Pagos (Stripe Checkout)**: el precio es **fuente de verdad del servidor**. El catálogo tipado vive en `src/lib/content/checkout.ts` (`PURCHASABLES`, `getPurchasable`); el cliente solo envía el `id` del item, nunca el importe. El webhook persiste un `Order` (guardado por `if (prisma)`) tras verificar la firma con `STRIPE_WEBHOOK_SECRET`.
 
 **Frontera cliente/servidor**. Todo es Server Component (RSC) por defecto. Las islas cliente (`"use client"`) son: `Terminal`, `StackGraph`, `ContactView`, `Testimonials`, `ThemeToggle`, `Marquee`, nav móvil del `Header`, filtros de proyectos. Los módulos servidor llevan `import "server-only"` (`db.ts`, `email.ts`, `blog.ts`).
 
@@ -51,4 +53,5 @@ Portfolio fullstack en **Next.js 16 (App Router, Turbopack) · React 19 · TS es
 - El contenido ("Alejandro Vargas" y datos de ejemplo) es **seed/marcador** pendiente de personalizar; edítalo en `src/lib/content/` y `content/blog/`.
 - El panel de _Tweaks_ del prototipo se descartó en producción.
 - `ROADMAP.md` es la fuente de verdad del avance: consúltalo antes de retomar trabajo y actualízalo en cada PR.
-- Las variables de entorno (`DATABASE_URL`, `RESEND_API_KEY`, `EMAIL_FROM`, `CONTACT_TO_EMAIL`) van en `.env.local`; nunca versionar `.env*` con valores reales.
+- Las variables de entorno (`DATABASE_URL`, `RESEND_API_KEY`, `EMAIL_FROM`, `CONTACT_TO_EMAIL`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `NEXT_PUBLIC_BASE_URL`) van en `.env.local`; nunca versionar `.env*` con valores reales. Plantilla documentada en `.env.example` (única `.env*` versionada).
+- **Deploy**: `.github/workflows/deploy.yml` despliega a Vercel vía CLI encadenado al workflow `CI` (`workflow_run`): solo corre si CI quedó en verde; `main` → producción, otras ramas → preview. Requiere secretos `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`.
