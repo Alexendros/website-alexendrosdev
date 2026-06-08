@@ -1,36 +1,37 @@
 import type { Addon, ComparisonRow, FaqItem, HomeService, Tiers } from "./types";
 
-// NOTA: todos los precios son PLACEHOLDER. TODO: fijar tarifas reales antes de
-// publicar (y sincronizar los importes de `checkout.ts`).
+// Precios base ORIENTATIVOS (EUR), pensados para freelance senior en España con
+// foco en seguridad/infra/fullstack. Ancla ≈ €60-65/h. Públicos en formato
+// «desde». TODO: revisar/ajustar a tu criterio antes de cerrar tarifas.
 export const HOME_SERVICES: HomeService[] = [
   {
-    name: "Seguridad & verificación",
-    sub: "Auditorías check-only de repos, apps y hosts (SAST/SCA/DAST, IaC, RGPD). Informe priorizado + propuesta.",
-    price: "TODO: desde €—",
-  },
-  {
-    name: "MCP & tooling",
-    sub: "Servidores MCP, gateways de credenciales y herramientas para Claude Code, con plantillas y validación.",
-    price: "TODO: desde €—",
+    name: "Seguridad & auditoría",
+    sub: "Auditorías check-only (XEK): SAST/SCA/DAST, IaC y compliance/RGPD. Informe priorizado + propuesta.",
+    price: "desde €1.500",
   },
   {
     name: "Fullstack web",
     sub: "Sitios y apps en Next.js 15/16 · React 19 · TypeScript, con backend propio y despliegue en Vercel.",
-    price: "TODO: desde €—",
+    price: "desde €3.500",
   },
   {
-    name: "Infra & observabilidad",
-    sub: "Secretos (Vault), mTLS, contenedores y telemetría con OpenTelemetry → SigNoz. Sistemas auditables.",
-    price: "TODO: €—/hora",
+    name: "Infra & hardening",
+    sub: "Secretos (Vault), mTLS, contenedores y observabilidad (OpenTelemetry → SigNoz). Sistemas auditables.",
+    price: "desde €2.500",
+  },
+  {
+    name: "MCP & tooling",
+    sub: "Servidores MCP, gateways de credenciales y herramientas para Claude Code, con plantillas y validación.",
+    price: "a consultar",
   },
 ];
 
-// TODO: revisar precios y características de cada tier según tu oferta real.
+// Precios base orientativos. TODO: verificar antes de publicar.
 export const TIERS: Tiers = {
   proyecto: [
     {
       name: "Starter",
-      price: "TODO: €—",
+      price: "€2.500",
       unit: "/proyecto",
       feats: [
         ["Sitio o herramienta acotada", true],
@@ -42,7 +43,7 @@ export const TIERS: Tiers = {
     },
     {
       name: "Pro",
-      price: "TODO: €—",
+      price: "€6.500",
       unit: "/proyecto",
       pro: true,
       feats: [
@@ -55,7 +56,7 @@ export const TIERS: Tiers = {
     },
     {
       name: "Scale",
-      price: "TODO: €—+",
+      price: "€14.000+",
       unit: "/proyecto",
       feats: [
         ["Arquitectura a medida", true],
@@ -69,10 +70,10 @@ export const TIERS: Tiers = {
   retainer: [
     {
       name: "Starter",
-      price: "TODO: €—",
+      price: "€1.250",
       unit: "/mes",
       feats: [
-        ["TODO h/mes", true],
+        ["20 h/mes", true],
         ["Mantenimiento y monitoring", true],
         ["Corrección de bugs", true],
         ["Features nuevas", false],
@@ -81,11 +82,11 @@ export const TIERS: Tiers = {
     },
     {
       name: "Pro",
-      price: "TODO: €—",
+      price: "€2.600",
       unit: "/mes",
       pro: true,
       feats: [
-        ["TODO h/mes", true],
+        ["40 h/mes", true],
         ["Features nuevas", true],
         ["Code & security reviews", true],
         ["Canal directo", true],
@@ -94,14 +95,14 @@ export const TIERS: Tiers = {
     },
     {
       name: "Scale",
-      price: "TODO: €—",
+      price: "€4.500",
       unit: "/mes",
       feats: [
-        ["Dedicación parcial (80%+)", true],
+        ["70 h/mes (media jornada)", true],
         ["Roadmap conjunto", true],
         ["Arquitectura y ADRs", true],
-        ["On-call 24/7", true],
-        ["SLA garantizado", true],
+        ["On-call", true],
+        ["SLA acordado", true],
       ],
     },
   ],
@@ -116,22 +117,22 @@ export const COMPARISON: ComparisonRow[] = [
   ["SLA & on-call", [false, false, true]],
 ];
 
-// TODO: fijar precios reales (sincronizar con PURCHASABLES en checkout.ts).
+// Items puntuales (sincronizados con PURCHASABLES en checkout.ts).
 export const ADDONS: Addon[] = [
   {
     name: "Auditoría de seguridad",
     desc: "Verificación check-only (XEK) de repo, app o host: SAST/SCA/DAST, IaC y compliance. Informe priorizado con propuesta.",
-    price: "TODO: €—",
+    price: "desde €1.500",
   },
   {
     name: "Sesión de mentoría",
     desc: "Acompañamiento técnico en seguridad, MCP/Claude Code, Rust o arquitectura web. 1 hora.",
-    price: "TODO: €—/hora",
+    price: "€90/hora",
   },
   {
     name: "Sprint de hardening",
     desc: "1-2 semanas asegurando secretos, mTLS, observabilidad y CI: de configuración frágil a sistema auditable.",
-    price: "TODO: €—",
+    price: "desde €2.500",
   },
 ];
 
@@ -141,15 +142,15 @@ export const FAQ: FaqItem[] = [
     a: "Empiezo con una llamada de descubrimiento para entender el problema real. Entrego una propuesta con alcance, hitos y precio cerrado antes de empezar, y trabajo en iteraciones cortas con demos y feedback continuo.",
   },
   {
-    q: "¿Qué pasa si el alcance cambia?",
-    a: "Los cambios pequeños van incluidos. Para cambios significativos, paro, evaluamos juntos el impacto y acordamos el ajuste antes de continuar. Sin sorpresas en la factura final.",
+    q: "¿Los precios son cerrados?",
+    a: "Sí. Las tarifas que ves son orientativas («desde»); tras la llamada de descubrimiento te paso un precio cerrado por el alcance acordado. Los cambios pequeños van incluidos; para cambios significativos, paro, evaluamos juntos el impacto y lo acordamos antes de continuar.",
   },
   {
     q: "¿Trabajas con seguridad sin modificar mis sistemas?",
     a: "Sí. Mi enfoque (XEK) es check-only: verifico y razono, no modifico. Recibes un informe con hallazgos y una propuesta de remediación; la acción correctiva es siempre una decisión tuya.",
   },
   {
-    q: "¿Cómo te integras con equipos existentes?",
-    a: "Trabajo en el repositorio del cliente y con su metodología. Me integro como un ingeniero más: code reviews, pair programming y documentación donde el equipo ya trabaja.",
+    q: "¿De quién es el código que entregas?",
+    a: "Tuyo. Trabajo con software libre siempre que es posible y el cliente es dueño de su código e infraestructura: sin lock-in, con todo documentado y reproducible para que tu equipo pueda mantenerlo.",
   },
 ];

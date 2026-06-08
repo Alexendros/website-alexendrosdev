@@ -4,27 +4,27 @@ import type { PurchasableItem } from "./types";
 // viven aquí, en el servidor: el route handler nunca confía en un precio
 // enviado por el cliente — solo recibe el `id` y resuelve el resto aquí.
 // Importes en céntimos de euro. Se corresponden con los `ADDONS` de servicios.
-// TODO: los `amount` son PLACEHOLDER — fijar tarifas reales antes de cobrar.
+// Precios base orientativos. TODO: verificar antes de cobrar.
 export const PURCHASABLES: PurchasableItem[] = [
   {
     id: "auditoria-seguridad",
     name: "Auditoría de seguridad",
     desc: "Verificación check-only (XEK) de repo, app o host: SAST/SCA/DAST, IaC y compliance. Informe priorizado con propuesta.",
-    amount: 100_000, // TODO: precio real
+    amount: 150_000,
     currency: "eur",
   },
   {
     id: "sesion-mentoria",
     name: "Sesión de mentoría (1 h)",
     desc: "Acompañamiento técnico en seguridad, MCP/Claude Code, Rust o arquitectura web.",
-    amount: 12_000, // TODO: precio real
+    amount: 9_000,
     currency: "eur",
   },
   {
     id: "sprint-hardening",
     name: "Sprint de hardening",
     desc: "1-2 semanas asegurando secretos, mTLS, observabilidad y CI: de configuración frágil a sistema auditable.",
-    amount: 250_000, // TODO: precio real
+    amount: 250_000,
     currency: "eur",
   },
 ];

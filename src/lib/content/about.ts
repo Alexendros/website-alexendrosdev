@@ -1,12 +1,11 @@
 import type { Principle, Stat, TimelineEntry } from "./types";
 
-// Stats: factuales donde se puede deducir de los repos públicos; las inciertas
-// (años de experiencia, nº de clientes) quedan como TODO para el usuario.
+// Stats orientadas a valor/output (no a años): la huella pública es reciente.
 export const HERO_STATS: Stat[] = [
-  ["5", "proyectos OSS"], // TODO: ajustar si se cuentan privados/otros
+  ["5", "proyectos OSS"],
   ["4", "lenguajes"], // Rust · Python · TypeScript · Bash
   ["3", "licencias OSS"], // AGPL-3.0 · MIT · CC BY 4.0
-  ["1", "objetivo: tu sistema"], // TODO: reemplplazar por años de experiencia / clientes reales
+  ["100%", "código auditable"],
 ];
 
 export const ABOUT_STATS: Stat[] = HERO_STATS;
@@ -19,38 +18,38 @@ export const TIMELINE: TimelineEntry[] = [
     now: true,
     bullets: [
       "Diseño y construyo herramientas de seguridad e infraestructura: TrenchPass (gateway MCP de credenciales en Rust) y XEK (40+ skills de verificación check-only).",
-      "Tooling para desarrolladores y automatización: ecosistema de plantillas `claude-init`-ready para Claude Code y portales web fullstack en Next.js.",
+      "Tooling para desarrolladores y web fullstack: ecosistema de plantillas para Claude Code y portales en Next.js con backend propio.",
     ],
-    tags: ["Rust", "Python", "TypeScript", "MCP", "Seguridad"],
+    tags: ["Rust", "Python", "TypeScript", "Seguridad", "MCP"],
   },
-  // TODO: añadir el historial laboral previo real (rol, empresa, periodo, logros).
   {
-    year: "TODO — TODO",
-    role: "TODO: rol anterior",
-    org: "TODO: empresa · ubicación",
+    year: "Hasta 2026",
+    role: "Desarrollo, seguridad y autoformación",
+    org: "Proyectos propios y aprendizaje continuo",
     bullets: [
-      "TODO: principal logro o responsabilidad de esta etapa.",
-      "TODO: segundo logro medible (impacto, escala, tecnología).",
+      "Base técnica en seguridad, sistemas (Rust) y automatización (Python), volcada en proyectos open source públicos.",
+      "Detalle de experiencia, referencias y CV disponibles bajo petición.",
     ],
-    tags: ["TODO"],
+    tags: ["Seguridad", "Rust", "Python", "Open Source"],
   },
+  // TODO: si procede, detallar empleos/clientes anteriores con rol, empresa, fechas y logros reales.
 ];
 
 export const PRINCIPLES: Principle[] = [
   {
     icon: "shield",
-    title: "Verificar antes de modificar",
-    body: "Primero medir y razonar, después actuar. Las herramientas auditan y proponen; la acción correctiva es una decisión consciente, nunca un efecto colateral. Es la filosofía de XEK aplicada a todo.",
+    title: "Honestidad y precio cerrado",
+    body: "Alcance claro y precio cerrado antes de empezar. Los cambios pequeños van incluidos; los grandes se hablan y se acuerdan. Sin sorpresas en la factura final.",
   },
   {
-    icon: "lock",
-    title: "Custodia de secretos por diseño",
-    body: "Las credenciales no se esparcen por mil servicios: viven tras un único custodio con doble factor y auditoría append-only. Si no queda registro, no ha pasado.",
+    icon: "check",
+    title: "Calidad y verificación",
+    body: "Nada se entrega sin verde: CI, tests y validadores en modo estricto. Verificar antes de modificar — la filosofía check-only de XEK aplicada a todo lo que construyo.",
   },
   {
-    icon: "eye-off",
-    title: "Sin tracking, con transparencia",
-    body: "Lo personal sin analítica ni cookies de terceros; lo público, abierto y verificable (datos, licencias y registros como GV.ERRA). La confianza se construye enseñando el trabajo, no escondiéndolo.",
+    icon: "git-branch",
+    title: "Open source y tuyo",
+    body: "Trabajo con software libre siempre que puedo y el cliente es dueño de su código e infraestructura: sin lock-in, documentado y reproducible para que tu equipo lo mantenga.",
   },
 ];
 

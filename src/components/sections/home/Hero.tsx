@@ -7,7 +7,7 @@ export function Hero() {
     <section className="ak-hero-c" data-screen-label="hero">
       <span className="ak-note" data-reveal>
         <span className="ak-status-dot" />
-        Disponible para proyectos
+        Disponible · media jornada
       </span>
       <h1 className="ak-display" data-reveal data-reveal-delay="1">
         Seguridad, <em>tooling</em> e infraestructura que puedes auditar.
