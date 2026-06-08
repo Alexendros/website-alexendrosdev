@@ -16,10 +16,10 @@ const W = 880;
 const H = 560;
 const CENTER = { x: 440, y: 280 };
 const CAT_POS: Record<string, { x: number; y: number }> = {
-  Frontend: { x: 205, y: 150 },
-  Backend: { x: 675, y: 150 },
-  Observabilidad: { x: 205, y: 410 },
-  DevOps: { x: 675, y: 410 },
+  Lenguajes: { x: 205, y: 150 },
+  Web: { x: 675, y: 150 },
+  "Infra & Seguridad": { x: 205, y: 410 },
+  "Tooling & IA": { x: 675, y: 410 },
 };
 
 type NodeType = "center" | "cat" | "leaf";
