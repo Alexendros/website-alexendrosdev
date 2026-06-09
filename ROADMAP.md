@@ -169,5 +169,5 @@ migración inicial:
 
 ## Notas
 
-- Contenido genérico "Alejandro Vargas" como **seed**; personalización posterior.
+- Contenido personalizado con los datos reales de **Alejandro Domingo Agustí** (Alexendros) y sus 5 proyectos OSS públicos (TrenchPass, plantillas, XEK, GV.ERRA, alexendros.me). El seed original ("Alejandro Vargas") queda archivado en la rama `base-seed-snapshot`. Pendientes marcados con `TODO:`: precios reales, historial laboral previo, testimonios, URL de LinkedIn.
 - Fidelidad pixel-perfect: comparar contra `screenshots/*.png` del bundle original.
