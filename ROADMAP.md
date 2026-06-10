@@ -111,7 +111,7 @@
 | 9.2 | Isla `PurchaseCard` extraída y reutilizada en `/servicios` y `/escaparate`  | hecho    | 9.1                   | —          |
 | 9.3 | Endurecer `ci.yml`: `concurrency` cancel-in-progress + `timeout-minutes`    | hecho    | 6.2                   | —          |
 | 9.4 | Provisionar Supabase (instancia libre) + `DATABASE_URL` + migración Prisma  | en curso | Supabase (MCP) + env  | 4.1        |
-| 9.5 | Deploy producción Vercel (MCP) + dominio `alexendros.pro`                   | en curso | proyecto Vercel + env | 8.2        |
+| 9.5 | Deploy producción Vercel (MCP) + dominio `alexendros.dev`                   | en curso | proyecto Vercel + env | 8.2        |
 | 9.6 | Personalización de contenido: datos reales + 5 proyectos OSS de GitHub      | hecho    | 9.1                   | —          |
 
 > Nota build (sandbox): `pnpm build` (static export) falla en el contenedor de trabajo con
