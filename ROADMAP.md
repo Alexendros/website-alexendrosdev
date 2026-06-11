@@ -108,19 +108,20 @@
 
 ## F9 · Escaparate (página showcase) + deploy en vivo
 
-| #   | Tarea                                                                       | Estado   | Bloquea               | Desbloquea |
-| --- | --------------------------------------------------------------------------- | -------- | --------------------- | ---------- |
-| 9.1 | `/escaparate`: proyectos featured + items comprables (Stripe) + nav/sitemap | hecho    | F3,7.4                | —          |
-| 9.2 | Isla `PurchaseCard` extraída y reutilizada en `/servicios` y `/escaparate`  | hecho    | 9.1                   | —          |
-| 9.3 | Endurecer `ci.yml`: `concurrency` cancel-in-progress + `timeout-minutes`    | hecho    | 6.2                   | —          |
-| 9.4 | Provisionar Supabase (instancia libre) + `DATABASE_URL` + migración Prisma  | hecho    | Supabase (MCP) + env  | 4.1        |
-| 9.5 | Deploy producción Vercel (MCP) + dominio `alexendros.dev`                   | en curso | proyecto Vercel + env | 8.2        |
-| 9.6 | Personalización de contenido: datos reales + 5 proyectos OSS de GitHub      | hecho    | 9.1                   | —          |
-| 9.7 | Landing "en construcción" `/proximamente` + split preview/prod              | hecho    | 9.1                   | 9.5        |
+| #   | Tarea                                                                       | Estado | Bloquea               | Desbloquea |
+| --- | --------------------------------------------------------------------------- | ------ | --------------------- | ---------- |
+| 9.1 | `/escaparate`: proyectos featured + items comprables (Stripe) + nav/sitemap | hecho  | F3,7.4                | —          |
+| 9.2 | Isla `PurchaseCard` extraída y reutilizada en `/servicios` y `/escaparate`  | hecho  | 9.1                   | —          |
+| 9.3 | Endurecer `ci.yml`: `concurrency` cancel-in-progress + `timeout-minutes`    | hecho  | 6.2                   | —          |
+| 9.4 | Provisionar Supabase (instancia libre) + `DATABASE_URL` + migración Prisma  | hecho  | Supabase (MCP) + env  | 4.1        |
+| 9.5 | Deploy producción Vercel (MCP) + dominio `alexendros.dev`                   | hecho  | proyecto Vercel + env | 8.2        |
+| 9.6 | Personalización de contenido: datos reales + 5 proyectos OSS de GitHub      | hecho  | 9.1                   | —          |
+| 9.7 | Landing "en construcción" `/proximamente` + split preview/prod              | hecho  | 9.1                   | 9.5        |
 
-> Holding page: producción muestra `/proximamente` por defecto (`VERCEL_ENV=production`, vía
-> `src/middleware.ts` + `isComingSoon` en `src/lib/flags.ts`); el portfolio completo vive en los
-> deploys de preview. Override con `COMING_SOON=0|1`. La cabecera/pie se ocultan en ese modo.
+> Holding page (sitio lanzado): el portfolio completo es público por defecto en todos los entornos.
+> La landing `/proximamente` (vía `src/middleware.ts` + `isComingSoon` en `src/lib/flags.ts`) queda
+> como **opt-in**: actívala con `COMING_SOON=1` para volver a cerrar el sitio temporalmente. La
+> cabecera/pie se ocultan en ese modo.
 
 > Nota build (sandbox): `pnpm build` (static export) falla en el contenedor de trabajo con
 > `useContext` null en `/` y en `/_global-error` (página del framework), con Turbopack **y** webpack,
