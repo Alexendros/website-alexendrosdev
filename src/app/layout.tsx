@@ -48,7 +48,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // En modo "próximamente" (producción por defecto) ocultamos la cabecera y el
+  // En modo "próximamente" (opt-in con COMING_SOON=1) ocultamos la cabecera y el
   // pie: la landing de holding es full-screen, sin navegación al sitio completo.
   const holding = isComingSoon();
 

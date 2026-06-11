@@ -2,17 +2,18 @@ import { describe, it, expect } from "vitest";
 import { isComingSoon } from "@/lib/flags";
 
 describe("isComingSoon", () => {
-  it("se activa por defecto en producción", () => {
-    expect(isComingSoon({ VERCEL_ENV: "production" })).toBe(true);
-  });
-
-  it("queda inactivo por defecto en preview y desarrollo", () => {
-    expect(isComingSoon({ VERCEL_ENV: "preview" })).toBe(false);
+  it("inactivo por defecto: el portfolio completo es público", () => {
     expect(isComingSoon({})).toBe(false);
   });
 
-  it("el override explícito COMING_SOON tiene prioridad", () => {
-    expect(isComingSoon({ COMING_SOON: "1", VERCEL_ENV: "preview" })).toBe(true);
-    expect(isComingSoon({ COMING_SOON: "0", VERCEL_ENV: "production" })).toBe(false);
+  it("se activa solo con el opt-in explícito COMING_SOON=1|true", () => {
+    expect(isComingSoon({ COMING_SOON: "1" })).toBe(true);
+    expect(isComingSoon({ COMING_SOON: "true" })).toBe(true);
+  });
+
+  it("cualquier otro valor deja el sitio completo abierto", () => {
+    expect(isComingSoon({ COMING_SOON: "0" })).toBe(false);
+    expect(isComingSoon({ COMING_SOON: "false" })).toBe(false);
+    expect(isComingSoon({ COMING_SOON: "" })).toBe(false);
   });
 });
