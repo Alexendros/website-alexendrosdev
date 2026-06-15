@@ -5,7 +5,11 @@ import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 
 export function HomeProjects() {
-  const feat = PROJECTS.slice(0, 3);
+  // Criterio único de prominencia: el flag `featured` (igual que /escaparate y
+  // el orden de /proyectos), no la posición en el array. Fallback a los 3
+  // primeros si ningún proyecto está marcado.
+  const flagged = PROJECTS.filter((p) => p.featured);
+  const feat = (flagged.length ? flagged : PROJECTS).slice(0, 3);
   return (
     <section className="ak-section" id="proyectos">
       <SectionHead center eyebrow="casos de estudio" title="Proyectos destacados" />
