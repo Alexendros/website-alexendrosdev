@@ -3,7 +3,7 @@ import { BlogView } from "@/components/sections/blog/BlogView";
 
 export const metadata: Metadata = {
   title: "Blog",
-  description: "Notas de ingeniería sobre seguridad, tooling, MCP y desarrollo fullstack.",
+  description: "Notas de ingeniería sobre desarrollo web, productos digitales y tecnología.",
 };
 
 export default function BlogPage() {

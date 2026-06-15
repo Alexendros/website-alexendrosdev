@@ -10,12 +10,12 @@ export function Hero() {
         Disponible · media jornada
       </span>
       <h1 className="ak-display" data-reveal data-reveal-delay="1">
-        Seguridad, <em>tooling</em> e infraestructura que puedes auditar.
+        Plataformas, webs y <em>aplicaciones</em> a medida para tu negocio.
       </h1>
       <p className="ak-hero-c-lead" data-reveal data-reveal-delay="2">
-        Construyo herramientas de seguridad, gateways de credenciales y aplicaciones fullstack en
-        Rust, Python y TypeScript. Sistemas que verifican antes de modificar y que dejan registro de
-        todo lo que hacen.
+        Diseño y desarrollo el producto digital que necesitas —desde una web hasta una plataforma
+        completa— con tecnología moderna y código que de verdad es tuyo. Rápido, fiable y construido
+        de forma segura desde el primer día.
       </p>
       <div className="ak-hero-c-cta" data-reveal data-reveal-delay="2">
         <Button variant="primary" href="/proyectos">

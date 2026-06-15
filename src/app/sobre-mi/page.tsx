@@ -8,7 +8,7 @@ import { Eyebrow, SectionHead } from "@/components/ui/SectionHead";
 export const metadata: Metadata = {
   title: "Sobre mí",
   description:
-    "Software & Platform Engineer en Valencia. Construyo herramientas de seguridad, gateways de credenciales y aplicaciones fullstack en Rust, Python y TypeScript.",
+    "Desarrollador en Valencia. Diseño y construyo webs, aplicaciones y plataformas a medida con tecnología moderna (Next.js, React, TypeScript) y backend propio.",
 };
 
 function AboutIntro() {
@@ -17,14 +17,13 @@ function AboutIntro() {
       <span className="ak-avatar" data-reveal />
       <Eyebrow>sobre mí</Eyebrow>
       <h1 className="ak-page-title" data-reveal data-reveal-delay="1">
-        Construyo sistemas que se pueden auditar
+        Construyo el producto digital que tu negocio necesita
       </h1>
       <p className="ak-page-lead" data-reveal data-reveal-delay="2">
-        Soy Alejandro Domingo Agustí (Alexendros), Software &amp; Platform Engineer en Valencia. Me
-        muevo entre la seguridad y el tooling: gateways de credenciales en Rust, clústeres de
-        verificación check-only, plantillas para Claude Code y aplicaciones fullstack en Next.js.
-        Creo en verificar antes de modificar, en la custodia de secretos por diseño y en la
-        transparencia: enseñar el trabajo en abierto.
+        Soy Alejandro Domingo Agustí (Alexendros), desarrollador en Valencia. Diseño y construyo
+        webs, aplicaciones y plataformas a medida con tecnología moderna (Next.js, React,
+        TypeScript) y backend propio. Me importa entregar cosas que funcionen, sin sorpresas en la
+        factura, con código que es tuyo y construido de forma segura desde el primer día.
       </p>
       <div className="ak-about-cta" data-reveal data-reveal-delay="2">
         <Button variant="primary" href="#">
@@ -141,7 +140,7 @@ export default function AboutPage() {
           center
           eyebrow="trayectoria"
           title="Línea de carrera"
-          sub="Del trabajo en abierto a la ingeniería de seguridad y plataforma."
+          sub="Del trabajo en abierto al desarrollo de plataformas, webs y aplicaciones."
         />
         <TimelineAlt />
       </section>

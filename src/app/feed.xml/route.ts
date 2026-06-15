@@ -54,7 +54,7 @@ export async function GET() {
   <channel>
     <title>${escape(SITE.name)} · Blog</title>
     <link>${base}/blog</link>
-    <description>Notas sobre seguridad, tooling, MCP y desarrollo fullstack.</description>
+    <description>Notas sobre desarrollo web, productos digitales e ingeniería.</description>
     <language>es-ES</language>
 ${items}
   </channel>

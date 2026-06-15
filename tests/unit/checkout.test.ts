@@ -15,7 +15,7 @@ describe("catálogo de items comprables", () => {
   });
 
   it("resuelve por id y devuelve null para ids desconocidos", () => {
-    expect(getPurchasable("auditoria-seguridad")?.name).toBe("Auditoría de seguridad");
+    expect(getPurchasable("revision-seguridad")?.name).toBe("Revisión de seguridad");
     expect(getPurchasable("no-existe")).toBeNull();
   });
 });

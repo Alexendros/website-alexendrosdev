@@ -23,16 +23,16 @@ const SITE_URL = "https://alexendros.dev";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Alejandro Domingo Agustí · Software & Platform Engineer",
+    default: "Alejandro Domingo Agustí · Desarrollo de plataformas, webs y apps",
     template: "%s · Alexendros",
   },
   description:
-    "Software & Platform Engineer en Valencia. Seguridad, tooling e infraestructura auditable en Rust, Python y TypeScript. Disponible para proyectos freelance.",
+    "Desarrollo plataformas, webs y aplicaciones a medida en Valencia. Tecnología moderna, código que es tuyo y precios pensados para empresas nuevas y pequeñas.",
   authors: [{ name: "Alejandro Domingo Agustí" }],
   openGraph: {
-    title: "Alejandro Domingo Agustí · Software & Platform Engineer",
+    title: "Alejandro Domingo Agustí · Desarrollo de plataformas, webs y apps",
     description:
-      "Seguridad, tooling e infraestructura auditable en Rust, Python y TypeScript. Gateways de credenciales, verificación check-only y fullstack.",
+      "Diseño y desarrollo el producto digital que tu negocio necesita: webs, aplicaciones y plataformas a medida, con tecnología moderna y código que es tuyo.",
     type: "website",
     locale: "es_ES",
     url: SITE_URL,

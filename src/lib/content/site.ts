@@ -2,7 +2,7 @@ import type { NavLink } from "./types";
 
 export const SITE = {
   name: "Alejandro Domingo Agustí",
-  role: "Software & Platform Engineer",
+  role: "Desarrollo de plataformas, webs y aplicaciones",
   domain: "alexendros.dev",
   url: "https://alexendros.dev",
   email: "contacto@alexendros.dev",
@@ -23,6 +23,6 @@ export const NAV: NavLink[] = [
 ];
 
 export const TECH = [
-  "Rust", "Python", "TypeScript", "Next.js", "React", "Bash",
-  "Docker", "Vault", "OpenTelemetry", "MCP", "GitHub Actions", "JSON Schema",
+  "TypeScript", "Next.js", "React", "Node.js", "Python", "PostgreSQL",
+  "Tailwind", "Docker", "Vercel", "Rust", "GitHub Actions", "OpenTelemetry",
 ];

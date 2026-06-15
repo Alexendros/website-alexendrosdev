@@ -12,8 +12,8 @@ export function Footer() {
             alex<b>endros</b>
           </div>
           <p className="ak-footer-tag">
-            Software &amp; Platform Engineer. Seguridad, tooling e infraestructura que puedes
-            auditar.
+            Desarrollo plataformas, webs y aplicaciones a medida. Tecnología moderna y código que es
+            tuyo.
           </p>
           <div className="ak-footer-social">
             <a aria-label="GitHub" href={SITE.socials.github}>
@@ -60,7 +60,7 @@ export function Footer() {
         <div>
           <div className="ak-footer-ct">Newsletter</div>
           <p className="ak-footer-tag" style={{ marginBottom: 10 }}>
-            Notas sobre seguridad, tooling e ingeniería, sin spam.
+            Notas sobre desarrollo web, productos digitales e ingeniería, sin spam.
           </p>
           <NewsletterForm variant="footer" />
         </div>

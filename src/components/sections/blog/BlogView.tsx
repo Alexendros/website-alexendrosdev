@@ -91,8 +91,8 @@ export function BlogView() {
             <Eyebrow>blog · escrito en MDX</Eyebrow>
             <h1 className="ak-page-title">Notas de ingeniería</h1>
             <p className="ak-page-lead">
-              Apuntes sobre seguridad, tooling, MCP y desarrollo. Sin relleno: lo que aprendo
-              construyendo mis propios proyectos.
+              Apuntes sobre desarrollo web, productos digitales e ingeniería. Sin relleno: lo que
+              aprendo construyendo mis propios proyectos.
             </p>
           </div>
           <div className="ak-search" style={{ minWidth: 240 }}>

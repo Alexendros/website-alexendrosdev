@@ -2,10 +2,10 @@ import type { Principle, Stat, TimelineEntry } from "./types";
 
 // Stats orientadas a valor/output (no a años): la huella pública es reciente.
 export const HERO_STATS: Stat[] = [
-  ["5", "proyectos OSS"],
-  ["4", "lenguajes"], // Rust · Python · TypeScript · Bash
-  ["3", "licencias OSS"], // AGPL-3.0 · MIT · CC BY 4.0
-  ["100%", "código auditable"],
+  ["5", "proyectos publicados"],
+  ["4", "lenguajes"], // TypeScript · Python · Rust · Bash
+  ["100%", "código tuyo"],
+  ["0", "lock-in"],
 ];
 
 export const ABOUT_STATS: Stat[] = HERO_STATS;
@@ -13,24 +13,24 @@ export const ABOUT_STATS: Stat[] = HERO_STATS;
 export const TIMELINE: TimelineEntry[] = [
   {
     year: "2026 — Hoy",
-    role: "Contratista independiente · Software & Platform Engineer",
+    role: "Desarrollador independiente · plataformas, webs y aplicaciones",
     org: "Iniciativas Alexendros · Valencia, España",
     now: true,
     bullets: [
-      "Diseño y construyo herramientas de seguridad e infraestructura: TrenchPass (gateway MCP de credenciales en Rust) y XEK (40+ skills de verificación check-only).",
-      "Tooling para desarrolladores y web fullstack: ecosistema de plantillas para Claude Code y portales en Next.js con backend propio.",
+      "Diseño y desarrollo webs, aplicaciones y plataformas a medida para negocios, con tecnología moderna (Next.js, React, TypeScript) y backend propio.",
+      "También creo herramientas internas y automatizaciones para equipos, y publico proyectos open source de ingeniería como TrenchPass (Rust) y XEK.",
     ],
-    tags: ["Rust", "Python", "TypeScript", "Seguridad", "MCP"],
+    tags: ["TypeScript", "Next.js", "React", "Plataformas", "Rust"],
   },
   {
     year: "Hasta 2026",
-    role: "Desarrollo, seguridad y autoformación",
+    role: "Desarrollo y formación continua",
     org: "Proyectos propios y aprendizaje continuo",
     bullets: [
-      "Base técnica en seguridad, sistemas (Rust) y automatización (Python), volcada en proyectos open source públicos.",
+      "Base técnica sólida en desarrollo, sistemas (Rust) y automatización (Python), volcada en proyectos open source públicos.",
       "Detalle de experiencia, referencias y CV disponibles bajo petición.",
     ],
-    tags: ["Seguridad", "Rust", "Python", "Open Source"],
+    tags: ["Desarrollo", "Rust", "Python", "Open Source"],
   },
   // TODO: si procede, detallar empleos/clientes anteriores con rol, empresa, fechas y logros reales.
 ];
@@ -43,8 +43,8 @@ export const PRINCIPLES: Principle[] = [
   },
   {
     icon: "check",
-    title: "Calidad y verificación",
-    body: "Nada se entrega sin verde: CI, tests y validadores en modo estricto. Verificar antes de modificar — la filosofía check-only de XEK aplicada a todo lo que construyo.",
+    title: "Calidad de verdad",
+    body: "Nada se entrega sin pasar los controles: pruebas automáticas y revisión antes de cada entrega. Reviso y verifico antes de dar nada por terminado, para que lo que recibes funcione.",
   },
   {
     icon: "git-branch",
@@ -54,7 +54,7 @@ export const PRINCIPLES: Principle[] = [
 ];
 
 export const DAILY_STACK = [
-  "Rust", "Python", "TypeScript", "Next.js", "React", "Bash",
-  "Docker", "HashiCorp Vault", "OpenTelemetry", "SigNoz", "PostgreSQL",
-  "MCP", "Claude Code", "GitHub Actions", "JSON Schema", "Tailwind", "Vercel",
+  "TypeScript", "Next.js", "React", "Node.js", "Python", "PostgreSQL",
+  "Tailwind", "Docker", "Vercel", "GitHub Actions", "Rust", "Bash",
+  "OpenTelemetry", "Claude Code",
 ];

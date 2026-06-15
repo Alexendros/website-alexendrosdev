@@ -7,7 +7,7 @@ import type { Project } from "@/lib/content";
 import { Icon } from "@/components/ui/Icon";
 import { Eyebrow } from "@/components/ui/SectionHead";
 
-const PROJ_CATS = ["Todos", "Web App", "Mobile", "API", "Open Source", "Infra"];
+const PROJ_CATS = ["Todos", "Web App", "Plataforma", "Open Source"];
 const ORDERS: [string, string][] = [
   ["recientes", "Más recientes"],
   ["antiguos", "Más antiguos"],
@@ -85,8 +85,8 @@ export function ProjectsView() {
         <Eyebrow>portafolio · {PROJECTS.length}+ proyectos</Eyebrow>
         <h1 className="ak-page-title">Proyectos</h1>
         <p className="ak-page-lead">
-          Una selección de lo que he construido: herramientas de seguridad, gateways de
-          credenciales, tooling para desarrolladores y proyectos open source.
+          Una selección de lo que he construido: webs y aplicaciones, plataformas y backend,
+          herramientas a medida y proyectos open source.
         </p>
       </section>
       <section className="ak-section" style={{ paddingTop: 14 }}>

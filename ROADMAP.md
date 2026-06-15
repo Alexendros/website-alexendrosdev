@@ -123,13 +123,29 @@
 > como **opt-in**: actívala con `COMING_SOON=1` para volver a cerrar el sitio temporalmente. La
 > cabecera/pie se ocultan en ese modo.
 
-> Nota build (sandbox): `pnpm build` (static export) falla en el contenedor de trabajo con
-> `useContext` null en `/` y en `/_global-error` (página del framework), con Turbopack **y** webpack,
-> tras reinstalación limpia. La CI de GitHub (mismo Node 22, `react@19.2.4`/`next@16.2.6`) compila el
-> mismo código en **verde**, así que la CI/Vercel son la fuente de verdad del build. `/escaparate`
-> sirve 200 en dev y pasa format/lint/typecheck/unit.
+> Nota build (2026-06-15): el fallo `useContext` null en sandbox **ya no se reproduce**;
+> `next build` compila las 28 rutas en verde en local (worktree), igual que CI/Vercel.
 
 ---
+
+## Estado de cierre (2026-06-15) — Reposicionamiento hacia desarrollo
+
+Pivote del eje comercial de **seguridad → desarrollo de plataformas/webs/apps** y reescritura
+del copy a lenguaje accesible para el cliente (menos jerga), más precios contenidos para
+empresas nuevas/pequeñas:
+
+- **Mensaje/tono**: hero, footer, terminal, metadatos/OG (`layout.tsx`), páginas
+  `sobre-mi`/`servicios`/`proyectos`/`blog` y `feed.xml` reorientados a desarrollo y sin jerga
+  (XEK, SAST/SCA/DAST, mTLS, check-only, hardening, gateway de credenciales).
+- **Servicios** (`services.ts`): desarrollo lidera (webs/apps, plataformas, automatización);
+  seguridad pasa a servicio secundario. Precios contenidos (ancla ≈ €40-45/h): proyecto
+  €1.200/€2.900/€5.900+, cuota €690/€1.290/€1.990, addons €60-600.
+- **Catálogo Stripe** (`checkout.ts`): reencuadrado (puesta a punto web, consultoría, revisión
+  de seguridad) con precios contenidos; test `checkout.test.ts` actualizado.
+- **Proyectos** (`projects.ts`): TrenchPass → «Plataforma / Backend», XEK → «Herramientas /
+  Automatización»; `alexendros.me` (web) ascendido a destacado. Nuevo `kind: "Plataforma"`.
+- **Higiene**: `.idea/`/`.junie/`/`.ruff_cache/` a `.gitignore` y `.prettierignore`.
+- **Verificación**: lint + typecheck + vitest (21/21) + `next build` (28 rutas) en verde.
 
 ## Bloqueos activos
 

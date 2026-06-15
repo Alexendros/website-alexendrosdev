@@ -4,7 +4,7 @@ import { ProjectsView } from "@/components/sections/projects/ProjectsView";
 export const metadata: Metadata = {
   title: "Proyectos",
   description:
-    "Herramientas de seguridad, gateways de credenciales, tooling para desarrolladores y proyectos open source.",
+    "Webs y aplicaciones, plataformas y backend, herramientas a medida y proyectos open source.",
 };
 
 export default function ProjectsPage() {

@@ -7,24 +7,24 @@ import type { PurchasableItem } from "./types";
 // Precios base orientativos. TODO: verificar antes de cobrar.
 export const PURCHASABLES: PurchasableItem[] = [
   {
-    id: "auditoria-seguridad",
-    name: "Auditoría de seguridad",
-    desc: "Verificación check-only (XEK) de repo, app o host: SAST/SCA/DAST, IaC y compliance. Informe priorizado con propuesta.",
-    amount: 150_000,
+    id: "puesta-a-punto-web",
+    name: "Puesta a punto de tu web",
+    desc: "Reviso tu web actual (velocidad, posicionamiento en Google y errores) y te entrego un informe claro con las mejoras priorizadas.",
+    amount: 39_000,
     currency: "eur",
   },
   {
-    id: "sesion-mentoria",
-    name: "Sesión de mentoría (1 h)",
-    desc: "Acompañamiento técnico en seguridad, MCP/Claude Code, Rust o arquitectura web.",
-    amount: 9_000,
+    id: "sesion-consultoria",
+    name: "Sesión de consultoría (1 h)",
+    desc: "Hablamos de tu proyecto y te ayudo a decidir cómo abordar tu web, tu aplicación o una automatización. Sin compromiso.",
+    amount: 6_000,
     currency: "eur",
   },
   {
-    id: "sprint-hardening",
-    name: "Sprint de hardening",
-    desc: "1-2 semanas asegurando secretos, mTLS, observabilidad y CI: de configuración frágil a sistema auditable.",
-    amount: 250_000,
+    id: "revision-seguridad",
+    name: "Revisión de seguridad",
+    desc: "Reviso tu web o tu sistema y te explico, en cristiano, qué conviene mejorar para estar tranquilo. Solo reviso: no toco nada sin tu visto bueno.",
+    amount: 60_000,
     currency: "eur",
   },
 ];

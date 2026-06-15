@@ -1,108 +1,108 @@
 import type { Addon, ComparisonRow, FaqItem, HomeService, Tiers } from "./types";
 
-// Precios base ORIENTATIVOS (EUR), pensados para freelance senior en España con
-// foco en seguridad/infra/fullstack. Ancla ≈ €60-65/h. Públicos en formato
-// «desde». TODO: revisar/ajustar a tu criterio antes de cerrar tarifas.
+// Precios base ORIENTATIVOS (EUR), contenidos para empresas nuevas y pequeñas
+// (foco en desarrollo de plataformas/web/apps). Ancla ≈ €40-45/h. Públicos en
+// formato «desde». TODO: revisar/ajustar a tu criterio antes de cerrar tarifas.
 export const HOME_SERVICES: HomeService[] = [
   {
-    name: "Seguridad & auditoría",
-    sub: "Auditorías check-only (XEK): SAST/SCA/DAST, IaC y compliance/RGPD. Informe priorizado + propuesta.",
-    price: "desde €1.500",
+    name: "Webs y aplicaciones a medida",
+    sub: "Tu sitio o tu app, de la idea al lanzamiento: diseño, desarrollo y puesta en marcha con tecnología moderna que carga rápido y se ve bien en cualquier pantalla.",
+    price: "desde €1.200",
   },
   {
-    name: "Fullstack web",
-    sub: "Sitios y apps en Next.js 15/16 · React 19 · TypeScript, con backend propio y despliegue en Vercel.",
-    price: "desde €3.500",
+    name: "Plataformas y producto digital",
+    sub: "Cuando necesitas algo más que una web: paneles de gestión, áreas privadas, pagos e integraciones con las herramientas que ya usas, listas para crecer contigo.",
+    price: "desde €2.900",
   },
   {
-    name: "Infra & hardening",
-    sub: "Secretos (Vault), mTLS, contenedores y observabilidad (OpenTelemetry → SigNoz). Sistemas auditables.",
-    price: "desde €2.500",
-  },
-  {
-    name: "MCP & tooling",
-    sub: "Servidores MCP, gateways de credenciales y herramientas para Claude Code, con plantillas y validación.",
+    name: "Automatización y herramientas internas",
+    sub: "Herramientas a medida que ahorran horas a tu equipo: automatizo tareas repetitivas y conecto tus sistemas para que trabajen solos.",
     price: "a consultar",
+  },
+  {
+    name: "Revisión de seguridad",
+    sub: "Reviso tu web o tu sistema y te explico, en cristiano, qué conviene mejorar para estar tranquilo. Solo reviso: no toco nada sin tu visto bueno.",
+    price: "desde €600",
   },
 ];
 
-// Precios base orientativos. TODO: verificar antes de publicar.
+// Precios base orientativos y contenidos (pymes/startups). TODO: verificar antes de publicar.
 export const TIERS: Tiers = {
   proyecto: [
     {
       name: "Starter",
-      price: "€2.500",
+      price: "€1.200",
       unit: "/proyecto",
       feats: [
-        ["Sitio o herramienta acotada", true],
-        ["Hasta 5 vistas/comandos", true],
-        ["Responsive + SEO base", true],
-        ["Backend propio", false],
+        ["Sitio web o herramienta acotada", true],
+        ["Hasta 5 páginas", true],
+        ["Adaptable a móvil + SEO base", true],
+        ["Backend a medida", false],
         ["Soporte 30 días", false],
       ],
     },
     {
       name: "Pro",
-      price: "€6.500",
+      price: "€2.900",
       unit: "/proyecto",
       pro: true,
       feats: [
-        ["App o servicio fullstack", true],
-        ["Auth, datos y backend propio", true],
-        ["CI/CD + tests automatizados", true],
+        ["Aplicación o plataforma completa", true],
+        ["Acceso de usuarios, datos y backend", true],
+        ["Pruebas automáticas y despliegue continuo", true],
         ["Soporte 60 días", true],
-        ["Documentación técnica", true],
+        ["Documentación de uso", true],
       ],
     },
     {
       name: "Scale",
-      price: "€14.000+",
+      price: "€5.900+",
       unit: "/proyecto",
       feats: [
         ["Arquitectura a medida", true],
-        ["Seguridad y observabilidad", true],
-        ["Hardening + auditoría", true],
-        ["SLA y on-call", true],
-        ["Roadmap conjunto", true],
+        ["Buenas prácticas de seguridad", true],
+        ["Monitorización y alertas", true],
+        ["Soporte prioritario", true],
+        ["Hoja de ruta conjunta", true],
       ],
     },
   ],
   retainer: [
     {
       name: "Starter",
-      price: "€1.250",
+      price: "€690",
       unit: "/mes",
       feats: [
         ["20 h/mes", true],
-        ["Mantenimiento y monitoring", true],
-        ["Corrección de bugs", true],
-        ["Features nuevas", false],
-        ["On-call", false],
+        ["Mantenimiento y monitorización", true],
+        ["Corrección de errores", true],
+        ["Funcionalidades nuevas", false],
+        ["Soporte prioritario", false],
       ],
     },
     {
       name: "Pro",
-      price: "€2.600",
+      price: "€1.290",
       unit: "/mes",
       pro: true,
       feats: [
         ["40 h/mes", true],
-        ["Features nuevas", true],
-        ["Code & security reviews", true],
+        ["Funcionalidades nuevas", true],
+        ["Revisiones de código", true],
         ["Canal directo", true],
-        ["Reporte semanal", true],
+        ["Informe semanal", true],
       ],
     },
     {
       name: "Scale",
-      price: "€4.500",
+      price: "€1.990",
       unit: "/mes",
       feats: [
         ["70 h/mes (media jornada)", true],
-        ["Roadmap conjunto", true],
-        ["Arquitectura y ADRs", true],
-        ["On-call", true],
-        ["SLA acordado", true],
+        ["Hoja de ruta conjunta", true],
+        ["Arquitectura y decisiones documentadas", true],
+        ["Soporte prioritario", true],
+        ["Acuerdo de servicio (SLA)", true],
       ],
     },
   ],
@@ -110,29 +110,29 @@ export const TIERS: Tiers = {
 
 export const COMPARISON: ComparisonRow[] = [
   ["Desarrollo a medida", [true, true, true]],
-  ["Backend propio", [false, true, true]],
-  ["Tests automatizados", [false, true, true]],
-  ["CI/CD", [false, true, true]],
-  ["Seguridad & observabilidad", [false, true, true]],
-  ["SLA & on-call", [false, false, true]],
+  ["Backend a medida", [false, true, true]],
+  ["Pruebas automáticas", [false, true, true]],
+  ["Despliegue continuo", [false, true, true]],
+  ["Seguridad y monitorización", [false, true, true]],
+  ["Acuerdo de servicio y soporte prioritario", [false, false, true]],
 ];
 
 // Items puntuales (sincronizados con PURCHASABLES en checkout.ts).
 export const ADDONS: Addon[] = [
   {
-    name: "Auditoría de seguridad",
-    desc: "Verificación check-only (XEK) de repo, app o host: SAST/SCA/DAST, IaC y compliance. Informe priorizado con propuesta.",
-    price: "desde €1.500",
+    name: "Puesta a punto de tu web",
+    desc: "Reviso tu web actual (velocidad, posicionamiento en Google y errores) y te entrego un informe claro con las mejoras priorizadas.",
+    price: "€390",
   },
   {
-    name: "Sesión de mentoría",
-    desc: "Acompañamiento técnico en seguridad, MCP/Claude Code, Rust o arquitectura web. 1 hora.",
-    price: "€90/hora",
+    name: "Sesión de consultoría",
+    desc: "Hablamos de tu proyecto y te ayudo a decidir cómo abordar tu web, tu aplicación o una automatización. 1 hora, sin compromiso.",
+    price: "€60/hora",
   },
   {
-    name: "Sprint de hardening",
-    desc: "1-2 semanas asegurando secretos, mTLS, observabilidad y CI: de configuración frágil a sistema auditable.",
-    price: "desde €2.500",
+    name: "Revisión de seguridad",
+    desc: "Reviso tu web o tu sistema y te explico, en cristiano, qué conviene mejorar para estar tranquilo. Solo reviso: no toco nada sin tu visto bueno.",
+    price: "desde €600",
   },
 ];
 
@@ -146,8 +146,8 @@ export const FAQ: FaqItem[] = [
     a: "Sí. Las tarifas que ves son orientativas («desde»); tras la llamada de descubrimiento te paso un precio cerrado por el alcance acordado. Los cambios pequeños van incluidos; para cambios significativos, paro, evaluamos juntos el impacto y lo acordamos antes de continuar.",
   },
   {
-    q: "¿Trabajas con seguridad sin modificar mis sistemas?",
-    a: "Sí. Mi enfoque (XEK) es check-only: verifico y razono, no modifico. Recibes un informe con hallazgos y una propuesta de remediación; la acción correctiva es siempre una decisión tuya.",
+    q: "¿Y la seguridad de lo que construyes?",
+    a: "Va incluida de serie: todo lo que desarrollo se construye con buenas prácticas desde el principio. Si además quieres que revise una web o un sistema que ya tienes, lo hago sin tocar nada: te entrego un informe claro con lo que conviene mejorar y tú decides.",
   },
   {
     q: "¿De quién es el código que entregas?",

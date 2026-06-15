@@ -4,7 +4,7 @@ import { ServicesView } from "@/components/sections/services/ServicesView";
 export const metadata: Metadata = {
   title: "Servicios",
   description:
-    "Servicios de seguridad, tooling/MCP y desarrollo fullstack. Planes por proyecto o retainer, precios cerrados y sin sorpresas.",
+    "Desarrollo de webs, aplicaciones y plataformas a medida. Planes por proyecto o cuota mensual, precios cerrados y contenidos para empresas nuevas y pequeñas.",
 };
 
 export default function ServicesPage() {

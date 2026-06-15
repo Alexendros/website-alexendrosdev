@@ -10,7 +10,7 @@ export interface Project {
   id: string;
   title: string;
   category: string;
-  kind: "Web App" | "Infra" | "API" | "Open Source";
+  kind: "Web App" | "Plataforma" | "Infra" | "API" | "Open Source";
   year: string;
   h: number; // alto relativo para el masonry
   featured?: boolean;
