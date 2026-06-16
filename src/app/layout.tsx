@@ -29,6 +29,9 @@ export const metadata: Metadata = {
   description:
     "Desarrollo plataformas, webs y aplicaciones a medida en Valencia. Tecnología moderna, código que es tuyo y precios pensados para empresas nuevas y pequeñas.",
   authors: [{ name: "Alejandro Domingo Agustí" }],
+  alternates: {
+    canonical: "./",
+  },
   openGraph: {
     title: "Alejandro Domingo Agustí · Desarrollo de plataformas, webs y apps",
     description:
