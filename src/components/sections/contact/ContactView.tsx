@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useId, useState } from "react";
 import { SITE } from "@/lib/content";
 import { Button } from "@/components/ui/Button";
 import { Icon, type IconName } from "@/components/ui/Icon";
@@ -31,18 +31,26 @@ interface FieldProps {
 }
 
 function Field({ label, value, onChange, type = "text", placeholder, error }: FieldProps) {
+  const id = useId();
+  const errorId = `${id}-error`;
   return (
     <div className="ak-field">
-      <label className="ak-label">{label}</label>
+      <label className="ak-label" htmlFor={id}>
+        {label}
+      </label>
       <input
+        id={id}
+        name={type === "email" ? "email" : label.toLowerCase()}
         className={`ak-input ${error ? "err" : ""}`.trim()}
         type={type}
         value={value}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error ? errorId : undefined}
       />
       {error && (
-        <span className="ak-err-msg">
+        <span className="ak-err-msg" id={errorId}>
           <Icon name="alert-circle" size={13} />
           {error}
         </span>
@@ -221,15 +229,21 @@ function MultiStepForm() {
               </div>
             </div>
             <div className="ak-field">
-              <label className="ak-label">Cuéntame del proyecto</label>
+              <label className="ak-label" htmlFor="contact-message">
+                Cuéntame del proyecto
+              </label>
               <textarea
+                id="contact-message"
+                name="message"
                 className={`ak-textarea ${errors.message ? "err" : ""}`.trim()}
                 value={data.message}
                 placeholder="Objetivo, alcance, plazos…"
                 onChange={(e) => set("message", e.target.value)}
+                aria-invalid={errors.message ? true : undefined}
+                aria-describedby={errors.message ? "contact-message-error" : undefined}
               />
               {errors.message && (
-                <span className="ak-err-msg">
+                <span className="ak-err-msg" id="contact-message-error">
                   <Icon name="alert-circle" size={13} />
                   {errors.message}
                 </span>
