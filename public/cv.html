@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alejandro Domingo Agustí — Chef · Cocinero · CV</title>
+    <meta
+      name="description"
+      content="Currículum de Alejandro Domingo Agustí — Chef y cocinero con más de 10 años de experiencia en cocinas de Barcelona y Valencia."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ===== Paleta Arctic Ocean (tema claro) ===== */
+      :root {
+        --bg: #fafafa;
+        --card: #ffffff;
+        --sunken: #f0f4f8;
+        --highlight: #d4e4f7;
+        --text: #1a2332;
+        --text-2: #4a5568;
+        --text-3: #708090;
+        --primary: #4a6fa5; /* azul acero */
+        --primary-deep: #355080;
+        --teal: #2d8b8b; /* seafoam / teal */
+        --border: #c8d4e0;
+        --border-subtle: #e2e8f0;
+        --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        background: #d9e2ec;
+        color: var(--text);
+        font-family: var(--sans);
+        font-size: 10.2px;
+        line-height: 1.45;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ===== Hoja A4 ===== */
+      .page {
+        position: relative;
+        width: 210mm;
+        min-height: 296mm;
+        margin: 16px auto;
+        background: var(--bg);
+        display: grid;
+        grid-template-columns: 70mm 1fr;
+        box-shadow: 0 10px 40px rgba(26, 35, 50, 0.18);
+        overflow: hidden;
+      }
+
+      /* ===== Barra lateral ===== */
+      .aside {
+        background: var(--text);
+        color: #e8eef6;
+        padding: 14mm 9mm 12mm;
+      }
+
+      .aside .name-block {
+        margin-bottom: 9mm;
+      }
+      .aside h1 {
+        font-size: 21px;
+        font-weight: 800;
+        line-height: 1.1;
+        letter-spacing: -0.01em;
+        color: #f1faee;
+      }
+      .aside h1 .surname {
+        color: #a8dadc;
+        display: block;
+        font-weight: 700;
+      }
+      .aside .role {
+        margin-top: 5px;
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #a8dadc;
+      }
+
+      .aside section {
+        margin-bottom: 8mm;
+      }
+      .aside h2 {
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #ffffff;
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+        border-bottom: 1px solid rgba(168, 218, 220, 0.35);
+      }
+
+      .contact-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 7px;
+        margin-bottom: 7px;
+        font-size: 9.6px;
+        color: #cdd9e8;
+        word-break: break-word;
+      }
+      .contact-item svg {
+        flex: 0 0 13px;
+        width: 13px;
+        height: 13px;
+        margin-top: 1px;
+        color: #a8dadc;
+      }
+      .contact-item a {
+        color: #cdd9e8;
+        text-decoration: none;
+      }
+
+      /* Idiomas */
+      .lang {
+        margin-bottom: 8px;
+      }
+      .lang-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 9.6px;
+        margin-bottom: 3px;
+      }
+      .lang-row .level {
+        color: #a8dadc;
+        font-family: var(--mono);
+        font-size: 8.6px;
+      }
+      .bar {
+        height: 4px;
+        border-radius: 4px;
+        background: rgba(168, 218, 220, 0.22);
+        overflow: hidden;
+      }
+      .bar > span {
+        display: block;
+        height: 100%;
+        border-radius: 4px;
+        background: var(--teal);
+      }
+
+      /* Habilidades */
+      .skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      .chip {
+        font-size: 8.8px;
+        padding: 3px 8px;
+        border-radius: 20px;
+        background: rgba(168, 218, 220, 0.14);
+        border: 1px solid rgba(168, 218, 220, 0.3);
+        color: #e8eef6;
+      }
+
+      /* Formación (lateral) */
+      .edu {
+        font-size: 9.6px;
+        color: #cdd9e8;
+      }
+      .edu .deg {
+        font-weight: 600;
+        color: #f1faee;
+        font-size: 10px;
+      }
+      .edu .meta {
+        color: #a8dadc;
+        margin-top: 2px;
+      }
+
+      /* ===== Columna principal ===== */
+      .main {
+        padding: 14mm 12mm 12mm;
+        background: var(--bg);
+      }
+
+      .main h2 {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--primary-deep);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 9px;
+      }
+      .main h2::after {
+        content: "";
+        flex: 1;
+        height: 2px;
+        background: linear-gradient(90deg, var(--primary) 0%, var(--teal) 100%);
+        border-radius: 2px;
+        opacity: 0.55;
+      }
+
+      .profile {
+        margin-bottom: 9mm;
+      }
+      .profile p {
+        color: var(--text-2);
+        font-size: 10.4px;
+        line-height: 1.6;
+      }
+
+      /* Timeline experiencia */
+      .xp {
+        margin-bottom: 9mm;
+      }
+      .timeline {
+        position: relative;
+        padding-left: 16px;
+      }
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 4px;
+        top: 4px;
+        bottom: 4px;
+        width: 2px;
+        background: linear-gradient(180deg, var(--primary) 0%, var(--teal) 100%);
+        opacity: 0.45;
+      }
+      .job {
+        position: relative;
+        margin-bottom: 12px;
+        break-inside: avoid;
+      }
+      .job:last-child {
+        margin-bottom: 0;
+      }
+      .job::before {
+        content: "";
+        position: absolute;
+        left: -16px;
+        top: 4px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--card);
+        border: 2px solid var(--primary);
+      }
+      .job .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 10px;
+      }
+      .job .title {
+        font-weight: 700;
+        font-size: 11px;
+        color: var(--text);
+      }
+      .job .org {
+        font-weight: 600;
+        color: var(--teal);
+      }
+      .job .dates {
+        font-family: var(--mono);
+        font-size: 8.8px;
+        color: var(--text-3);
+        white-space: nowrap;
+      }
+      .job ul {
+        list-style: none;
+        margin-top: 4px;
+      }
+      .job li {
+        position: relative;
+        padding-left: 12px;
+        font-size: 9.8px;
+        color: var(--text-2);
+        line-height: 1.5;
+        margin-bottom: 2px;
+      }
+      .job li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 6px;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: var(--primary);
+        opacity: 0.7;
+      }
+
+      .footnote {
+        margin-top: 7mm;
+        font-size: 8.4px;
+        color: var(--text-3);
+        font-style: italic;
+        border-top: 1px solid var(--border-subtle);
+        padding-top: 6px;
+      }
+
+      /* Botón imprimir (oculto al imprimir) */
+      .print-btn {
+        position: fixed;
+        top: 18px;
+        right: 18px;
+        z-index: 10;
+        font-family: var(--sans);
+        font-size: 13px;
+        font-weight: 600;
+        color: #fff;
+        background: var(--primary);
+        border: none;
+        border-radius: 8px;
+        padding: 10px 16px;
+        cursor: pointer;
+        box-shadow: 0 4px 14px rgba(74, 111, 165, 0.4);
+      }
+      .print-btn:hover {
+        background: var(--primary-deep);
+      }
+
+      /* ===== Impresión ===== */
+      @page {
+        size: A4;
+        margin: 0;
+      }
+      @media print {
+        html,
+        body {
+          background: #fff;
+          font-size: 10.2px;
+        }
+        .print-btn {
+          display: none !important;
+        }
+        .page {
+          margin: 0;
+          box-shadow: none;
+          width: 210mm;
+          min-height: 296mm;
+        }
+        * {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <button class="print-btn" onclick="window.print()">Imprimir / Guardar PDF</button>
+
+    <div class="page">
+      <!-- ===== Barra lateral ===== -->
+      <aside class="aside">
+        <div class="name-block">
+          <h1>Alejandro<span class="surname">Domingo Agustí</span></h1>
+          <div class="role">Chef · Cocinero</div>
+        </div>
+
+        <section>
+          <h2>Contacto</h2>
+          <div class="contact-item">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="2" y="4" width="20" height="16" rx="2" />
+              <path d="m22 7-10 5L2 7" />
+            </svg>
+            <a href="mailto:Alexendros@proton.me">Alexendros@proton.me</a>
+          </div>
+          <div class="contact-item">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"
+              />
+            </svg>
+            <span>+34 623 570 672 · WhatsApp</span>
+          </div>
+          <div class="contact-item">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            <span>Valencia, España</span>
+          </div>
+        </section>
+
+        <section>
+          <h2>Idiomas</h2>
+          <div class="lang">
+            <div class="lang-row"><span>Español</span><span class="level">Nativo</span></div>
+            <div class="bar"><span style="width: 100%"></span></div>
+          </div>
+          <div class="lang">
+            <div class="lang-row"><span>Valenciano</span><span class="level">Nativo</span></div>
+            <div class="bar"><span style="width: 100%"></span></div>
+          </div>
+          <div class="lang">
+            <div class="lang-row"><span>Inglés</span><span class="level">Intermedio</span></div>
+            <div class="bar"><span style="width: 60%"></span></div>
+          </div>
+        </section>
+
+        <section>
+          <h2>Habilidades</h2>
+          <div class="skills">
+            <span class="chip">Gestión de cocina</span>
+            <span class="chip">Liderazgo de equipos</span>
+            <span class="chip">Diseño de menús</span>
+            <span class="chip">Control de escandallos</span>
+            <span class="chip">Optimización de procesos</span>
+            <span class="chip">Gestión de recursos</span>
+            <span class="chip">Gestión del tiempo</span>
+            <span class="chip">Reducción de mermas</span>
+            <span class="chip">Cocina internacional y local</span>
+            <span class="chip">Producto de temporada</span>
+            <span class="chip">APPCC / higiene</span>
+            <span class="chip">Trabajo bajo presión</span>
+          </div>
+        </section>
+
+        <section>
+          <h2>Formación</h2>
+          <div class="edu">
+            <div class="deg">Grado en Cocina y Gastronomía</div>
+            <div class="meta">Academia Aclys — Valencia</div>
+            <div class="meta">Prácticas: Hotel Astoria</div>
+          </div>
+        </section>
+      </aside>
+
+      <!-- ===== Columna principal ===== -->
+      <main class="main">
+        <section class="profile">
+          <h2>Perfil profesional</h2>
+          <p>
+            Chef con más de diez años de experiencia en cocinas de Barcelona y Valencia,
+            especializado en la gestión eficiente del servicio y en la resolución de problemas para
+            garantizar una experiencia gastronómica de calidad. Versátil en todo tipo de partidas,
+            capaz de liderar equipos o trabajar de forma autónoma, con foco en el diseño de menús,
+            la optimización de recursos y el aprovechamiento de producto local y de temporada.
+          </p>
+        </section>
+
+        <section class="xp">
+          <h2>Experiencia</h2>
+          <div class="timeline">
+            <div class="job">
+              <div class="top">
+                <span class="title"
+                  >Cocinero — <span class="org">Bierwinkel, S.L.</span> · Valencia</span
+                >
+                <span class="dates">2026 — Actualidad</span>
+              </div>
+              <ul>
+                <li>
+                  Ejecución del servicio diario manteniendo los estándares de calidad de la casa.
+                </li>
+                <li>
+                  Responsabilidad sobre las partidas asignadas y coordinación con el resto del
+                  equipo.
+                </li>
+              </ul>
+            </div>
+
+            <div class="job">
+              <div class="top">
+                <span class="title"
+                  >Jefe de Partida / Cocinero —
+                  <span class="org"
+                    >Establecimientos de Valencia y servicios de catering</span
+                  ></span
+                >
+                <span class="dates">2023 — 2025</span>
+              </div>
+              <ul>
+                <li>
+                  Puestos de temporada en restauración y catering (entre ellos Gastrobar Motes,
+                  2024, y Hotel Sea You, 2023).
+                </li>
+                <li>
+                  Organización y elaboración del menú semanal, montaje de buffet y platos para menús
+                  temáticos.
+                </li>
+                <li>
+                  Control de existencias, optimización de recursos y reducción de mermas; producto
+                  local y de temporada.
+                </li>
+              </ul>
+            </div>
+
+            <div class="job">
+              <div class="top">
+                <span class="title"
+                  >Jefe de Partida — <span class="org">Restaurante Paco Meralgo</span> ·
+                  Barcelona</span
+                >
+                <span class="dates">2022</span>
+              </div>
+              <ul>
+                <li>
+                  Diseño de sugerencias y preparación de platos temáticos; coordinación de la
+                  producción en cocina.
+                </li>
+                <li>
+                  Gestión de la ejecución eficiente de los platos manteniendo los estándares de
+                  calidad.
+                </li>
+                <li>
+                  Inicio de actividad propia en Valencia (autónomo) compaginando encargos y
+                  servicios puntuales.
+                </li>
+              </ul>
+            </div>
+
+            <div class="job">
+              <div class="top">
+                <span class="title"
+                  >Segundo Chef — <span class="org">Restaurante Els 4 Gats</span> · Barcelona</span
+                >
+                <span class="dates">2019 — 2022</span>
+              </div>
+              <ul>
+                <li>Diseño de menús, sugerencias y preparación de platos temáticos.</li>
+                <li>Coordinación y supervisión de la producción en cocina.</li>
+                <li>
+                  Gestión de la ejecución eficiente de los platos manteniendo los estándares de
+                  calidad.
+                </li>
+              </ul>
+            </div>
+
+            <div class="job">
+              <div class="top">
+                <span class="title"
+                  >Segundo Chef — <span class="org">Hotel H10 Madison</span> · Barcelona</span
+                >
+                <span class="dates">2019 — 2020</span>
+              </div>
+              <ul>
+                <li>
+                  Diseño del menú a la carta del restaurante del hotel y del servicio de
+                  habitaciones.
+                </li>
+                <li>Supervisión y coordinación de los procesos de producción en cocina.</li>
+                <li>Asistencia en la supervisión de inventarios y productos.</li>
+              </ul>
+            </div>
+
+            <div class="job">
+              <div class="top">
+                <span class="title"
+                  >Cocinero / Ayudante de cocina —
+                  <span class="org">Barcelona y Valencia</span></span
+                >
+                <span class="dates">2014 — 2019</span>
+              </div>
+              <ul>
+                <li>Etapa formativa en distintas cocinas de hostelería y restauración.</li>
+                <li>
+                  Progresión desde ayudante hasta partida, asumiendo responsabilidad creciente sobre
+                  el servicio.
+                </li>
+              </ul>
+            </div>
+          </div>
+          <p class="footnote">
+            Trayectoria continuada en hostelería desde 2014, con experiencia acreditada en el
+            Informe de Vida Laboral. Referencias disponibles a petición.
+          </p>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
