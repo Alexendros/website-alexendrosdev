@@ -2,9 +2,23 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { act, renderHook } from "@testing-library/react";
 import { useTheme } from "@/lib/hooks/useTheme";
 
+const localStorageMock = (function () {
+  let store: Record<string, string> = {};
+  return {
+    getItem: (key: string) => store[key] || null,
+    setItem: (key: string, value: string) => {
+      store[key] = value.toString();
+    },
+    clear: () => {
+      store = {};
+    },
+  };
+})();
+
 beforeEach(() => {
   document.documentElement.classList.remove("dark");
-  localStorage.clear();
+  (window as unknown as { localStorage: typeof localStorageMock }).localStorage = localStorageMock;
+  localStorageMock.clear();
 });
 afterEach(() => {
   document.documentElement.classList.remove("dark");

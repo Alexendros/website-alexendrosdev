@@ -1,59 +1,88 @@
-# CLAUDE.md
+# CLAUDE.md — website-alexendrosdev
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guía para Claude Code al trabajar en este repositorio.
 
-## Comandos
+<proyecto>
+Portfolio profesional fullstack de **Alejandro Domingo Agustí (Alexendros)**, Software & Platform Engineer en Valencia — sitio de **alexendros.dev**. Migración de un prototipo HTML/CSS/JS (sistema de diseño _Arctic Ocean_) a una app Next.js real con backend propio. El contenido refleja trabajo real (seguridad, tooling/MCP, infraestructura en Rust/Python/TS) y está personalizado con sus datos. Incluye además un esquema CRM personal en Prisma (contactos, deals, pipeline, facturas) aún no expuesto por UI.
+</proyecto>
 
-Gestor: **pnpm ≥10** (lockfile `pnpm-lock.yaml`, `pnpm-workspace.yaml` declara `allowBuilds` para native deps).
+<stack>
+- **Next.js 16.2.6** (App Router, Turbopack) · **React 19.2** · **TypeScript** estricto.
+- **Tailwind CSS v4** (`@theme` en `globals.css`) + `site.css` portado (tokens HSL, light _Arctic Frost_ / dark _Ocean Depths_).
+- **MDX** blog (`next-mdx-remote/rsc` v6, TOC vía `rehype-slug`) · **lucide-react** · next/font (Inter, JetBrains Mono).
+- **Backend**: Route Handlers + **zod v4** + **Resend** + **React Email** + **Stripe** + **Prisma 7 / Postgres (Supabase)** con `@prisma/adapter-pg`.
+- **Observabilidad**: `@vercel/otel` + `@vercel/analytics` (cookie-less).
+- **Calidad**: ESLint 9 · Prettier · tsc · Vitest 4 · Playwright + axe · Lighthouse/html-validate (scripts de auditoría).
+
+Gestor: **pnpm 11.5.2** (`packageManager` en package.json; lockfile `pnpm-lock.yaml`, `pnpm-workspace.yaml` declara `allowBuilds` para deps nativas).
+
+Comandos REALES (de `package.json` scripts):
 
 ```bash
-pnpm dev            # servidor de desarrollo (Turbopack) → http://localhost:3000
-pnpm build          # build de producción
-pnpm lint           # ESLint (eslint-config-next)
-pnpm typecheck      # tsc --noEmit (TS estricto)
-pnpm format:check   # Prettier en modo verificación (CI); pnpm format para escribir
-pnpm test           # Vitest (unit + integration + component) en modo run
-pnpm test:watch     # Vitest en watch
-pnpm test:coverage  # Vitest con cobertura v8 + umbrales (lo que corre CI)
-pnpm e2e            # Playwright + axe (e2e)
+pnpm dev            # next dev (Turbopack) → http://localhost:3000
+pnpm build          # next build
+pnpm start          # next start (producción local)
+pnpm lint           # eslint
+pnpm typecheck      # tsc --noEmit
+pnpm format         # prettier --write .   (format:check para verificar en CI)
+pnpm test           # vitest run (unit + integration + component)
+pnpm test:watch     # vitest
+pnpm test:coverage  # vitest run --coverage (gate v8 que bloquea merge; lo que corre CI)
+pnpm e2e            # playwright test (+ axe)
+pnpm db:migrate     # prisma migrate dev   (exige DATABASE_URL)
+pnpm db:deploy      # prisma migrate deploy (prod)
+pnpm db:generate    # prisma generate (funciona sin DATABASE_URL)
+pnpm audit:lh|html|a11y  # auditorías Lighthouse / html-validate / axe (scripts/)
 ```
 
-- **Estructura de tests** (detalle en `tests/README.md`): `tests/unit` (node), `tests/integration` (Route Handlers, node), `tests/component` (islas cliente, jsdom/RTL + MSW), `tests/e2e` (Playwright), más `tests/helpers` y `tests/fixtures`. Vitest usa dos `projects` (node + jsdom) y **aliasa `server-only`→módulo vacío** para poder importar la lógica servidor en node. Cobertura v8 (gate progresivo que bloquea merge) sobre `src/lib/**` + `src/app/api/**`.
-- **Un solo test**: `pnpm exec vitest run tests/integration/contact.test.ts` (o `-t "<nombre>"` por título). Por entorno: `--project unit` / `--project component`.
-- **Un solo e2e**: `pnpm exec playwright test tests/e2e/smoke.spec.ts`. `playwright.config.ts` arranca `pnpm dev` automáticamente (webServer).
-- **Base de datos**: `pnpm db:migrate` (dev) / `pnpm db:deploy` (prod) / `pnpm db:generate`. `postinstall` ejecuta `prisma generate`. Las migraciones **exigen** `DATABASE_URL`; `prisma generate` funciona sin ella.
+- `postinstall` ejecuta `prisma generate`.
+- **Un solo test**: `pnpm exec vitest run tests/integration/contact.test.ts` (o `-t "<título>"`; por entorno `--project unit` / `--project component`). Vitest usa dos `projects` (node + jsdom) y aliasa `server-only`→módulo vacío para importar lógica servidor en node.
+- **Un solo e2e**: `pnpm exec playwright test tests/e2e/smoke.spec.ts` (`playwright.config.ts` arranca `pnpm dev` vía webServer).
+- CI (`.github/workflows/ci.yml`, job `quality`): `format:check → lint → typecheck → test:coverage → build`; job `e2e` depende de `quality`. Replica ese orden antes de cerrar trabajo. Runner configurable con la variable de repo `CI_RUNNER` (default `ubuntu-latest`).
+  </stack>
 
-El pipeline de CI (`.github/workflows/ci.yml`, job `quality`) corre en orden: `format:check → lint → typecheck → test:coverage → build`; el job `e2e` depende de `quality`. Replica ese orden antes de dar trabajo por cerrado.
+<estado>
+- **Activo / en desarrollo intenso.** 93 commits entre 2026-05-30 y **2026-06-19** (~3 semanas), flujo de PRs por rama (`claude/*`). Última actividad: 2026-06-19. Working tree limpio.
+- **Madurez: MVP avanzado** acercándose a producción. Frontend completo y personalizado; backend con pagos (Stripe Checkout), captura de leads/newsletter y CRM persistido.
+- **¿Funcional? Sí (inferido, NO ejecutado).** Evidencia: config completa (next/ts/eslint/prettier/vitest/playwright/prisma/vercel), deps declaradas con lockfile, **23 ficheros de test** (unit/integration/component/e2e) con gate de cobertura v8, 4 migraciones Prisma aplicables, y patrón de **degradación sin credenciales** que garantiza arranque 200 aunque falten claves. No hay `.next`/`dist` versionado (esperado). No se ejecutó build ni tests en este análisis.
+</estado>
 
-## Arquitectura
+<arquitectura>
+**Degradación sin credenciales** — patrón central. El sitio arranca y responde 200 aunque falten `DATABASE_URL`, `RESEND_API_KEY`, `STRIPE_SECRET_KEY`:
+- `src/lib/db.ts` → `prisma: PrismaClient | null`; `src/lib/email.ts` → `resend: Resend | null`; `src/lib/stripe.ts` → `stripe: Stripe | null`. Todos `null` si falta su clave.
+- Los Route Handlers (`src/app/api/{contact,newsletter,checkout}/route.ts`, `api/stripe/webhook`) guardan con `if (prisma)` / `if (resend)` / `if (stripe)`; sin ellos degradan y loguean aviso. **Nunca asumas que son no-nulos.** `POST /api/checkout` → 503 si no hay Stripe (UI ofrece contacto como fallback); el webhook acusa recibo sin procesar si falta clave/secreto.
+- **Pagos**: el precio es **fuente de verdad del servidor**. Catálogo tipado en `src/lib/content/checkout.ts` (`PURCHASABLES`, `getPurchasable`); el cliente solo envía el `id`. El webhook persiste `Order` (guardado por `if (prisma)`) tras verificar firma con `STRIPE_WEBHOOK_SECRET`.
 
-Portfolio fullstack en **Next.js 16 (App Router, Turbopack) · React 19 · TS estricto**, migración de un prototipo HTML/CSS/JS (sistema de diseño _Arctic Ocean_) a app real con backend propio.
+**Frontera cliente/servidor**: todo RSC por defecto; islas `"use client"`: `Terminal`, `StackGraph`, `ContactView`, `Testimonials`, `ThemeToggle`, `Marquee`, nav móvil del `Header`, filtros de proyectos. Módulos servidor con `import "server-only"` (`db.ts`, `email.ts`, `blog.ts`).
 
-**Degradación sin credenciales** — patrón central y no obvio. El sitio arranca y responde 200 aunque falten `DATABASE_URL` y `RESEND_API_KEY`:
+**Contenido tipado como fuente de datos** (no hay CMS): módulos TS en `src/lib/content/` (`projects.ts`, `posts.ts`, `services.ts`, `about.ts`, `stack.ts`, `testimonials.ts`, `case-studies.ts`, `site.ts`, `checkout.ts`; tipos en `types.ts`, reexport en `index.ts`). El blog combina metadatos (`posts.ts`) con cuerpo MDX en `content/blog/*.mdx` (3 posts: plantillas-claude-init, trenchpass-mcp-gateway, xek-verificacion-componible), leído por `src/lib/blog.ts` (`getPostSource`→`null` si no existe) y renderizado con `next-mdx-remote/rsc`.
 
-- `src/lib/db.ts`: `prisma` es `PrismaClient | null` — `null` si no hay `DATABASE_URL`.
-- `src/lib/email.ts`: `resend` es `Resend | null` — `null` si no hay `RESEND_API_KEY`.
-- `src/lib/stripe.ts`: `stripe` es `Stripe | null` — `null` si no hay `STRIPE_SECRET_KEY`. `POST /api/checkout` responde 503 (la UI ofrece contacto como fallback) y `POST /api/stripe/webhook` acusa recibo sin procesar cuando falta la clave o `STRIPE_WEBHOOK_SECRET`.
-- Los Route Handlers (`src/app/api/{contact,newsletter,checkout}/route.ts` y `api/stripe/webhook`) comprueban `if (prisma)` / `if (resend)` / `if (stripe)` antes de usarlos; sin ellos, registran un aviso en log y degradan. **No asumas que estos clientes son no-nulos**: cualquier acceso debe ir guardado.
-- **Pagos (Stripe Checkout)**: el precio es **fuente de verdad del servidor**. El catálogo tipado vive en `src/lib/content/checkout.ts` (`PURCHASABLES`, `getPurchasable`); el cliente solo envía el `id` del item, nunca el importe. El webhook persiste un `Order` (guardado por `if (prisma)`) tras verificar la firma con `STRIPE_WEBHOOK_SECRET`.
+**Validación/abuso**: esquemas zod en `src/lib/validation.ts`; handlers con rate-limit en memoria (`src/lib/rate-limit.ts`) + honeypot. Validación→422 con `fields`; rate-limit→429.
 
-**Frontera cliente/servidor**. Todo es Server Component (RSC) por defecto. Las islas cliente (`"use client"`) son: `Terminal`, `StackGraph`, `ContactView`, `Testimonials`, `ThemeToggle`, `Marquee`, nav móvil del `Header`, filtros de proyectos. Los módulos servidor llevan `import "server-only"` (`db.ts`, `email.ts`, `blog.ts`).
+**Tema (no-flash)**: script bloqueante en `app/layout.tsx` lee `localStorage['ao-theme']` (o `prefers-color-scheme`) y aplica `.dark` antes de hidratar. Tokens en `src/styles/design-tokens.css` + `site.css` (clases `ak-*`) sobre Tailwind v4.
 
-**Contenido tipado como fuente de datos**. No hay CMS: el contenido vive en módulos TS tipados en `src/lib/content/` (`projects.ts`, `posts.ts`, `services.ts`, `about.ts`, `stack.ts`, `testimonials.ts`, `case-studies.ts`, `site.ts`; tipos en `types.ts`, reexport en `index.ts`). El blog combina metadatos en `content/posts.ts` con el **cuerpo MDX** en `content/blog/*.mdx`, leído por `src/lib/blog.ts` (`getPostSource` devuelve `null` si no existe el archivo) y renderizado con `next-mdx-remote/rsc` (+ `rehype-slug`, TOC en `lib/utils/toc.ts`).
+**Estructura** `src/`:
 
-**Validación y abuso**. Esquemas zod en `src/lib/validation.ts` (`contactSchema`, `flattenErrors`). Los handlers aplican rate-limit en memoria (`src/lib/rate-limit.ts`) y honeypot antes de persistir. Errores de validación → 422 con `fields`; rate-limit → 429.
+- `app/` rutas: `/` · `/sobre-mi` · `/proyectos`(+`[slug]`) · `/stack`(grafo radial) · `/blog`(+`[slug]` MDX) · `/servicios` · `/contacto` · `/escaparate` · `/proximamente` · `/checkout`(+`/checkout/success`). API: `api/contact`, `api/newsletter`, `api/checkout`, `api/stripe/webhook`. SEO: `feed.xml`, `sitemap.xml`, `robots.txt`.
+- `components/` por ruta en `sections/` (`home/`, `blog/`, `projects/`, `services/`, `contact/`, `stack/` + `Header`, `Footer`, `Marquee`, `Terminal`, `ThemeToggle`); primitivos en `ui/`; `providers/`. Emails React Email en `src/emails/`.
+- `lib/` `content/`, `hooks/`, `seo/` (JSON-LD/Schema.org), `utils/` (TOC), más ficheros planos `db.ts`/`email.ts`/`stripe.ts`/`validation.ts`/`rate-limit.ts`/`blog.ts`.
 
-**Tema (no-flash)**. Script bloqueante en `app/layout.tsx` que lee `localStorage['ao-theme']` (o `prefers-color-scheme`) y aplica `.dark` en `<html>` antes de hidratar. El toggle cliente persiste en ese mismo `localStorage`. Tokens en `src/styles/design-tokens.css` + estilos portados en `src/styles/site.css` (clases `ak-*`), sobre Tailwind v4 (`@theme` en `globals.css`).
+**Modelo Prisma** (`prisma/schema.prisma`, Prisma 7 + adapter-pg; URL inyectada en `prisma.config.ts`, no en el schema): público — `Lead` (con campos UTM), `Subscriber`, `Order`. Más **esquema CRM personal**: `Contact`, `Product`, `PipelineStage`, `Deal`, `DealItem`, `Activity`, `Task`, `Invoice`, `InvoiceItem` + enums (`ContactType`, `ContactStatus`, `ActivityType`, `TaskPriority`). 4 migraciones en `prisma/migrations/` (init, enable_rls, add_utm_to_lead, add_crm_schema).
+</arquitectura>
 
-**Componentes** organizados por ruta bajo `src/components/sections/` (`home/`, `blog/`, `projects/`, `services/`, `contact/`, `stack/` + transversales `Header`, `Footer`, `Marquee`, `Terminal`, `ThemeToggle`). Primitivos en `src/components/ui/` (`Button`, `Icon`, `SectionHead`). Emails React Email en `src/emails/`.
+<pendiente>
+- **~30 marcadores `TODO:` en `src/lib/content/`** para datos no públicos: precios reales (`checkout.ts`: "verificar antes de cobrar"), métricas de proyectos (stars/usuarios), historial laboral previo (`about.ts`), testimonios reales (`testimonials.ts`) y `years` de cada tecnología en `stack.ts`. URL de LinkedIn pendiente.
+- **CRM**: esquema Prisma definido y migrado, pero sin UI ni endpoints aún (inferido — no hay rutas `api/crm` ni vistas).
+- Rutas `/escaparate` y `/proximamente` recientes — verificar si son placeholders.
+- Credenciales reales de producción pendientes de fijar/migrar (ver overlay `.claude/CLAUDE.md`).
+- `ROADMAP.md` es la fuente de verdad del avance: consúltalo antes de retomar y actualízalo en cada PR.
+</pendiente>
 
-**Modelo Prisma** (`prisma/schema.prisma`): `Lead { id, name, email, type?, message, source, createdAt }` y `Subscriber { id, email@unique, confirmed, createdAt }`. Prisma 7 con adapter Postgres (`@prisma/adapter-pg`); la URL se inyecta en `prisma.config.ts` (ya no en `schema.prisma`).
-
-## Notas
-
-- `ARCHITECTURE.md` describe en parte el **árbol objetivo**, no el real. Donde diverja, **manda el código**: p. ej. el tema usa `localStorage`/script (no cookie SSR `ao-theme`), `lib/db` y `lib/validation` son ficheros planos (no carpetas), `emails/` está en `src/emails/`, y el `Lead` real usa `type` (no `company`/`budget`).
-- El contenido está **personalizado** con los datos reales de Alejandro Domingo Agustí (Alexendros): identidad en `src/lib/content/site.ts`, sus 5 proyectos OSS en `projects.ts`, y blog en `content/blog/`. El seed original ("Alejandro Vargas") queda archivado en la rama `base-seed-snapshot`. Quedan marcadores `TODO:` para datos no públicos (precios, historial laboral previo, testimonios, URL de LinkedIn); edita en `src/lib/content/` y `content/blog/`.
-- El panel de _Tweaks_ del prototipo se descartó en producción.
-- `ROADMAP.md` es la fuente de verdad del avance: consúltalo antes de retomar trabajo y actualízalo en cada PR.
-- Las variables de entorno (`DATABASE_URL`, `RESEND_API_KEY`, `EMAIL_FROM`, `CONTACT_TO_EMAIL`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `NEXT_PUBLIC_BASE_URL`) van en `.env.local`; nunca versionar `.env*` con valores reales. Plantilla documentada en `.env.example` (única `.env*` versionada).
-- **Deploy**: lo gestiona la **integración Git nativa de Vercel** (push a `main` → producción; ramas/PR → preview). El workflow `deploy.yml` por CLI se eliminó por redundante (fallaba en `vercel pull` con "Project not found"). La CI (`.github/workflows/ci.yml`) sigue siendo la fuente de verdad de calidad; Vercel despliega por su cuenta.
+<notas>
+- `ARCHITECTURE.md` describe en parte el **árbol objetivo**, no el real. Donde diverja, **manda el código**: tema por `localStorage`/script (no cookie SSR), `lib/db`/`lib/validation` son ficheros planos (no carpetas), `emails/` en `src/emails/`, y `Lead` usa `type` (no `company`/`budget`).
+- Existe un overlay `.claude/CLAUDE.md` que extiende `~/.claude/CLAUDE.md` (canon L0) y difiere a este fichero raíz como CLAUDE.md rico; no duplicar contenido allí.
+- Seed original ("Alejandro Vargas") archivado en rama `base-seed-snapshot`. El panel de _Tweaks_ del prototipo se descartó en producción.
+- Variables de entorno en `.env.local` (nunca versionar `.env*` con valores reales; plantilla en `.env.example`): `DATABASE_URL`, `RESEND_API_KEY`, `EMAIL_FROM`, `CONTACT_TO_EMAIL`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `NEXT_PUBLIC_BASE_URL`.
+- **Deploy**: integración Git nativa de **Vercel** (push a `main` → producción; ramas/PR → preview). El workflow `deploy.yml` por CLI se eliminó (redundante, fallaba en `vercel pull`). La CI sigue siendo la fuente de verdad de calidad; Vercel despliega por su cuenta.
+- Editar contenido en `src/lib/content/` y posts en `content/blog/`. Detalle de tests en `tests/README.md`.
+</notas>
