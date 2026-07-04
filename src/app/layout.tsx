@@ -24,14 +24,18 @@ const jetbrainsMono = JetBrains_Mono({
 
 const SITE_URL = "https://alexendros.dev";
 
+const SITE_TITLE = "Alejandro Domingo Agustí · Desarrollo a medida en Valencia";
+const SITE_DESCRIPTION =
+  "Desarrollo plataformas, webs y aplicaciones a medida en Valencia. Tecnología moderna, código que es tuyo y precios pensados para empresas nuevas y pequeñas.";
+const OG_IMAGE = "/opengraph-image";
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Alejandro Domingo Agustí · Desarrollo de plataformas, webs y apps",
+    default: SITE_TITLE,
     template: "%s · Alexendros",
   },
-  description:
-    "Desarrollo plataformas, webs y aplicaciones a medida en Valencia. Tecnología moderna, código que es tuyo y precios pensados para empresas nuevas y pequeñas.",
+  description: SITE_DESCRIPTION,
   authors: [{ name: "Alejandro Domingo Agustí" }],
   alternates: {
     canonical: "./",
@@ -40,12 +44,19 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Alejandro Domingo Agustí · Desarrollo de plataformas, webs y apps",
+    title: SITE_TITLE,
     description:
       "Diseño y desarrollo el producto digital que tu negocio necesita: webs, aplicaciones y plataformas a medida, con tecnología moderna y código que es tuyo.",
     type: "website",
     locale: "es_ES",
     url: SITE_URL,
+    images: [{ url: OG_IMAGE, alt: "Alexendros — Desarrollo de plataformas, webs y apps" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [OG_IMAGE],
   },
 };
 

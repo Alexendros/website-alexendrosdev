@@ -44,6 +44,7 @@ export function makePersonJsonLd(): WithContext<Person> {
     "@type": "Person",
     name: SITE_NAME,
     url: SITE_URL,
+    image: `${SITE_URL}/opengraph-image`,
     jobTitle: "Desarrollador de plataformas, webs y aplicaciones",
     worksFor: {
       "@type": "Organization",
@@ -54,7 +55,15 @@ export function makePersonJsonLd(): WithContext<Person> {
       "https://github.com/Alexendros",
       "https://www.linkedin.com/in/alejandro-d-a-024391384",
     ],
-  };
+    knowsAbout: [
+      "Desarrollo web a medida",
+      "Aplicaciones web con Next.js y React",
+      "Backend con Node.js, Rust y Python",
+      "Bases de datos PostgreSQL",
+      "Ingeniería de plataformas y automatización",
+      "Seguridad web y auditoría de sistemas",
+    ],
+  } as WithContext<Person>;
 }
 
 export function makeProfessionalServiceJsonLd(): WithContext<ProfessionalService> {

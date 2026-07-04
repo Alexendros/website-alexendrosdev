@@ -10,12 +10,12 @@ export function Hero() {
         Disponible · media jornada
       </span>
       <h1 className="ak-display" data-reveal data-reveal-delay="1">
-        Plataformas, webs y <em>aplicaciones</em> a medida para tu negocio.
+        Desarrollo de plataformas, webs y <em>apps</em> a medida en Valencia.
       </h1>
       <p className="ak-hero-c-lead" data-reveal data-reveal-delay="2">
         Diseño y desarrollo el producto digital que necesitas —desde una web hasta una plataforma
-        completa— con tecnología moderna y código que de verdad es tuyo. Rápido, fiable y construido
-        de forma segura desde el primer día.
+        completa— con tecnología moderna y código que de verdad es tuyo. Trabajo desde Valencia para
+        empresas nuevas y pequeñas de toda España: rápido, fiable y seguro desde el primer día.
       </p>
       <div className="ak-hero-c-cta" data-reveal data-reveal-delay="2">
         <Button variant="primary" href="/proyectos">

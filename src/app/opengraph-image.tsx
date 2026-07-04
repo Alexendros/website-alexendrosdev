@@ -39,18 +39,18 @@ export default async function Image() {
       </div>
       <div
         style={{
-          fontSize: 88,
+          fontSize: 72,
           fontWeight: 700,
           lineHeight: 1.05,
           letterSpacing: -2,
           maxWidth: 1000,
         }}
       >
-        Alexendros
+        Desarrollo de plataformas, webs y apps
       </div>
       <div
         style={{
-          fontSize: 44,
+          fontSize: 40,
           fontWeight: 500,
           lineHeight: 1.2,
           marginTop: 32,
@@ -58,7 +58,7 @@ export default async function Image() {
           color: "#e5e7eb",
         }}
       >
-        Desarrollo de plataformas, webs y apps
+        A medida · Valencia · España
       </div>
       <div
         style={{
