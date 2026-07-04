@@ -31,6 +31,15 @@ export const POSTS: Post[] = [
     desc: "Más de 40 comprobaciones automáticas que revisan calidad y seguridad e informan, sin modificar nada. De la prueba en seco a la real, sobre proyectos, aplicaciones y servidores.",
     metaDescription: "XEK: 40+ comprobaciones de calidad y seguridad en 3 fases. Revisa e informa sin tocar el código. Proyectos, apps y servidores.",
   },
+  {
+    id: "devin-desktop-mcp-inconsistencias",
+    title: "Devin Desktop, MCP y la documentación: seis inconsistencias que bloquean servidores locales",
+    tag: "DevTools",
+    date: "1 Jul 2026",
+    read: "10 min",
+    desc: "Autopsia de una semana de pruebas: por qué Devin Desktop bloquea servidores MCP locales en un plan Pro y dónde la documentación de docs.devin.ai contradice la realidad del sistema.",
+    metaDescription: "Devin Desktop bloquea servidores MCP locales por una allowlist de org Pro. Análisis de seis inconsistencias entre docs.devin.ai y la realidad del sistema.",
+  },
 ];
 
 export const BLOG_TAGS = ["Todos", "Plataforma", "DevTools", "Calidad", "Rust", "Open Source"];
