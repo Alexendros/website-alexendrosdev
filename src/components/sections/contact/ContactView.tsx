@@ -381,7 +381,7 @@ function Calendar() {
   );
 }
 
-function ContactViewInner() {
+function UtmForm() {
   const searchParams = useSearchParams();
   const utms: UtmParams = {
     utmSource: searchParams.get("utm_source") ?? undefined,
@@ -391,6 +391,10 @@ function ContactViewInner() {
     utmContent: searchParams.get("utm_content") ?? undefined,
   };
 
+  return <MultiStepForm utms={utms} />;
+}
+
+export function ContactView() {
   return (
     <div className="ak-container">
       <section className="ak-contact-hero" data-screen-label="header">
@@ -404,7 +408,9 @@ function ContactViewInner() {
       </section>
       <section className="ak-section" style={{ paddingTop: 24 }}>
         <div className="ak-contact-grid">
-          <MultiStepForm utms={utms} />
+          <Suspense fallback={<MultiStepForm utms={{}} />}>
+            <UtmForm />
+          </Suspense>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <Calendar />
             <div className="ak-panel">
@@ -424,13 +430,5 @@ function ContactViewInner() {
         </div>
       </section>
     </div>
-  );
-}
-
-export function ContactView() {
-  return (
-    <Suspense fallback={null}>
-      <ContactViewInner />
-    </Suspense>
   );
 }
