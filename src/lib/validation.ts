@@ -68,3 +68,89 @@ export function flattenErrors(error: z.ZodError): Record<string, string> {
   }
   return out;
 }
+
+// ─── F14 — Schemas CRM ─────────────────────────────────────────────────────
+
+export const crmContactSchema = z.object({
+  type: z.enum(["INDIVIDUAL", "COMPANY"]).optional(),
+  firstName: z.string().trim().min(1, "Indica el nombre.").max(120),
+  lastName: z.string().trim().max(120).optional(),
+  email: z.string().email("Email no válido.").max(200).optional(),
+  phone: z.string().trim().max(30).optional(),
+  company: z.string().trim().max(200).optional(),
+  position: z.string().trim().max(200).optional(),
+  notes: z.string().trim().max(5000).optional(),
+});
+
+export type CrmContactInput = z.infer<typeof crmContactSchema>;
+
+export const crmDealSchema = z.object({
+  title: z.string().trim().min(1, "Indica el título.").max(200),
+  contactId: z.string().uuid("ID de contacto inválido."),
+  value: z.number().int().min(0).optional(),
+  currency: z.string().max(3).optional(),
+  probability: z.number().int().min(0).max(100).optional(),
+  notes: z.string().trim().max(5000).optional(),
+  items: z
+    .array(
+      z.object({
+        productId: z.string().uuid("ID de producto inválido.").optional(),
+        quantity: z.number().int().min(1).default(1),
+        unitPrice: z.number().int().min(0).optional(),
+        notes: z.string().trim().max(500).optional(),
+      }),
+    )
+    .optional(),
+});
+
+export type CrmDealInput = z.infer<typeof crmDealSchema>;
+
+export const crmDealPatchSchema = z.object({
+  stageId: z.string().uuid().optional(),
+  probability: z.number().int().min(0).max(100).optional(),
+  notes: z.string().trim().max(5000).optional(),
+  closedAt: z.string().datetime().optional(),
+});
+
+export type CrmDealPatchInput = z.infer<typeof crmDealPatchSchema>;
+
+export const crmProductSchema = z.object({
+  name: z.string().trim().min(1).max(200),
+  description: z.string().trim().max(2000).optional(),
+  unitPrice: z.number().min(0),
+  currency: z.string().max(3).optional(),
+  active: z.boolean().optional(),
+});
+
+export type CrmProductInput = z.infer<typeof crmProductSchema>;
+
+export const crmInvoiceSchema = z
+  .object({
+    contactId: z.string().uuid("ID de contacto inválido.").optional(),
+    dealId: z.string().uuid("ID de deal inválido.").optional(),
+    notes: z.string().trim().max(2000).optional(),
+    taxRate: z.number().min(0).max(1).optional(),
+    items: z
+      .array(
+        z.object({
+          description: z.string().trim().min(1, "Descripción requerida.").max(500),
+          quantity: z.number().int().min(1),
+          unitPrice: z.number().min(0),
+          productId: z.string().uuid().optional(),
+        }),
+      )
+      .min(1, "Al menos un item requerido."),
+  })
+  .refine((d) => !!(d.contactId || d.dealId), {
+    message: "Se requiere contactId o dealId.",
+    path: ["contactId"],
+  });
+
+export type CrmInvoiceInput = z.infer<typeof crmInvoiceSchema>;
+
+export const crmInvoicePatchSchema = z.object({
+  status: z.enum(["sent", "paid", "cancelled"]),
+  paidAt: z.string().datetime().optional(),
+});
+
+export type CrmInvoicePatchInput = z.infer<typeof crmInvoicePatchSchema>;

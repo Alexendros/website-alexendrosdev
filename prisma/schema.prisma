@@ -52,6 +52,24 @@ model Order {
   @@index([email])
 }
 
+model Subscription {
+  id                    String    @id @default(uuid()) @db.Uuid
+  stripeSubscriptionId  String    @unique
+  stripeCustomerId      String
+  status                String    @default("active")
+  currentPeriodStart    DateTime
+  currentPeriodEnd      DateTime
+  canceledAt            DateTime?
+  metadata              Json?
+  contactId             String?   @db.Uuid
+  contact               Contact?  @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([stripeCustomerId])
+  @@index([status])
+}
+
 // ─── Enums CRM ────────────────────────────────────────────────────────────────
 
 enum ContactType {
@@ -100,10 +118,11 @@ model Contact {
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
 
-  deals      Deal[]
-  activities Activity[]
-  tasks      Task[]
-  invoices   Invoice[]
+  deals         Deal[]
+  activities    Activity[]
+  tasks         Task[]
+  invoices      Invoice[]
+  subscriptions Subscription[]
 
   @@index([email])
   @@index([status])
@@ -220,9 +239,10 @@ model Task {
 }
 
 model Invoice {
-  id         String    @id @default(uuid()) @db.Uuid
-  number     String    @unique
-  status     String    @default("draft")
+  id               String    @id @default(uuid()) @db.Uuid
+  number           String    @unique
+  stripeInvoiceId  String?   @unique
+  status           String    @default("draft")
   issuedAt   DateTime  @default(now())
   dueAt      DateTime?
   paidAt     DateTime?
