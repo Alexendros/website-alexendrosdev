@@ -249,7 +249,7 @@ Handlers, validación, rate-limit, degradación null-safe) y las islas cliente.
 
 > Repo externo: `/home/alexendros/repositorios/personal/agentes-ia-catalog/`. 31 tests pytest.
 > Stack: Python 3.12+, FastAPI, uv, pytest, httpx, respx.
-> LLM: Ollama local `ornith:9b` (primario) + OpenCode Zen free (fallback: `mimo-v2.5-free`, `deepseek-v4-flash-free`, etc.).
+> LLM: Ollama local `ornith:9b` (primario) + OpenCode Zen free (fallback: `mimo-v2.5-free` → `deepseek-v4-flash-free` → `north-mini-code-free`).
 > Hardening: Ornith evalúa calidad diagnósticos (utilidad) y contrato API (cumplimiento).
 > No comparte proceso con Next.js — se comunica solo por HTTP con CRM API.
 
