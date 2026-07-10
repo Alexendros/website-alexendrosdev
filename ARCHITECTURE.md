@@ -5,18 +5,18 @@
 
 ## Stack
 
-| Capa             | Tecnología                                                                                                                 |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| Framework        | Next.js 16 (App Router, Turbopack), React 19, TypeScript estricto                                                          |
-| Estilos          | Tailwind CSS v4 (`@theme`) + `src/styles/site.css` (portado, clases `ak-*`) + tokens `design-tokens.css`                   |
-| Fuentes / iconos | `next/font` (Inter, JetBrains Mono) · `lucide-react`                                                                       |
-| Contenido        | Módulos TS tipados (`src/lib/content/`) + blog en MDX (`content/blog/`)                                                    |
-| Backend          | Route Handlers + zod + Resend + React Email + Prisma 7 / Postgres (Supabase self-hosted en Coolify)                        |
-| Pagos            | Stripe Checkout **live activo** (sk_live_*) + catálogo unificado (`catalog.ts`) + canal transferencia + Payment Link (F17) |
-| CRM              | API REST (`/api/crm/`) con 9 stages de pipeline, auth `X-API-Key` (F14 pendiente)                                          |
-| Agentes IA       | Python/FastAPI externo (`localhost:8400`) — monitorización, diagnóstico, reparación (F15 pendiente)                        |
-| Calidad          | ESLint, Prettier, tsc, Vitest, Playwright, axe, Lighthouse/CWV                                                             |
-| Gestor           | pnpm ≥10                                                                                                                   |
+| Capa             | Tecnología                                                                                                                                                                                                            |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework        | Next.js 16 (App Router, Turbopack), React 19, TypeScript estricto                                                                                                                                                     |
+| Estilos          | Tailwind CSS v4 (`@theme`) + `src/styles/site.css` (portado, clases `ak-*`) + tokens `design-tokens.css`                                                                                                              |
+| Fuentes / iconos | `next/font` (Inter, JetBrains Mono) · `lucide-react`                                                                                                                                                                  |
+| Contenido        | Módulos TS tipados (`src/lib/content/`) + blog en MDX (`content/blog/`)                                                                                                                                               |
+| Backend          | Route Handlers + zod + Resend + React Email + Prisma 7 / Postgres (Supabase self-hosted en Coolify)                                                                                                                   |
+| Pagos            | Stripe Checkout **live activo** (`sk_live_...`, webhook `we_1TrUSpK8xOmiNNUKB8yz7tob`) + catálogo unificado con price IDs dual-mode (`test`/`live`) + canal transferencia + Payment Link fallback (F7 + F17 + F17.5b) |
+| CRM              | API REST (`/api/crm/`) con 9 stages de pipeline, auth `X-API-Key` (F14 hecho)                                                                                                                                         |
+| Agentes IA       | Módulos TS integrados en `src/lib/agents/` — 3 agentes (Auditor/Diagnosticador/Reparador) con provider LLM híbrido Gemini 3.5 Flash (primario) + OpenCode Zen free (fallback) (F15 pendiente)                         |
+| Calidad          | ESLint, Prettier, tsc, Vitest, Playwright, axe, Lighthouse/CWV                                                                                                                                                        |
+| Gestor           | pnpm ≥10                                                                                                                                                                                                              |
 
 ## Árbol de rutas (App Router)
 
@@ -39,6 +39,8 @@
 /api/checkout           app/api/checkout/route.ts  (Route Handler) POST sesión Stripe / transferencia
 /api/stripe/webhook     app/api/stripe/webhook/route.ts (Route Handler) POST eventos Stripe
 /api/crm/*              app/api/crm/** (pendiente) (11 Route Handlers) REST CRM (auth X-API-Key)
+/api/health           app/api/health/route.ts    (Route Handler) Health check (F17)
+/api/agents/*         app/api/agents/** (F15)    (5 Route Handlers) health, hooks, audit, diagnose, repair
 /sitemap.xml /robots.txt /feed.xml                 SEO
 ```
 
@@ -58,6 +60,7 @@ src/
                         testimonials.ts, faq.ts, checkout.ts (deprecado → reexporta catálogo),
                         types.ts
     crm/                invoice-number.ts, pipeline.ts, crm-auth.ts
+    agents/         F15: auditor, diagnosticador, reparador, llm, crm-client, prompts, schemas
     db/                 cliente Prisma
     stripe.ts           cliente Stripe + `isLiveMode` (deriva del prefijo `sk_live_`)
     validation/         esquemas zod (contact, newsletter, checkout)

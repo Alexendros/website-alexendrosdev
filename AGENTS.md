@@ -45,8 +45,10 @@ This repository is initialized for the Stripe project "website-alexendrosdev".
 | **F13**  | Canal secundario (transferencia + Stripe Payment Link fallback)                  | **hecho** — 10 tests integración green                  |
 | **F14**  | Webhook ampliado + CRM API (8 handlers REST) + Pipeline 9 stages + 3 migraciones | **hecho** — 188 tests, commit `bbbc6a8`                 |
 | **F14b** | Notion bidirectional sync (client, mapper, outbound, inbound webhook)            | **hecho** — 219 tests, commit `3c8fbd8`                 |
-| **F15**  | Agentes IA autónomos + Hardening con Ornith (Python/FastAPI, 31 tests)           | **pendiente** — desbloqueado por F14+F14b               |
+| **F15**  | Agentes IA + Hardening (TS integrado, Gemini 3.5 Flash + Zen)                    | **pendiente** — desbloqueado por F14+F14b               |
 | **F16**  | E2E + Gates finales — lock-in cobertura 85/80/85/85                              | **pendiente** — depende de F15                          |
+| **F17**  | Monitorización full-stack (SigNoz, health, alertas)                              | **pendiente** — paralelo a F15                          |
+| **F18**  | Contenido & Marketing (blog, newsletter, analytics)                              | **pendiente** — depende de F16                          |
 
 ### Specs activos
 
@@ -82,22 +84,26 @@ Cobertura v8 sobre `src/lib/**` + `src/app/api/**`:
 | Métrica    | Gate lock-in |
 | ---------- | ------------ |
 | Statements | 85%          |
-| Branches   | 70%          |
-| Functions  | 93%          |
-| Lines      | 87%          |
+| Branches   | 80%          |
+| Functions  | 85%          |
+| Lines      | 85%          |
+
+**Medición actual**: 87.7/72.08/95.41/89.93 con 229 tests (32 ficheros).
 
 **Regla RSC**: Server Components asíncronos (páginas, `/proyectos/[slug]`, `/blog/[slug]`) se cubren por e2e, no por Vitest.
 
 ### Infraestructura
 
-| Servicio     | Estado                                                                       | Nota                                                                                                                                                                        |
-| ------------ | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Vercel**   | ✅ deploy Git nativo (push a `main` → prod). Dominio `alexendros.dev`        | Env vars configuradas: `DATABASE_URL`, `DIRECT_URL`, `RESEND_API_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `TRANSFER_IBAN`, `TRANSFER_BENEFICIARY`, `CRM_API_KEY` |
-| **Supabase** | ✅ self-hosted en Coolify (`supabase-website-alexendrosdev`, Docker oficial) | Postgres en la MiniPC, conectividad vía Cloudflare Tunnel (`db.alexendros.cloud`). 5 migraciones aplicadas.                                                                 |
-| **Stripe**   | ⚠️ null-safe, clave pendiente (operador)                                     | Pagos reales no activos; código y tests con `vi.mock`                                                                                                                       |
-| **Resend**   | ⚠️ null-safe, clave pendiente (operador)                                     | Emails transaccionales no activos; código y tests con `vi.mock`                                                                                                             |
-| **MiniPC**   | NVIDIA RTX 5060, Ollama (`ornith:9b`, `qwen2.5-coder:7b`, `bge-m3`)          | Coolify + Supabase self-hosted + SigNoz. Cloudflare Tunnel para exponer DB.                                                                                                 |
-| **MCP**      | Stripe CLI 1.43.6 + plugin projects 0.22.0 en `~/.local/bin`                 | `stripe-projects` skill en `~/.agents/skills/`                                                                                                                              |
+| Servicio       | Estado                                                                       | Nota                                                                                                                                                                        |
+| -------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Vercel**     | ✅ deploy Git nativo (push a `main` → prod). Dominio `alexendros.dev`        | Env vars configuradas: `DATABASE_URL`, `DIRECT_URL`, `RESEND_API_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `TRANSFER_IBAN`, `TRANSFER_BENEFICIARY`, `CRM_API_KEY` |
+| **Supabase**   | ✅ self-hosted en Coolify (`supabase-website-alexendrosdev`, Docker oficial) | Postgres en la MiniPC, conectividad vía Cloudflare Tunnel (`db.alexendros.cloud`). 5 migraciones aplicadas.                                                                 |
+| **Stripe**     | ✅ **live activo** (`sk_live_...`)                                           | Pagos reales operativos en prod; código y tests con `vi.mock` para tests unit                                                                                               |
+| **Resend**     | ⚠️ null-safe, clave pendiente (operador)                                     | Emails transaccionales no activos; código y tests con `vi.mock`                                                                                                             |
+| **MiniPC**     | NVIDIA RTX 5060, Ollama (`ornith:9b`, `qwen2.5-coder:7b`, `bge-m3`)          | Coolify + Supabase self-hosted + SigNoz. Cloudflare Tunnel para exponer DB.                                                                                                 |
+| **MCP**        | Stripe CLI 1.43.6 + plugin projects 0.22.0 en `~/.local/bin`                 | `stripe-projects` skill en `~/.agents/skills/`                                                                                                                              |
+| **Gemini API** | ✅ gratuita (sin activar — provider LLM primario de F15)                     | Tier free de Google AI Studio. Plan: 15 RPM, 1M TPM, 1500 RPD.                                                                                                              |
+| **Plausible**  | 🔜 analytics privacy-first — F18                                             | Cookie-less, sin banner de consentimiento, <1 KB script.                                                                                                                    |
 
 ### Variables de entorno críticas
 
@@ -117,3 +123,5 @@ Definidas en `.env.example`. **Todas null-safe**: la app arranca y responde 200 
 | `NOTION_DEALS_DB_ID`                     | Outbound sync Deal→Notion                                   | Sin él, sync Deal silenciado.                                            |
 | `NOTION_WEBHOOK_SECRET`                  | Verificación firma webhook Notion                           | Sin él, webhook ack sin procesar.                                        |
 | `COMING_SOON=1`                          | Opt-in para landing `/proximamente`                         | Apagado por defecto (sitio público).                                     |
+| `GEMINI_API_KEY`                         | Provider LLM primario F15 (Gemini 3.5 Flash, gratuito)      | Sin ella, F15 usa solo OpenCode Zen (degradación suave).                 |
+| `OPENCODE_ZEN_API_KEY`                   | Provider LLM fallback F15 (3 modelos free)                  | Sin ella, F15 usa solo Gemini (degradación suave).                       |
