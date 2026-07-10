@@ -7,6 +7,7 @@ import Stripe from "stripe";
 const apiKey = process.env.STRIPE_SECRET_KEY;
 
 export const stripe: Stripe | null = apiKey ? new Stripe(apiKey) : null;
+export const isLiveMode = apiKey?.startsWith("sk_live_") ?? false;
 
 // Secreto de firma del webhook (Stripe CLI / Dashboard). Sin él no se verifican
 // los eventos entrantes y el handler degrada.

@@ -39,6 +39,7 @@ vi.mock("@/lib/stripe", () => ({
   hasTransferConfig() {
     return mocks.state.transfer.configured;
   },
+  isLiveMode: false,
 }));
 
 vi.mock("@/lib/db", () => ({

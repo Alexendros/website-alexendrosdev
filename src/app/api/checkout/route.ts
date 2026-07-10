@@ -8,6 +8,7 @@ import {
   TRANSFER_BENEFICIARY,
   TRANSFER_BANK,
   hasTransferConfig,
+  isLiveMode,
 } from "@/lib/stripe";
 import { prisma } from "@/lib/db";
 import { generateInvoiceNumberAsync } from "@/lib/crm/invoice-number";
@@ -91,10 +92,15 @@ export async function POST(req: Request) {
   const origin = req.headers.get("origin") ?? BASE_URL;
 
   // F17: preferir `price` (precio pre-creado en el Dashboard) cuando el item
-  // del catálogo tiene `stripePriceId`. Esto da analytics, control de inventario
-  // y reutilización entre sesiones. Si por algún motivo falta, se degrada a
-  // `price_data` inline (comportamiento anterior).
-  const lineItem = item.stripePriceId
+  // del catálogo tiene `stripePriceId` y la clave activa NO es live.
+  //
+  // El catálogo actual contiene `price_test_...`; las claves live los
+  // rechazarían con `Invalid API Key provided to Price`. En live mode
+  // degradamos a `price_data` inline, que sigue siendo server-trusted desde
+  // el catálogo. Para usar `stripePriceId` en live, hay que poblar el
+  // catálogo con `price_live_...` y refinar esta guardia.
+  const canUsePrice = item.stripePriceId && !isLiveMode;
+  const lineItem = canUsePrice
     ? { quantity: 1, price: item.stripePriceId }
     : effectiveMode === "subscription"
       ? {
