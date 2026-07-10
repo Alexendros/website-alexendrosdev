@@ -74,6 +74,9 @@ export interface CrmDeal {
   probability: number;
   stageId: string | null;
   contactId: string | null;
+  // Timestamp ISO del último cambio. El endpoint /api/crm/deals/[id] lo
+  // devuelve. Si falta, el agente trata el deal como "stale desconocido".
+  updatedAt?: string;
 }
 
 export interface CrmContact {
@@ -111,6 +114,10 @@ export const crmClient = {
 
   getDeal(id: string, baseUrl?: string): Promise<CrmDeal | null> {
     return crmRequest<CrmDeal>(`/api/crm/deals/${id}`, { baseUrl });
+  },
+
+  listDeals(baseUrl?: string): Promise<CrmDeal[] | null> {
+    return crmRequest<CrmDeal[]>(`/api/crm/deals`, { baseUrl });
   },
 
   getContact(id: string, baseUrl?: string): Promise<CrmContact | null> {

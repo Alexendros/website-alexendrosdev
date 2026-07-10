@@ -44,7 +44,15 @@ export {
   type AgentRepairRequest,
 } from "@/lib/agents/schemas";
 
-// Agentes específicos (S2-S4 los implementan)
-// export { runAuditor } from "@/lib/agents/auditor";
+// Agentes específicos (S3-S4 los implementan)
 // export { runDiagnosticador } from "@/lib/agents/diagnosticador";
 // export { runReparador } from "@/lib/agents/reparador";
+export {
+  classifyStripeEvent,
+  recordAndCheckAnomaly,
+  findStalledDeals,
+  runAudit,
+  processHookEvent,
+  type AuditReport,
+  type StripeEvent,
+} from "@/lib/agents/auditor";
