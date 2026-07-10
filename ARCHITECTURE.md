@@ -194,14 +194,17 @@ Degradación: sin Ollama → cloud para todo. Sin cloud → solo logs. Gestor: `
 
 `alexendros.dev` acepta pagos reales desde 2026-07-10. Configuración:
 
-- **Catálogo** (`src/lib/content/catalog.ts`): 9 items, cada uno con `stripePriceId`
-  apuntando a `price_test_...`. Los importes en céntimos siguen siendo
-  server-trusted.
+- **Catálogo** (`src/lib/content/catalog.ts`): 9 items, cada uno con
+  `stripePriceIds: { test, live }` apuntando a sus precios en cada Dashboard.
+  Los importes en céntimos siguen siendo server-trusted. El helper
+  `getCatalogPriceId(item, mode)` resuelve el ID del modo activo o `null`.
 - **Cliente** (`src/lib/stripe.ts`): exporta `stripe` (null-safe) y `isLiveMode`
   (booleano derivado del prefijo de la clave activa).
-- **Checkout** (`src/app/api/checkout/route.ts`): prefiere `price` cuando
-  `!isLiveMode`; degrada a `price_data` inline con los importes del catálogo en
-  live mode (los `price_test_` serían rechazados por una clave live).
+- **Checkout** (`src/app/api/checkout/route.ts`): resuelve el `priceId` con
+  `getCatalogPriceId(item, isLiveMode ? "live" : "test")`; lo usa si existe;
+  si no, degrada a `price_data` inline con los importes del catálogo. Esto
+  se aplica tanto a `checkout.sessions.create` como al fallback de
+  `paymentLinks.create` (F13).
 - **Webhook** (`src/app/api/stripe/webhook/route.ts`): sin cambios respecto a
   F14. Verifica firma y procesa 4 eventos (`checkout.session.completed`,
   `invoice.paid`, `customer.subscription.updated`, `customer.subscription.deleted`).
@@ -210,12 +213,33 @@ Degradación: sin Ollama → cloud para todo. Sin cloud → solo logs. Gestor: `
   - `STRIPE_WEBHOOK_SECRET` = `whsec_...` del webhook live
 - **Webhook endpoint live**: `we_1TrUSpK8xOmiNNUKB8yz7tob`
   apuntando a `https://alexendros.dev/api/stripe/webhook`.
-- **Productos live** (Dashboard Stripe): 9 productos creados con los mismos
-  nombres y precios que el catálogo. Sus `price_live_...` aún no se usan en
-  el código (siguiente iteración: poblar catálogo + refinar guardia).
+- **Productos live** (Dashboard Stripe): 9 productos con sus 9 precios
+  pre-creados. Smoke test post-F17.5b confirmó que el checkout live usa
+  `price: "price_1TrUSW..."` y `product: prod_UrCswCK6GqUFDm` (no productos
+  anónimos generados por `price_data`).
 
 Para auditoría/rollback, las claves viven en el item "Stripe" del vault
 "Infraestructura" en Proton Pass, junto con las claves test.
+
+### Tests de integridad del catálogo (F17.5b)
+
+`tests/unit/catalog.test.ts` añade 7 tests de invariantes:
+
+- Todo item activo y comprable (PURCHASABLES) tiene AMBOS IDs (`test` y `live`).
+- Todos los IDs siguen el formato `^price_[A-Za-z0-9]{10,}$`.
+- Para el mismo item, los IDs de test y live son distintos.
+- Ningún ID de test se reusa como ID de live en otro item (detecta swap).
+- `getCatalogPriceId` devuelve el ID del modo solicitado.
+- `getCatalogPriceId` devuelve `null` si falta el ID del modo.
+
+`tests/integration/checkout.test.ts` añade 3 tests E2E:
+
+- En live mode usa `stripePriceIds.live`.
+- En test mode usa `stripePriceIds.test`.
+- En live mode con retainer usa el `price_...` live con `mode: "subscription"`.
+
+`isLiveMode` en el mock pasa a ser un getter sobre `mocks.state.isLiveMode`,
+lo que permite alternar test ↔ live dentro de la misma suite.
 
 ```
 

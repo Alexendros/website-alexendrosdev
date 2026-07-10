@@ -140,6 +140,35 @@ cambios adicionales.
 - Población del catálogo con `price_live_...` (mejora de analytics, no bloqueante)
 - Tests e2e Playwright contra el deploy de development (cubre `alexendros.dev` real)
 
+### F17.5b · Live price IDs en el catálogo (2026-07-10)
+
+Iteración para que el checkout use el `price_live_...` real del Dashboard en
+producción, en lugar de degradar a `price_data` inline. Esto evita que Stripe
+cree productos anónimos on-the-fly y rompe el analytics.
+
+| #       | Tarea                                                                                              | Estado | Notas                                                       |
+| ------- | -------------------------------------------------------------------------------------------------- | ------ | ----------------------------------------------------------- |
+| 17.5b-1 | Listar `price_live_...` en Dashboard y validar que existen 9 con importes/recurring correctos      | hecho  | `price_1TrUSU...` ↔ catálogo: 9/9 OK                        |
+| 17.5b-2 | Refactorizar tipo `CatalogItem`: `stripePriceId?: string` → `stripePriceIds?: { test?, live? }`    | hecho  | `lib/content/types.ts`                                      |
+| 17.5b-3 | Poblar catálogo con ambos IDs (test + live) para los 9 items                                       | hecho  | `lib/content/catalog.ts`                                    |
+| 17.5b-4 | `getCatalogPriceId(item, mode)` resuelve el ID del modo activo o `null` si falta                   | hecho  | `lib/content/catalog.ts`                                    |
+| 17.5b-5 | Refinar guardia del checkout: usar el ID del modo activo, fallback a `price_data` inline           | hecho  | `app/api/checkout/route.ts` (sesión + paymentLink fallback) |
+| 17.5b-6 | Tests de integridad: formato, presencia, no cross-mode, getCatalogPriceId contract                 | hecho  | 7 tests nuevos en `tests/unit/catalog.test.ts`              |
+| 17.5b-7 | Tests E2E live/test del checkout: `isLiveMode` como getter mockeable                               | hecho  | 3 tests nuevos en `tests/integration/checkout.test.ts`      |
+| 17.5b-8 | Smoke test post-deploy: `cs_live_...` con `price_1TrUSWK8xOmiNNUK1A2UoF5Y` y `prod_UrCswCK6GqUFDm` | hecho  | Verificado vía Dashboard Stripe                             |
+| 17.5b-9 | Checks de integridad: typecheck, lint, format, tests (229), build                                  | hecho  | 0 errors, 32 files, 229 tests, build OK                     |
+
+**Resultado**: el checkout live usa los precios del Dashboard (`price: "price_1TrUSW..."`)
+y los productos del Dashboard (`prod_UrCswCK6GqUFDm`). El fallback a `price_data`
+sigue activo si por algún motivo el catálogo perdiera los IDs del modo activo.
+
+**Pendiente fuera de F17.5b**:
+
+- Tests e2e Playwright contra el deploy de development con pago real (cancelación, refund)
+- Tests contra el webhook live real (mockear con `stripe trigger`)
+- Limpiar los 4 `price_1TIhh...` antiguos del Dashboard live (no se pueden archivar
+  por CLI; habría que hacerlo desde la UI o dejarlo como ruido histórico aceptable)
+
 ## F8 · Deploy automatizado (Vercel)
 
 | #   | Tarea                                                                | Estado     | Bloquea | Desbloquea |
