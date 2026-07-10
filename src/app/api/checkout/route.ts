@@ -90,9 +90,13 @@ export async function POST(req: Request) {
 
   const origin = req.headers.get("origin") ?? BASE_URL;
 
-  // F12: construir line_items según el modo efectivo.
-  const lineItem =
-    effectiveMode === "subscription"
+  // F17: preferir `price` (precio pre-creado en el Dashboard) cuando el item
+  // del catálogo tiene `stripePriceId`. Esto da analytics, control de inventario
+  // y reutilización entre sesiones. Si por algún motivo falta, se degrada a
+  // `price_data` inline (comportamiento anterior).
+  const lineItem = item.stripePriceId
+    ? { quantity: 1, price: item.stripePriceId }
+    : effectiveMode === "subscription"
       ? {
           quantity: 1,
           price_data: {
@@ -214,24 +218,26 @@ async function handlePaymentLinkFallback(
   try {
     const link = await stripe.paymentLinks.create({
       line_items: [
-        mode === "subscription"
-          ? {
-              quantity: 1,
-              price_data: {
-                currency: item.currency,
-                unit_amount: item.amount,
-                recurring: { interval: item.interval ?? "month" },
-                product_data: { name: item.name, description: item.desc },
+        item.stripePriceId
+          ? { quantity: 1, price: item.stripePriceId }
+          : mode === "subscription"
+            ? {
+                quantity: 1,
+                price_data: {
+                  currency: item.currency,
+                  unit_amount: item.amount,
+                  recurring: { interval: item.interval ?? "month" },
+                  product_data: { name: item.name, description: item.desc },
+                },
+              }
+            : {
+                quantity: 1,
+                price_data: {
+                  currency: item.currency,
+                  unit_amount: item.amount,
+                  product_data: { name: item.name, description: item.desc },
+                },
               },
-            }
-          : {
-              quantity: 1,
-              price_data: {
-                currency: item.currency,
-                unit_amount: item.amount,
-                product_data: { name: item.name, description: item.desc },
-              },
-            },
       ],
       metadata: { item: item.id, fallback: "paymentLink" },
     });
