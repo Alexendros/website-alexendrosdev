@@ -6,3 +6,5 @@ allowBuilds:
   prisma: true
   "@prisma/client": true
   msw: false
+  "@google/genai": set this to true or false
+  protobufjs: set this to true or false
