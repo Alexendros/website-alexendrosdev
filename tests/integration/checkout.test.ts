@@ -97,7 +97,7 @@ describe("POST /api/checkout", () => {
       expect.objectContaining({
         line_items: [
           expect.objectContaining({
-            price_data: expect.objectContaining({ unit_amount: 6_000 }),
+            price: "price_1TrTacK8xOmiNNUKNemQs0G6",
           }),
         ],
       }),
@@ -173,10 +173,7 @@ describe("POST /api/checkout", () => {
         mode: "subscription",
         line_items: [
           expect.objectContaining({
-            price_data: expect.objectContaining({
-              unit_amount: 129_000,
-              recurring: { interval: "month" },
-            }),
+            price: "price_1TrTahK8xOmiNNUK8B8CGKYH",
           }),
         ],
       }),
@@ -200,7 +197,7 @@ describe("POST /api/checkout", () => {
       expect.objectContaining({
         line_items: [
           expect.objectContaining({
-            price_data: expect.objectContaining({ unit_amount: 6_000 }),
+            price: "price_1TrTacK8xOmiNNUKNemQs0G6",
           }),
         ],
       }),
