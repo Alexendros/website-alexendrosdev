@@ -28,6 +28,7 @@
 /.idea/
 /.junie/
 /.ruff_cache/
+/.commandcode/
 # Worktrees efímeros de agentes Claude Code (envenenan knip/prettier si se escanean)
 /.claude/worktrees/
 
