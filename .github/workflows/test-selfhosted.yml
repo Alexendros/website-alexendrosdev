@@ -1,0 +1,10 @@
+name: Test Self-Hosted Runner
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: self-hosted
+    timeout-minutes: 5
+    steps:
+      - run: echo "Self-hosted runner received job" && hostname && uname -a
+
