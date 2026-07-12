@@ -14,6 +14,8 @@ on:
         options:
           - ubuntu-latest
           - self-hosted
+  schedule:
+    - cron: "*/30 * * * *"
 
 # Cancela ejecuciones en curso de la misma rama cuando llega un push nuevo.
 concurrency:
@@ -27,13 +29,22 @@ jobs:
     timeout-minutes: 2
     permissions: {}
     steps:
-      - run: |
-          echo "::notice::Runner: $(hostname) | Kernel: $(uname -a)"
+      - name: Connectivity check
+        run: |
+          echo "::notice::Runner: $(hostname) | Kernel: $(uname -r)"
           echo "::notice::Docker: $(docker --version 2>/dev/null || echo 'N/A')"
           curl -so /dev/null -w "api.github.com: %{http_code} (%{time_total}s)\n" \
             https://api.github.com
           curl -so /dev/null -w "broker: %{http_code} (%{time_total}s)\n" \
             https://broker.actions.githubusercontent.com
+      - name: Host resources
+        run: |
+          echo "::notice::CPU: $(nproc) cores, load: $(uptime | awk -F'average:' '{print $2}' | xargs)"
+          echo "::notice::RAM: $(free -h | awk '/^Mem:/{print $3 "/" $2 " used"}')"
+          echo "::notice::Disk: $(df -h / | awk 'NR==2{print $3 "/" $2 " (" $5 ")"}')"
+          if command -v nvidia-smi &>/dev/null; then
+            echo "::notice::GPU: $(nvidia-smi --query-gpu=temperature.gpu,memory.used,memory.total --format=csv,noheader 2>/dev/null || echo 'N/A')"
+          fi
       - name: Check broker health from logs
         run: |
           RECENT=$(find /actions-runner/_diag/ -name 'Runner_*.log' -mmin -3 | sort | tail -1)
@@ -47,8 +58,14 @@ jobs:
           else
             echo "::warning::No recent runner logs found"
           fi
-      - name: Mark runner healthy
-        run: echo "RUNNER_HEALTHY=true" >> "$GITHUB_ENV"
+
+  smoke:
+    if: github.event_name == 'schedule'
+    runs-on: self-hosted
+    timeout-minutes: 2
+    permissions: {}
+    steps:
+      - run: echo "ok" && exit 0
 
   quality:
     runs-on: ${{ (github.event_name == 'workflow_dispatch' && inputs.runner) || 'ubuntu-latest' }}
