@@ -301,7 +301,26 @@ NO TOCAR el container `runner-ia` — pertenece a otra organización.
 
 ---
 
-## 8. Plan de implementación (cuando se retome)
+## 8. Hallazgo adicional (2026-07-11)
+
+**El self-hosted runner FUNCIONA en `workflow_dispatch`** (verificado por el operador con un workflow de prueba `test-selfhosted.yml`, run 29172317071):
+
+- El job `runner-health` (con `runs-on: self-hosted` en `workflow_dispatch`) corrió SUCCESS en `infra-alex-01`
+- Pero en `push` events, el mismo runner NO recibe jobs (GH Actions no se los asigna automáticamente)
+
+**Conclusión refinada**: el long-poll de asignación automática de GH Actions está roto para este runner específico. La asignación manual vía `workflow_dispatch` sí funciona. Esto descarta la hipótesis 3.1 (bug del runner 2.335.x) y refuerza la hipótesis 3.2 (overlay Docker de Coolify cierra idle connections del long-poll persistente).
+
+**Workaround aplicado**: el workflow `ci.yml` ahora tiene un input `workflow_dispatch` con `choices: [ubuntu-latest, self-hosted]`. El job `runner-health` solo corre si se elige `self-hosted`. Los jobs `quality` y `e2e` usan `runs-on: ${{ (workflow_dispatch && inputs.runner) || 'ubuntu-latest' }}` para que el operador pueda elegir.
+
+**Conclusión operativa**:
+
+- Push/PR → `ubuntu-latest` (default, instantáneo, sin fricción)
+- Diagnóstico manual → `workflow_dispatch` con `self-hosted` (testea el runner)
+- El runner self-hosted se mantiene como herramienta de diagnóstico, no como runner de CI
+
+---
+
+## 9. Plan de implementación (cuando se retome)
 
 Orden de ejecución (sesión aparte):
 
