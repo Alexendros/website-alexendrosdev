@@ -1,0 +1,158 @@
+# Mejoras de CI propuestas (auditoría 360º · 2026-07-13)
+#
+# Este fichero NO está activo: el token utilizado para subir los fixes carece
+# del scope `workflow`, que GitHub exige para escribir en `.github/workflows/`.
+#
+# Para activarlo, desde tu máquina (token con scope workflow):
+#   git checkout audit/360-fixes-devops
+#   cp docs/ci-improvements/ci.yml .github/workflows/ci.yml
+#   git add .github/workflows/ci.yml
+#   git commit -m "ci: scan de secretos con gitleaks, uptime smoke real y license-checker fijado"
+#   git push
+#
+# Cambios respecto al ci.yml actual:
+#   1. Nuevo job `secret-scan`: gitleaks 8.24.3 sobre todo el historial
+#      (fetch-depth: 0). Hoy el historial está limpio (verificado con la
+#      skill repo-audit), pero sin gate en CI cualquier commit futuro puede
+#      reintroducir un secreto.
+#   2. Smoke programado: de cron */30 sobre el runner self-hosted (cuya
+#      asignación de jobs programados está rota → 48 ejecuciones muertas al
+#      día) a un smoke diario 07:00 UTC en ubuntu-latest que verifica de
+#      verdad producción: /, /escaparate, /contacto, /api/health y el campo
+#      status:"ok". Monitor de uptime gratuito, sin servicios externos.
+#   3. license-checker fijado a 25.0.1 vía `npx --yes` (antes: npx sin
+#      versión → cada run descargaba la última disponible, no determinista).
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      runner:
+        description: "Runner type"
+        required: true
+        default: "ubuntu-latest"
+        type: choice
+        options:
+          - ubuntu-latest
+          - self-hosted
+  schedule:
+    - cron: "0 7 * * *"
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  runner-health:
+    if: github.event_name == 'workflow_dispatch' && inputs.runner == 'self-hosted'
+    runs-on: self-hosted
+    timeout-minutes: 2
+    permissions: {}
+    steps:
+      - name: Connectivity check
+        run: |
+          echo "::notice::Runner: $(hostname) | Kernel: $(uname -r)"
+          echo "::notice::Docker: $(docker --version 2>/dev/null || echo 'N/A')"
+          curl -so /dev/null -w "api.github.com: %{http_code} (%{time_total}s)\n" \
+            https://api.github.com
+          curl -so /dev/null -w "broker: %{http_code} (%{time_total}s)\n" \
+            https://broker.actions.githubusercontent.com
+      - name: Host resources
+        run: |
+          echo "::notice::CPU: $(nproc) cores, load: $(uptime | awk -F'average:' '{print $2}' | xargs)"
+          echo "::notice::RAM: $(free -h | awk '/^Mem:/{print $3 "/" $2 " used"}')"
+          echo "::notice::Disk: $(df -h / | awk 'NR==2{print $3 "/" $2 " (" $5 ")"}')"
+          if command -v nvidia-smi &>/dev/null; then
+            echo "::notice::GPU: $(nvidia-smi --query-gpu=temperature.gpu,memory.used,memory.total --format=csv,noheader 2>/dev/null || echo 'N/A')"
+          fi
+      - name: Check broker health from logs
+        run: |
+          RECENT=$(find /actions-runner/_diag/ -name 'Runner_*.log' -mmin -3 | sort | tail -1)
+          if [ -n "$RECENT" ]; then
+            ERRORS=$(grep -c 'ERR.*BrokerServer' "$RECENT" 2>/dev/null || echo 0)
+            if [ "$ERRORS" -gt 0 ]; then
+              echo "::warning::Broker errors in last 3 min: ${ERRORS}"
+            else
+              echo "::notice::Broker healthy (0 errors)"
+            fi
+          else
+            echo "::warning::No recent runner logs found"
+          fi
+
+  smoke:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Uptime smoke contra producción
+        run: |
+          set -euo pipefail
+          BASE="https://alexendros.dev"
+          for path in / /escaparate /contacto /api/health; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 "$BASE$path")
+            echo "$path → $code"
+            [ "$code" = "200" ] || { echo "::error::$path respondió $code"; exit 1; }
+          done
+          status=$(curl -s --max-time 20 "$BASE/api/health" | grep -o '"status":"[^"]*"' | head -1)
+          echo "health: $status"
+          [ "$status" = '"status":"ok"' ] || { echo "::error::health no reporta ok"; exit 1; }
+
+  quality:
+    runs-on: ${{ (github.event_name == 'workflow_dispatch' && inputs.runner) || 'ubuntu-latest' }}
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm audit --audit-level=high
+      - run: npx --yes license-checker@25.0.1 --production --failOn "GPL-2.0;GPL-3.0;AGPL-3.0"
+      - run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test:coverage
+      - run: pnpm build
+
+  secret-scan:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Scan de secretos en el historial (gitleaks)
+        run: |
+          set -euo pipefail
+          VERSION="8.24.3"
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${VERSION}/gitleaks_${VERSION}_linux_x64.tar.gz" | tar xz
+          ./gitleaks git --redact --exit-code 1 .
+
+  e2e:
+    runs-on: ${{ (github.event_name == 'workflow_dispatch' && inputs.runner) || 'ubuntu-latest' }}
+    needs: quality
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm e2e
+        env:
+          CI: "true"
