@@ -116,9 +116,9 @@ export default function CondicionesPage() {
             </p>
             <p>
               Para ejercer el desistimiento basta con comunicarlo por escrito a{" "}
-              <a href={`mailto:${SITE.email}`}>{SITE.email}</a> indicando el servicio contratado y la
-              referencia del pago. El reembolso se realizará por el mismo medio de pago en un plazo
-              máximo de 14 días naturales desde la recepción de la comunicación.
+              <a href={`mailto:${SITE.email}`}>{SITE.email}</a> indicando el servicio contratado y
+              la referencia del pago. El reembolso se realizará por el mismo medio de pago en un
+              plazo máximo de 14 días naturales desde la recepción de la comunicación.
             </p>
           </section>
 

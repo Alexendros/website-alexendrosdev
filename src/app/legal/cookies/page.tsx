@@ -80,8 +80,8 @@ export default function CookiesPage() {
             <h2 style={{ marginBottom: 12 }}>6. Cambios en esta política</h2>
             <p>
               Si en el futuro se incorporan cookies adicionales (por ejemplo, una herramienta de
-              analítica que las utilice), esta página se actualizará y, cuando la normativa lo exija,
-              se solicitará el consentimiento previo antes de instalarlas.
+              analítica que las utilice), esta página se actualizará y, cuando la normativa lo
+              exija, se solicitará el consentimiento previo antes de instalarlas.
             </p>
             <p>
               Para cualquier duda: <a href={`mailto:${SITE.email}`}>{SITE.email}</a>. El tratamiento
