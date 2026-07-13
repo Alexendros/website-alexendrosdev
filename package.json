@@ -25,7 +25,9 @@
     "db:deploy": "prisma migrate deploy",
     "audit:lh": "node scripts/audit-lighthouse.mjs",
     "audit:html": "node scripts/audit-html.mjs",
-    "audit:a11y": "node scripts/audit-axe.mjs"
+    "audit:a11y": "node scripts/audit-axe.mjs",
+    "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test:coverage && pnpm build",
+    "release": "semantic-release"
   },
   "dependencies": {
     "@notionhq/client": "^5.23.0",

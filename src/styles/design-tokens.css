@@ -33,8 +33,8 @@
   /* Text */
   --text-primary: 213 30% 15%;   /* #1a2332 */
   --text-secondary: 215 16% 34%; /* #4a5568 */
-  --text-tertiary: 210 12% 50%;  /* #708090 */
-  --text-muted: 213 15% 63%;     /* #94a3b8 */
+  --text-tertiary: 210 14% 40%;  /* #57636f — 4.6:1 sobre --bg-base (#fafafa), AA */
+  --text-muted: 213 15% 50%;     /* #74859a — 4.5:1 sobre --bg-base, AA */
   --text-on-primary: 0 0% 100%;
   --text-link: 214 38% 47%;
   --text-link-hover: 214 41% 41%;

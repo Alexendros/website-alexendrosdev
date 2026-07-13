@@ -127,7 +127,13 @@ main { display: block; }
 /* ---- CTA ---- */
 .ak-cta { background: hsl(var(--bg-highlight)); border-radius: var(--radius-2xl); padding: 56px 32px; text-align: center; margin: 72px 0; }
 .ak-cta-sub { font-size: var(--fs-body-lg); color: hsl(var(--text-secondary)); margin: 10px 0 28px; }
-.ak-cta-form { display: flex; gap: 10px; max-width: 420px; margin: 0 auto; }
+.ak-cta-form { display: flex; gap: 10px; max-width: min(420px, 100%); margin: 0 auto; padding-inline: 16px; box-sizing: border-box; }
+.ak-cta-form input { flex: 1; min-width: 0; }
+/* En movil el input+boton no caben en fila: apilar */
+@media (max-width: 480px) {
+  .ak-cta-form { flex-direction: column; }
+  .ak-cta-form .ak-btn-primary { width: 100%; }
+}
 .ak-cta-form input { flex: 1; background: hsl(var(--bg-inset)); border: 1px solid hsl(var(--border-subtle)); border-radius: var(--radius-md); padding: 12px 14px; font-size: var(--fs-body); color: hsl(var(--text-primary)); outline: none; }
 .ak-cta-form input:focus { border-color: hsl(var(--border-focus)); box-shadow: 0 0 0 3px hsl(var(--border-focus) / 0.2); }
 
