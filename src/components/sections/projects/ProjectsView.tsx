@@ -43,7 +43,7 @@ function ProjTile({ p }: { p: Project }) {
           }}
         >
           <h2 className="ak-tile-title">{p.title}</h2>
-          <span className="mono" style={{ color: "hsl(var(--text-muted))", fontSize: 11 }}>
+          <span className="mono" style={{ color: "hsl(var(--text-tertiary))", fontSize: 11 }}>
             {p.year}
           </span>
         </div>

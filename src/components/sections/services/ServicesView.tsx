@@ -80,7 +80,7 @@ function TierCard({ t, mode }: { t: Tier; mode: Mode }) {
           className="ak-tier-note"
           style={{
             fontSize: "12px",
-            color: "var(--ak-mute, #6b7785)",
+            color: "var(--text-tertiary)",
             marginTop: 4,
             marginBottom: 12,
             lineHeight: 1.4,

@@ -1,11 +1,14 @@
 import type { NextConfig } from "next";
 
 // Cabeceras de seguridad aplicadas a todas las rutas. Complementan el HSTS que ya
-// inyecta Vercel. La CSP es deliberadamente permisiva con estilos/fuentes (Next +
-// Tailwind inyectan <style> inline y next/font sirve fuentes self-hosted) y con el
-// script inline de tema en app/layout.tsx; endurecerla a nonces es trabajo posterior.
+// inyecta Vercel. La CSP permite estilos inline (Next + Tailwind inyectan <style>
+// inline y next/font sirve fuentes self-hosted); el script de tema (app/layout.tsx)
+// se firma con su hash SHA-256 estático, de modo que `script-src` NO usa
+// 'unsafe-inline'.
+const THEME_SCRIPT_HASH = "'sha256-hbpvxDGDgjtAQDU8vySCO/VmzNl3coK8Bui/PvwIRzw='";
+
 const securityHeaders = [
-  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  { key: "X-Frame-Options", value: "DENY" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   {
@@ -13,12 +16,15 @@ const securityHeaders = [
     value: "camera=(), microphone=(), geolocation=(), browsing-topics=()",
   },
   {
+    key: "Strict-Transport-Security",
+    value: "max-age=63072000; includeSubDomains; preload",
+  },
+  {
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      // 'unsafe-inline' requerido por el theme script inline (layout.tsx) y estilos
-      // inyectados por Next/Tailwind. Stripe.js se sirve desde js.stripe.com.
-      "script-src 'self' 'unsafe-inline' https://js.stripe.com",
+      // 'unsafe-inline' NO: el script de tema va por hash, Stripe.js por origen.
+      `script-src 'self' https://js.stripe.com ${THEME_SCRIPT_HASH}`,
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https:",
       "font-src 'self' data:",
@@ -28,7 +34,7 @@ const securityHeaders = [
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",
-      "frame-ancestors 'self'",
+      "frame-ancestors 'none'",
       "upgrade-insecure-requests",
     ].join("; "),
   },

@@ -16,7 +16,7 @@ function LegalNote() {
       className="ak-form-legal"
       style={{
         fontSize: "11px",
-        color: "var(--ak-mute, #6b7785)",
+        color: "var(--text-tertiary)",
         marginTop: 8,
         marginBottom: 0,
         lineHeight: 1.5,
