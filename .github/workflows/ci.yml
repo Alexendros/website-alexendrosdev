@@ -134,10 +134,13 @@ jobs:
         # /usr/local/bin que sí está en PATH por defecto en runners GH.
         run: npm install -g vercel@54.21.0 --unsafe-perm
       - name: Deploy to production (Vercel)
-        # Sin --scope: el CLI resuelve el team y proyecto desde
-        # VERCEL_ORG_ID y VERCEL_PROJECT_ID (env vars del job, no secrets).
+        # Sin --scope: el CLI resuelve el team desde VERCEL_ORG_ID.
+        # Con --project: el CLI no necesita "link" local y lee el project
+        # directamente del server, evitando el "Retrieving project…" que
+        # falla con "Could not retrieve Project Settings" en CI sin
+        # `.vercel/project.json` local.
         # Pasar VERCEL_TOKEN por env (no --token) para que el CLI lo lea
         # nativamente sin exponerlo en argv.
-        run: vercel deploy --prod --yes
+        run: vercel deploy --prod --yes --project "$VERCEL_PROJECT_ID"
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
