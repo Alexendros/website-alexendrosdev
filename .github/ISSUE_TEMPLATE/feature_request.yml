@@ -1,48 +1,35 @@
-name: Feature Request
-description: Proponer una nueva funcionalidad o mejora
-labels: [enhancement, triage]
+name: Petición de feature
+description: Propón una mejora o nueva funcionalidad
+title: "feat: "
+labels: ["enhancement"]
 body:
   - type: textarea
     id: problem
     attributes:
       label: Problema o necesidad
+      description: ¿Qué problema resuelve esta feature?
     validations:
       required: true
-
   - type: textarea
-    id: solution
+    id: proposal
     attributes:
-      label: Solución propuesta
+      label: Propuesta
+      description: Describe la solución que imaginas.
     validations:
       required: true
-
   - type: textarea
-    id: alternatives
+    id: alt
     attributes:
       label: Alternativas consideradas
     validations:
       required: false
-
   - type: dropdown
-    id: impact
+    id: priority
     attributes:
-      label: Impacto estimado
+      label: Prioridad sugerida
       options:
-        - Alto — afecta a muchos usuarios o funcionalidad core
-        - Medio — mejora relevante pero no crítica
-        - Bajo — nice-to-have
-    validations:
-      required: true
-
-  - type: dropdown
-    id: effort
-    attributes:
-      label: Esfuerzo estimado
-      options:
-        - XS (< 2h)
-        - S (< 1 día)
-        - M (1-3 días)
-        - L (1 semana)
-        - XL (> 1 semana)
+        - Baja
+        - Media
+        - Alta
     validations:
       required: true

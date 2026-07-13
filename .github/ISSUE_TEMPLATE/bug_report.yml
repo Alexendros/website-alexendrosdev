@@ -1,51 +1,49 @@
-name: Bug Report
-description: Reportar un comportamiento incorrecto
-labels: [bug, triage]
+name: Reporte de bug
+description: Informa de un fallo en el sitio o el código
+title: "bug: "
+labels: ["bug"]
 body:
-  - type: markdown
-    attributes:
-      value: Antes de abrir un issue, busca si ya existe uno similar.
-
-  - type: input
-    id: url
-    attributes:
-      label: URL afectada
-      placeholder: https://alexendros.dev/...
-    validations:
-      required: false
-
   - type: textarea
-    id: description
+    id: what
     attributes:
-      label: Descripción del bug
+      label: ¿Qué ocurre?
+      description: Descripción clara y concisa del fallo.
+      placeholder: Al hacer X en /proyectos, la página muestra Y.
     validations:
       required: true
-
   - type: textarea
-    id: steps
+    id: repro
     attributes:
       label: Pasos para reproducir
+      description: Pasos numerados.
       placeholder: |
-        1. Ir a '...'
-        2. Hacer click en '...'
-        3. Ver error
+        1. Ir a ...
+        2. Clic en ...
+        3. Ver el error
     validations:
       required: true
-
   - type: textarea
-    id: environment
+    id: expected
     attributes:
-      label: Entorno
-      placeholder: |
-        - OS: macOS / Linux / Windows
-        - Browser: Chrome / Firefox
-        - Device: Desktop / Mobile
+      label: Comportamiento esperado
     validations:
       required: true
-
-  - type: textarea
-    id: additional
+  - type: dropdown
+    id: area
     attributes:
-      label: Contexto adicional / Screenshots
+      label: Área afectada
+      options:
+        - UI / Frontend
+        - API / Backend
+        - Build / CI
+        - SEO / Accesibilidad
+        - Infraestructura
     validations:
-      required: false
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Confirmaciones
+      options:
+        - label: Busqué issues abiertos similares.
+          required: true

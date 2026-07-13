@@ -1,41 +1,27 @@
-## ¿Qué hace este PR?
+<!-- Título: tipo(scope): resumen conciso (imperativo, max 72 chars) -->
 
-<!-- Descripción concisa del cambio -->
+## Qué cambia
 
-## Motivación
-
-<!-- Por qué es necesario este cambio -->
+<!-- Describe el cambio y el motivo. Enlaza issues/ADRs si aplica. -->
 
 ## Tipo de cambio
 
-- [ ] `feat` — nueva funcionalidad
-- [ ] `fix` — corrección de bug
-- [ ] `perf` — mejora de rendimiento
-- [ ] `refactor` — refactorización sin cambio funcional
-- [ ] `chore` — tareas de mantenimiento
-- [ ] `docs` — documentación
-- [ ] `ci` — pipelines / workflows
-- [ ] `test` — tests
-- [ ] `style` — formato / estilos
+- [ ] Feature
+- [ ] Fix
+- [ ] Refactor
+- [ ] Docs
+- [ ] CI / tooling
+- [ ] Infra / deploy
 
 ## Checklist
 
-- [ ] El código sigue las convenciones del proyecto ([CONTRIBUTING.md](../CONTRIBUTING.md))
-- [ ] He añadido/actualizado tests si aplica
-- [ ] He revisado la accesibilidad si hay cambios de UI
-- [ ] Los Core Web Vitals no empeoran
-- [ ] Las variables de entorno nuevas están en `.env.example`
-- [ ] No hay `console.log` ni código de debug
-- [ ] El título sigue Conventional Commits (`type(scope): descripción`)
+- [ ] `pnpm typecheck` pasa
+- [ ] `pnpm lint` limpio
+- [ ] `pnpm test:coverage` verde (gates 85/80/85/85)
+- [ ] `pnpm knip` sin exportaciones muertas
+- [ ] `pnpm gitleaks` sin secretos
+- [ ] Cambios de arquitectura tienen ADR en `docs/adr/`
 
-## Screenshots / Video
+## Notas para revisión
 
-<!-- Si hay cambios visuales, adjunta capturas -->
-
-## ADR relacionado
-
-<!-- Si hay decisión arquitectónica, enlaza el ADR en /docs/adr/ -->
-
-## Issues relacionados
-
-Closes #
+<!-- Riesgos, decisiones, qué no cubre este PR. -->

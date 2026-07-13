@@ -1,40 +1,44 @@
-# Security Policy
+# Política de seguridad
 
 ## Versiones soportadas
 
-| Versión       | Soporte |
-| ------------- | ------- |
-| latest (main) | Activo  |
+| Versión | Soportada          |
+| ------- | ------------------ |
+| `main`  | :white_check_mark: |
+| otras   | :x:                |
 
 ## Reportar una vulnerabilidad
 
-**No abras un issue público para vulnerabilidades de seguridad.**
+Si encuentras una vulnerabilidad de seguridad en `alexendros.dev`, **no abras
+un issue público**.
 
-Usa el canal privado de GitHub Security Advisories:
-https://github.com/Iniciativas-Alexendros/website-alexendrosdev/security/advisories/new
+Reporta de forma privada a través de:
 
-O escribe a: contacto@alexendros.me
+- **Email:** security@alexendros.dev
+- **GitHub Security Advisories:** pestaña _Security → Report a vulnerability_
+  en el repositorio.
 
-### Qué incluir en el reporte
+Compromiso de respuesta:
 
-- Descripción del problema
-- Pasos para reproducir
-- Impacto potencial
-- Versión afectada
-- Posible solución (opcional)
+- Acuse de recibo en **72h**.
+- Evaluación inicial y plan de mitigación en **7 días**.
+- Crédito en el `CHANGELOG.md` salvo que pidas anonimato.
 
-### Tiempos de respuesta
+## Alcance
 
-- Confirmación de recepción: 48h
-- Evaluación inicial: 7 días
-- Resolución: según criticidad (crítico < 7 días, alto < 30 días)
+Cubierto:
 
-### Disclosure
+- Endpoints de API (`/api/*`) y autenticación CRM (X-API-Key).
+- Manejo de secretos y variables de entorno.
+- Cabeceras de seguridad, CSP y superficie de ataque del sitio.
 
-Responsible disclosure coordinada. No se publica el CVE hasta que el fix está en producción.
+Fuera de alcance (third-party):
 
-## Scope
+- Infraestructura de Vercel, Stripe, Supabase o Resend.
+- Fallos en dependencias — repórtalos igualmente y los escalamos al maintainer.
 
-**In scope:** alexendros.dev y subdominios, código en este repositorio
+## Buenas prácticas del repo
 
-**Out of scope:** ataques de fuerza bruta, spam, ingeniería social
+- `pnpm gitleaks` bloquea commits con secretos (Husky pre-commit).
+- `CodeQL` y `Semgrep` corren en CI (push/PR/semanal).
+- Las rutas `/api/agents/*` usan `requireCrmAuth` (timingSafeEqual + rate-limit).
