@@ -13,6 +13,8 @@ import path from "node:path";
 import matter from "gray-matter";
 import type { Post } from "./types";
 
+export type { Post };
+
 const BLOG_DIR = path.join(process.cwd(), "content", "blog");
 
 export interface LoadedPost extends Post {

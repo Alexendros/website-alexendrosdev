@@ -56,7 +56,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         {post.desc && <p className="ak-post-lead">{post.desc}</p>}
       </header>
       <div className="ak-prose ak-post-body">
-        <MDXRemote source={post.body} />
+        <MDXRemote source={post.body} components={{ h1: "h2", h2: "h3", h3: "h4" }} />
       </div>
     </article>
   );
