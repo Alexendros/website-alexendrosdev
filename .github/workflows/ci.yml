@@ -134,10 +134,10 @@ jobs:
         # /usr/local/bin que sí está en PATH por defecto en runners GH.
         run: npm install -g vercel@54.21.0 --unsafe-perm
       - name: Deploy to production (Vercel)
-        # --scope apunta al team. Sin él, vercel CLI puede fallar al
-        # resolver el org si el token pertenece a un team y no a una
-        # cuenta personal. Pasar VERCEL_TOKEN por env (no --token) para
-        # que el CLI lo lea nativamente sin exponerlo en argv.
-        run: vercel deploy --prod --yes --scope alexendros-team
+        # Sin --scope: el CLI resuelve el team y proyecto desde
+        # VERCEL_ORG_ID y VERCEL_PROJECT_ID (env vars del job, no secrets).
+        # Pasar VERCEL_TOKEN por env (no --token) para que el CLI lo lea
+        # nativamente sin exponerlo en argv.
+        run: vercel deploy --prod --yes
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
