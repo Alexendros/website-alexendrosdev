@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
 import { PROJECTS, SITE } from "@/lib/content";
-import { getPublishedPosts } from "@/lib/content/posts";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = SITE.url;
@@ -9,9 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/sobre-mi",
     "/proyectos",
     "/stack",
-    "/blog",
     "/servicios",
-    "/escaparate",
     "/contacto",
     "/legal/privacidad",
     "/legal/aviso-legal",
@@ -31,11 +28,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  const posts: MetadataRoute.Sitemap = getPublishedPosts().map((p) => ({
-    url: `${base}/blog/${p.id}`,
-    changeFrequency: "yearly",
-    priority: 0.6,
-  }));
-
-  return [...pages, ...projects, ...posts];
+  return [...pages, ...projects];
 }

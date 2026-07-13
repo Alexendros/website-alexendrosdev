@@ -1,11 +1,5 @@
-import type { Metadata } from "next";
-import { BlogView } from "@/components/sections/blog/BlogView";
-
-export const metadata: Metadata = {
-  title: "Blog",
-  description: "Notas de ingeniería sobre desarrollo web, productos digitales y tecnología.",
-};
+import { redirect } from "next/navigation";
 
 export default function BlogPage() {
-  return <BlogView />;
+  redirect("/");
 }

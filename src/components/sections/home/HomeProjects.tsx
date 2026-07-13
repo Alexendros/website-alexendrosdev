@@ -10,7 +10,7 @@ export function HomeProjects() {
   // el orden de /proyectos), no la posición en el array. Fallback a los 3
   // primeros si ningún proyecto está marcado.
   const flagged = PROJECTS.filter((p) => p.featured);
-  const feat = (flagged.length ? flagged : PROJECTS).slice(0, 3);
+  const feat = (flagged.length ? flagged : PROJECTS).slice(0, 2);
   return (
     <section className="ak-section" id="proyectos">
       <SectionHead center eyebrow="casos de estudio" title="Proyectos destacados" />
