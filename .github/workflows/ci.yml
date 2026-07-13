@@ -125,6 +125,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Clean .vercel local link
+        # El CLI de Vercel prioriza `.vercel/repo.json` (link local) sobre
+        # `--project` y `VERCEL_PROJECT_ID`. Si ese link está stale o
+        # corrupto, el deploy falla con "Could not retrieve Project
+        # Settings" incluso con --project. Lo borramos para forzar al
+        # CLI a usar las env vars del job.
+        run: rm -rf .vercel
       - name: Install Vercel CLI 54.21.0 (pinned)
         # Fijado a 54.x: vercel@55.0.0 introduce una regresión
         # ("Could not retrieve Project Settings" en CI, OK localmente).
