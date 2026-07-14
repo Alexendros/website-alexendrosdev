@@ -75,6 +75,16 @@ function ComparisonTable() {
 function FAQAccordion() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
+  const handleToggle = (i: number, isOpen: boolean) => {
+    queueMicrotask(() => {
+      if (isOpen) {
+        setOpenIndex(i);
+      } else if (openIndex === i) {
+        setOpenIndex(null);
+      }
+    });
+  };
+
   return (
     <div className="ak-faq" data-reveal>
       <h2 className="ak-h2" style={{ marginBottom: 24 }}>
@@ -85,13 +95,7 @@ function FAQAccordion() {
           key={i}
           className={`ak-faq-item ${openIndex === i ? "open" : ""}`}
           open={openIndex === i}
-          onToggle={(e) => {
-            if (e.currentTarget.open) {
-              setOpenIndex(i);
-            } else if (openIndex === i) {
-              setOpenIndex(null);
-            }
-          }}
+          onToggle={(e) => handleToggle(i, e.currentTarget.open)}
         >
           <summary>
             <span>{item.q}</span>
