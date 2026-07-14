@@ -1,9 +1,9 @@
 /* ============================================================
    ARCTIC OCEAN — Design System Foundations
    Light: Arctic Frost · Dark: Ocean Depths
-   Stack origin: Next.js + Tailwind CSS v4 + shadcn/ui
-   Fonts: Inter (sans) · JetBrains Mono (mono) — vía next/font
-   (variables --font-inter / --font-jetbrains desde app/layout.tsx)
+   Stack origin: Next.js + Tailwind CSS v4
+   Fonts: Geist (sans) · Geist Mono (mono UI) · JetBrains Mono (code) — vía next/font
+   (variables --font-geist / --font-geist-mono / --font-jetbrains desde app/layout.tsx)
 
    NOTA (contraste WCAG AA, verificado en F8):
    - --text-tertiary (light) ≥4.5:1 sobre --bg-base/--bg-elevated
@@ -41,12 +41,12 @@
 
   /* Text */
   --text-primary: 213 30% 15%;
-  --text-secondary: 215 16% 34%;
-  --text-tertiary: 210 16% 36%;
-  --text-muted: 213 18% 42%;
+  --text-secondary: 215 16% 30%;
+  --text-tertiary: 213 20% 28%;
+  --text-muted: 213 18% 38%;
   --text-on-primary: 0 0% 100%;
-  --text-link: 214 42% 38%;
-  --text-link-hover: 214 45% 32%;
+  --text-link: 214 45% 32%;
+  --text-link-hover: 214 50% 28%;
 
   /* Accent semántico para CTA (fill con texto encima). AA-safe en ambos modos:
      en light = primary-400; en dark se eleva a primary-300 (ver .dark). */
@@ -86,8 +86,11 @@
   --elev-focus: 0 0 0 3px hsl(var(--border-focus) / 0.3);
 
   /* ----- Type families ----- */
-  --font-sans: var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: var(--font-jetbrains), 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+  --font-sans: var(--font-geist), 'Geist', system-ui, -apple-system, sans-serif;
+  --font-mono:
+    var(--font-geist-mono), 'Geist Mono', ui-monospace, 'SF Mono', monospace;
+  --font-code:
+    var(--font-jetbrains), 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
 
   /* ----- Type scale (size / weight / line-height / tracking) ----- */
   --fs-display: clamp(2.5rem, 5vw, 4rem);
@@ -121,6 +124,7 @@
   --radius-xl: 16px;
   --radius-2xl: 20px;
   --radius-full: 9999px;
+  --radius-interactive: 9999px;
 
   /* ----- Motion ----- */
   --duration-fast: 150ms;
@@ -158,14 +162,14 @@
 
   --text-primary: 140 20% 96%;
   --text-secondary: 180 38% 76%;
-  --text-tertiary: 195 25% 57%;
-  --text-muted: 195 20% 44%;
+  --text-tertiary: 195 25% 62%;
+  --text-muted: 195 20% 52%;
   --text-on-primary: 213 30% 15%;
-  --text-link: 180 47% 42%;
-  --text-link-hover: 180 45% 55%;
+  --text-link: 180 47% 52%;
+  --text-link-hover: 180 45% 60%;
 
-  /* CTA dark elevado a primary-300 (#3a9e9e ≈4.6:1 sobre --text-on-primary) — AA */
-  --cta: var(--primary-300);
+  /* CTA lock — primary-400 en ambos modos (AA-safe sobre text-on-primary) */
+  --cta: var(--primary-400);
 
   --success: 174 56% 55%;
   --warning: 42 70% 64%;
@@ -200,24 +204,28 @@ body {
   font-size: var(--fs-body);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
 }
 
-h1, .h1 {
+h1,
+.h1 {
   font: 700 var(--fs-h1)/1.1 var(--font-sans);
   letter-spacing: -0.02em;
   color: hsl(var(--text-primary));
 }
-h2, .h2 {
+h2,
+.h2 {
   font: 600 var(--fs-h2)/1.15 var(--font-sans);
   letter-spacing: -0.01em;
   color: hsl(var(--text-primary));
 }
-h3, .h3 {
+h3,
+.h3 {
   font: 600 var(--fs-h3)/1.3 var(--font-sans);
   color: hsl(var(--text-primary));
 }
-h4, .h4 {
+h4,
+.h4 {
   font: 600 var(--fs-h4)/1.35 var(--font-sans);
   color: hsl(var(--text-primary));
 }
@@ -226,25 +234,51 @@ h4, .h4 {
   letter-spacing: -0.03em;
   color: hsl(var(--text-primary));
 }
-.body-lg { font-size: var(--fs-body-lg); line-height: 1.65; }
-.body-sm { font-size: var(--fs-body-sm); line-height: 1.55; }
-.caption {
-  font-size: var(--fs-caption); line-height: 1.4;
-  letter-spacing: 0.02em; font-weight: 500;
+.body-lg {
+  font-size: var(--fs-body-lg);
+  line-height: 1.65;
 }
-.mono, code, kbd, samp {
+.body-sm {
+  font-size: var(--fs-body-sm);
+  line-height: 1.55;
+}
+.caption {
+  font-size: var(--fs-caption);
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
+.mono,
+code,
+kbd,
+samp {
   font-family: var(--font-mono);
   font-size: var(--fs-mono-sm);
 }
-.mono-lg { font-family: var(--font-mono); font-size: var(--fs-mono-lg); line-height: 1.5; }
+.mono-lg {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-lg);
+  line-height: 1.5;
+}
 
-a, .link { color: hsl(var(--text-link)); text-decoration: none; }
-a:hover, .link:hover { color: hsl(var(--text-link-hover)); }
+a,
+.link {
+  color: hsl(var(--text-link));
+  text-decoration: none;
+}
+a:hover,
+.link:hover {
+  color: hsl(var(--text-link-hover));
+}
 
-::selection { background: hsl(var(--primary-400) / 0.25); }
+::selection {
+  background: hsl(var(--primary-400) / 0.25);
+}
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.001ms !important;
     transition-duration: 0.001ms !important;
   }
@@ -253,10 +287,39 @@ a:hover, .link:hover { color: hsl(var(--text-link-hover)); }
 /* ----------------------------------------------------------
    4. KEYFRAMES
    ---------------------------------------------------------- */
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@keyframes reveal { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 @keyframes pulse-ring {
-  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--success) / 0.4); }
-  50% { box-shadow: 0 0 0 6px hsl(var(--success) / 0); }
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 hsl(var(--success) / 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 6px hsl(var(--success) / 0);
+  }
 }

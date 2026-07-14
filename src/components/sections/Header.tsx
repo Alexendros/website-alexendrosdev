@@ -3,10 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { NAV } from "@/lib/content";
 import { ThemeToggle } from "./ThemeToggle";
-import { Button } from "@/components/ui/Button";
-import { Icon } from "@/components/ui/Icon";
+import { Button, Icon } from "@/components/ui";
 
 export function Header() {
   const pathname = usePathname();
@@ -23,44 +21,68 @@ export function Header() {
 
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
 
+  const navItems = [
+    { label: "Proyectos", href: "/proyectos" },
+    { label: "Servicios", href: "/servicios" },
+    { label: "Blog", href: "/blog" },
+    { label: "Stack", href: "/stack" },
+    { label: "Contacto", href: "/contacto" },
+  ];
+
   return (
-    <header className={`ak-header ${scrolled ? "ak-header-scrolled" : ""}`.trim()}>
+    <header className={`ak-header ${scrolled ? "ak-header-scrolled" : ""}`.trim()} role="banner">
       <div className="ak-header-inner">
-        <Link className="ak-logo" href="/">
-          alex<b>endros</b>
+        <Link className="ak-logo" href="/" aria-label="Alexendros - Inicio">
+          <span
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontWeight: 700,
+              fontSize: "1rem",
+            }}
+          >
+            alex<b>endros</b>
+          </span>
         </Link>
-        <nav className="ak-nav">
-          {NAV.map((l) => (
-            <Link key={l.label} href={l.href} className={isActive(l.href) ? "on" : ""}>
-              {l.label}
+        <nav className="ak-nav" aria-label="Navegación principal">
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={isActive(item.href) ? "on" : ""}
+              aria-current={isActive(item.href) ? "page" : undefined}
+            >
+              {item.label}
             </Link>
           ))}
         </nav>
         <div className="ak-header-right">
           <ThemeToggle />
-          <Button variant="primary" href="/contacto" style={{ padding: "8px 16px", fontSize: 13 }}>
-            Contacto
+          <Button variant="primary" size="sm" href="/contacto">
+            Hablemos
           </Button>
           <button
             type="button"
             className="ak-burger"
-            aria-label="Menú"
+            aria-label={open ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={open}
+            aria-controls="mobile-nav"
             onClick={() => setOpen((o) => !o)}
           >
-            <Icon name={open ? "x" : "menu"} size={20} />
+            <Icon name={open ? "x" : "list"} size={20} />
           </button>
         </div>
       </div>
       {open && (
-        <div className="ak-mobile-nav">
-          {[...NAV, { label: "Contacto", href: "/contacto" }].map((l) => (
+        <div id="mobile-nav" className="ak-mobile-nav" role="navigation" aria-label="Móvil">
+          {navItems.map((item) => (
             <Link
-              key={l.label}
-              href={l.href}
-              className={isActive(l.href) ? "on" : ""}
+              key={item.href}
+              href={item.href}
+              className={isActive(item.href) ? "on" : ""}
               onClick={() => setOpen(false)}
+              aria-current={isActive(item.href) ? "page" : undefined}
             >
-              {l.label}
+              {item.label}
             </Link>
           ))}
         </div>
