@@ -2,6 +2,5 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
   "cleanUrls": true,
-  "trailingSlash": false,
-  "ignoreBuildStep": "node scripts/should-build.mjs"
+  "trailingSlash": false
 }
