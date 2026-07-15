@@ -68,7 +68,13 @@ function TestimonialCard({ t }: { t: Testimonial }) {
           <span className="ak-tcard-name">{t.author}</span>
           {t.role && <span className="ak-tcard-role">{t.role}</span>}
           {t.url && (
-            <a className="ak-tcard-link" href={t.url} target="_blank" rel="noopener noreferrer">
+            <a
+              className="ak-tcard-link"
+              href={t.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Visitar ${t.author}`}
+            >
               <Icon name="arrow-up-right" size={12} />
             </a>
           )}
@@ -130,6 +136,7 @@ export function Testimonials() {
           <div className="ak-tcar-viewport">
             <div
               className="ak-tcar-track"
+              role="list"
               style={{
                 transform: `translateX(calc(-${safeIndex} * (100% + 20px) / ${perView}))`,
               }}

@@ -110,7 +110,7 @@ export function BlogView({ posts: allPosts }: BlogViewProps) {
           </div>
         </div>
 
-        {allPosts.length === 0 && (
+        {otherPosts.length === 0 && (
           <p className="ak-empty" role="status">
             Sin artículos para los filtros actuales
           </p>

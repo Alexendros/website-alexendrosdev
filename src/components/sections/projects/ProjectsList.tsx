@@ -85,7 +85,7 @@ export function ProjectsList() {
 
         <div className="ak-filter-group">
           <label className="ak-filter-label">Stack</label>
-          <div className="ak-tag-cloud" role="list" aria-label="Etiquetas de tecnología">
+          <div className="ak-tag-cloud" role="group" aria-label="Etiquetas de tecnología">
             {TAGS.map((tag) => (
               <button
                 key={tag}

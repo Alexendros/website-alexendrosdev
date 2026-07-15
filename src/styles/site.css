@@ -3,6 +3,17 @@
    Consumes tokens from design-tokens.css (HSL vars + .dark override)
    ============================================================ */
 
+/* Cascade fix: Tailwind v4 generates `a, .link` unlayered (max priority),
+   which overrides utilities like text-on-primary in @layer utilities.
+   These rules restore correct text color on buttons rendered as <a>.
+   Specificity (0,1,1) beats the unlayered `a` (0,0,1) and `.link` (0,1,0). */
+a:where(.bg-primary, .bg-cta, .text-on-primary) {
+  color: hsl(var(--text-on-primary));
+}
+a:where(.bg-primary, .bg-cta, .text-on-primary):hover {
+  color: hsl(var(--text-on-primary));
+}
+
 * {
   box-sizing: border-box;
 }
