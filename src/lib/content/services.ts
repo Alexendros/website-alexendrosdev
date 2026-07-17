@@ -119,12 +119,12 @@ const ADDON_ITEMS = [
 ]
 
 export const ADDONS: Addon[] = ADDON_ITEMS.map((item) => ({
-  name: item.category === 'consultoria' ? 'Sesión de consultoría' : item.name,
+  name: item.name,
   desc: item.desc,
   price:
-    item.amount === 39_000
+    item.id === 'puesta-a-punto-web'
       ? `€${(item.amount / 100).toLocaleString('es-ES')}`
-      : item.amount === 6_000
+      : item.id === 'sesion-consultoria'
         ? `€${item.amount / 100}/hora`
         : `desde €${(item.amount / 100).toLocaleString('es-ES')}`,
 }))
