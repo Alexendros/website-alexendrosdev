@@ -1,11 +1,9 @@
-# alexendros.dev
+# [Alexendros.dev](https://alexendros.dev) · Portfolio profesional de Alejandro Domingo Agustí: 'Software & Platform Engineering' desde Valencia.
 
 [![CI](https://github.com/Iniciativas-Alexendros/website-alexendrosdev/actions/workflows/ci.yml/badge.svg)](https://github.com/Iniciativas-Alexendros/website-alexendrosdev/actions/workflows/ci.yml)
 [![Deploy](https://img.shields.io/badge/deployed-Vercel-000?logo=vercel)](https://alexendros.dev)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Coverage: 80% branches](https://img.shields.io/badge/coverage-80%25_branches-brightgreen?logo=vitest)](https://github.com/Iniciativas-Alexendros/website-alexendrosdev/actions)
-
-**Alejandro Domingo Agustí** — Software & Platform Engineer en Valencia.
 
 Diseño y desarrollo **webs, aplicaciones y plataformas a medida** para negocios y proyectos digitales. También construyo herramientas internas, automatizaciones y open source.
 
