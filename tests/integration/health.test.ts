@@ -65,6 +65,15 @@ describe("GET /api/health", () => {
     expect(body.checks.stripe.ok).toBe(true);
   });
 
+  it("reports db ok false when DATABASE_URL set but prisma query fails", async () => {
+    // mockPrisma.$queryRaw por defecto rechaza (mockRejectedValue), así que
+    // el catch del health endpoint se activa y db.ok debe ser false
+    vi.stubEnv("DATABASE_URL", "postgres://user:pass@host/db");
+    const res = await GET();
+    const body = await res.json();
+    expect(body.checks.db.ok).toBe(false);
+  });
+
   it("reports not degraded when stripe and db are ok", async () => {
     vi.stubEnv("STRIPE_SECRET_KEY", "sk_test");
     vi.stubEnv("DATABASE_URL", "postgres://user:pass@host/db");
