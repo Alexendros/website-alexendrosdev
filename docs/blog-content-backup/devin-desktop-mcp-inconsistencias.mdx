@@ -67,11 +67,11 @@ Para la versión stable, eso es:
 
 Esas rutas son de Windsurf/Cascade, no de Devin CLI. Las ubicaciones correctas del CLI son:
 
-| Nivel | Ruta |
-| --- | --- |
-| User | `~/.config/devin/config.json` |
-| Local | `.devin/config.local.json` |
-| Project | `.devin/config.json` |
+| Nivel   | Ruta                          |
+| ------- | ----------------------------- |
+| User    | `~/.config/devin/config.json` |
+| Local   | `.devin/config.local.json`    |
+| Project | `.devin/config.json`          |
 
 La configuración nativa de usuario (`~/.config/devin/config.json`) ahora está estructurada y alineada con el schema. En `permissions` se usan patrones `Exec(...)` para agrupar familias de comandos:
 
@@ -90,10 +90,10 @@ El CLI no documenta ningún fallback a `~/.codeium/mcp_config.json`. En la prác
 
 La documentación de transición de Windsurf a Devin Desktop menciona `~/.config/Devin/` como ruta de configuración. En el sistema coexisten dos directorios con nombres casi iguales:
 
-| Ruta | Contenido real | Uso |
-| --- | --- | --- |
+| Ruta               | Contenido real                              | Uso                            |
+| ------------------ | ------------------------------------------- | ------------------------------ |
 | `~/.config/Devin/` | Cache, IndexedDB, cookies, logs de Electron | Datos de la aplicación gráfica |
-| `~/.config/devin/` | `config.json`, `AGENTS.md`, `skills/` | Configuración del agente CLI |
+| `~/.config/devin/` | `config.json`, `AGENTS.md`, `skills/`       | Configuración del agente CLI   |
 
 Para verificarlo, oculté `~/.config/devin/` y mantuve `~/.config/Devin/`. El CLI creó un nuevo `~/.config/devin/` vacío con un `config.json` mínimo. La aplicación, por su parte, recreó `~/.config/Devin/` para su caché.
 
@@ -180,18 +180,18 @@ El CLI guarda una copia caché de los team settings en:
 
 El archivo pesa 1019 bytes y se decodifica con `protoc --decode_raw`. El contenido estructural es:
 
-| Campo | Tipo | Valor |
-| --- | --- | --- |
-| 1 | bool | true |
-| 4 | bool | true |
-| 12 | bool | true |
-| 22 | bool | true |
-| 23 | bool | true |
-| 24 | bool | true |
-| 7 | allowlist de modelos | 36 entradas |
-| 26 | string | `claude-opus-4-7-medium` |
-| 6 | int | dos IDs numéricos |
-| 30 | string | `subagent-default` |
+| Campo | Tipo                 | Valor                    |
+| ----- | -------------------- | ------------------------ |
+| 1     | bool                 | true                     |
+| 4     | bool                 | true                     |
+| 12    | bool                 | true                     |
+| 22    | bool                 | true                     |
+| 23    | bool                 | true                     |
+| 24    | bool                 | true                     |
+| 7     | allowlist de modelos | 36 entradas              |
+| 26    | string               | `claude-opus-4-7-medium` |
+| 6     | int                  | dos IDs numéricos        |
+| 30    | string               | `subagent-default`       |
 
 Lo relevante es lo que **no** aparece:
 
@@ -212,11 +212,11 @@ Es decir, el caché local de team settings contiene la política de modelos, per
 
 El Devin CLI tiene tres niveles de configuración, pero solo dos de ellos están pensados para no mezclarse con el repo:
 
-| Nivel | Ruta | ¿Se sube a git? |
-| --- | --- | --- |
-| User | `~/.config/devin/config.json` | No, está en `$HOME` |
-| Local | `.devin/config.local.json` | No, debe estar gitignored |
-| Project | `.devin/config.json` | Sí, es parte del proyecto |
+| Nivel   | Ruta                          | ¿Se sube a git?           |
+| ------- | ----------------------------- | ------------------------- |
+| User    | `~/.config/devin/config.json` | No, está en `$HOME`       |
+| Local   | `.devin/config.local.json`    | No, debe estar gitignored |
+| Project | `.devin/config.json`          | Sí, es parte del proyecto |
 
 `.devin/config.local.json` es la ruta correcta para los overrides locales de un proyecto: permite definir `mcpServers` y `permissions` con prioridad sobre `~/.config/devin/config.json`, sin contaminar el archivo de proyecto que se versiona. En un caso real, ese archivo local incluyó permisos para patrones `mcp__*` y servidores específicos; `devin mcp list` los leyó correctamente y mostró `codebase-memory-mcp` como configurado. El bloqueo, sin embargo, siguió siendo el mismo: `MCP servers: enforced` con allowlist vacía.
 
