@@ -19,23 +19,23 @@
 
 ## Calendario Q3 2026
 
-| Mes       | Tema (borrador)                          | Categoría     | Estado         |
-| --------- | ---------------------------------------- | ------------- | -------------- |
-| Jul 2026  | Cuánto cuesta una web a medida en 2026   | Clientes      | ✅ publicado    |
-| Jul 2026  | WordPress vs Next.js en 2026             | Clientes      | ✅ publicado    |
-| Ago 2026  | Qué preguntar en una discovery call      | Clientes      | 🟡 borrador    |
-| Sep 2026  | Plantilla de revisión de seguridad web   | Calidad       | 🟡 esqueleto   |
-| Oct 2026  | Retainer o proyecto fijo: cuándo elegir  | Clientes      | ⚪ por hacer    |
-| Nov 2026  | Cómo presupuestar un proyecto a medida   | Clientes      | ⚪ por hacer    |
-| Dic 2026  | Buenas prácticas de monitorización web   | Plataforma    | ⚪ por hacer    |
+| Mes      | Tema (borrador)                         | Categoría  | Estado       |
+| -------- | --------------------------------------- | ---------- | ------------ |
+| Jul 2026 | Cuánto cuesta una web a medida en 2026  | Clientes   | ✅ publicado |
+| Jul 2026 | WordPress vs Next.js en 2026            | Clientes   | ✅ publicado |
+| Ago 2026 | Qué preguntar en una discovery call     | Clientes   | 🟡 borrador  |
+| Sep 2026 | Plantilla de revisión de seguridad web  | Calidad    | 🟡 esqueleto |
+| Oct 2026 | Retainer o proyecto fijo: cuándo elegir | Clientes   | ⚪ por hacer |
+| Nov 2026 | Cómo presupuestar un proyecto a medida  | Clientes   | ⚪ por hacer |
+| Dic 2026 | Buenas prácticas de monitorización web  | Plataforma | ⚪ por hacer |
 
 ## Estado
 
 - **5 posts ya publicados** (ver `src/lib/content/posts.ts`).
 - **2 borradores en preparación** que cubren los huecos más urgentes:
-  - *Qué preguntar en una discovery call* — reduce el ruido en leads y educa al
+  - _Qué preguntar en una discovery call_ — reduce el ruido en leads y educa al
     visitante sobre el proceso.
-  - *Plantilla de revisión de seguridad* — muestra metodología y coincide con
+  - _Plantilla de revisión de seguridad_ — muestra metodología y coincide con
     el addon `revision-seguridad` del catálogo (€600).
 
 ## Cómo añadir un post
