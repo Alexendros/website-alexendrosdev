@@ -215,6 +215,7 @@ const subscriptionUpdatedWithContactEvent = {
 
 // subscription.deleted CON canceled_at=null
 const subscriptionDeletedNullCancelEvent = {
+  id: "evt_sub_null_cancel",
   type: "customer.subscription.deleted",
   data: {
     object: {
@@ -485,13 +486,14 @@ describe("POST /api/stripe/webhook", () => {
   it("P1.5: subscription.deleted con canceled_at=null → canceledAt es Date actual", async () => {
     mocks.constructEvent.mockReturnValue(subscriptionDeletedNullCancelEvent);
     mocks.state.prisma = buildPrisma();
-    mocks.subscriptionFindUnique.mockResolvedValue({ contactId: "contact-1" });
+    mocks.subscriptionUpsert.mockResolvedValue({ contactId: "contact-1" });
+    mocks.taskFindFirst.mockResolvedValue(null);
     const res = await post("raw", { "stripe-signature": "buena" });
     expect(res.status).toBe(200);
-    expect(mocks.subscriptionUpdate).toHaveBeenCalledWith(
+    expect(mocks.subscriptionUpsert).toHaveBeenCalledWith(
       expect.objectContaining({
         where: { stripeSubscriptionId: "sub_stripe_null_cancel" },
-        data: expect.objectContaining({
+        update: expect.objectContaining({
           status: "canceled",
           canceledAt: expect.any(Date),
         }),
@@ -623,13 +625,15 @@ describe("POST /api/stripe/webhook", () => {
   it("subscription.deleted con canceled_at definido → canceledAt es Date del timestamp", async () => {
     mocks.constructEvent.mockReturnValue(subscriptionDeletedEvent);
     mocks.state.prisma = buildPrisma();
+    mocks.subscriptionUpsert.mockResolvedValue({ contactId: "contact-1" });
+    mocks.taskFindFirst.mockResolvedValue(null);
     const res = await post("raw", { "stripe-signature": "buena" });
     expect(res.status).toBe(200);
     // canceled_at = 1722000000 → new Date(1722000000 * 1000)
-    expect(mocks.subscriptionUpdate).toHaveBeenCalledWith(
+    expect(mocks.subscriptionUpsert).toHaveBeenCalledWith(
       expect.objectContaining({
         where: { stripeSubscriptionId: "sub_stripe_123" },
-        data: expect.objectContaining({
+        update: expect.objectContaining({
           status: "canceled",
           canceledAt: expect.any(Date),
         }),
@@ -679,7 +683,8 @@ describe("POST /api/stripe/webhook", () => {
   it("subscription.deleted sin contactId en sub → task create con undefined", async () => {
     mocks.constructEvent.mockReturnValue(subscriptionDeletedEvent);
     mocks.state.prisma = buildPrisma();
-    mocks.subscriptionFindUnique.mockResolvedValue({});
+    mocks.subscriptionUpsert.mockResolvedValue({});
+    mocks.taskFindFirst.mockResolvedValue(null);
     const res = await post("raw", { "stripe-signature": "buena" });
     expect(res.status).toBe(200);
     expect(mocks.taskCreate).toHaveBeenCalledWith(
