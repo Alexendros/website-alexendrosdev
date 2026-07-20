@@ -32,12 +32,23 @@ const { default: lighthouse } = await import(
 const CHROME_PATH = "/home/alexendros/.cache/ms-playwright/chromium-1228/chrome-linux64/chrome";
 const REPORTS_DIR = path.join(homedir(), "auditoria-alexendros-dev", "reports");
 
+// Timestamp para evitar sobrescribir reports de ejecuciones anteriores.
+// Formato: YYYY-MM-DD-HH-mm (ej. 2026-07-20-03-51). Las corridas de la misma
+// ejecución comparten timestamp, así que se agrupan por lote.
+const RUN_TIMESTAMP = new Date()
+  .toISOString()
+  .replace(/[T:]/g, "-")
+  .replace(/\..+/, "")
+  .slice(0, 16);
+
 // Asegurar directorio
 mkdirSync(REPORTS_DIR, { recursive: true });
 
 const URLS = [
   { url: "https://alexendros.dev", slug: "home" },
   { url: "https://alexendros.dev/servicios", slug: "servicios" },
+  { url: "https://alexendros.dev/sobre-mi", slug: "sobre-mi" },
+  { url: "https://alexendros.dev/proyectos/alexendros-me", slug: "proyecto" },
   {
     url: "https://alexendros.dev/blog",
     slug: "blog",
@@ -197,8 +208,8 @@ async function runAudit(url, slug, device) {
       throw new Error("Lighthouse no devolvió resultado (lhr undefined)");
     }
 
-    // Guardar JSON completo
-    const reportPath = path.join(REPORTS_DIR, `lh-${slug}-${device}.json`);
+    // Guardar JSON completo (con timestamp para no sobrescribir)
+    const reportPath = path.join(REPORTS_DIR, `lh-${slug}-${device}-${RUN_TIMESTAMP}.json`);
     writeFileSync(reportPath, JSON.stringify(runnerResult.lhr, null, 2), "utf-8");
     console.error(`  ✅ Guardado: ${reportPath}`);
 
@@ -206,7 +217,7 @@ async function runAudit(url, slug, device) {
     return { url, slug, device, metrics, error: null };
   } catch (err) {
     console.error(`  ❌ Error: ${err.message}`);
-    const errorPath = path.join(REPORTS_DIR, `lh-${slug}-${device}.json`);
+    const errorPath = path.join(REPORTS_DIR, `lh-${slug}-${device}-${RUN_TIMESTAMP}.json`);
     writeFileSync(
       errorPath,
       JSON.stringify({ error: err.message, url, device, slug }, null, 2),
@@ -218,7 +229,7 @@ async function runAudit(url, slug, device) {
       try {
         await chrome.kill();
         console.error(`  Chrome cerrado`);
-      } catch (_) {}
+      } catch {}
     }
   }
 }
@@ -341,7 +352,7 @@ async function main() {
 
   // Construir resumen
   const markdown = buildMarkdownTable(results);
-  const summaryPath = path.join(REPORTS_DIR, "lh-cwv-resumen.md");
+  const summaryPath = path.join(REPORTS_DIR, `lh-cwv-resumen-${RUN_TIMESTAMP}.md`);
   writeFileSync(summaryPath, markdown, "utf-8");
 
   console.error(`\n✅ Resumen guardado: ${summaryPath}`);
