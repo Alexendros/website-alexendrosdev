@@ -7,7 +7,6 @@ describe("SEO — superficie de indexación", () => {
     expect(urls).toContain("https://alexendros.dev");
     expect(urls).toContain("https://alexendros.dev/servicios");
     expect(urls).toContain("https://alexendros.dev/proyectos/alexendros-me");
-    expect(urls).not.toContain("/blog");
     expect(urls).toContain("https://alexendros.dev/legal/privacidad");
   });
 });

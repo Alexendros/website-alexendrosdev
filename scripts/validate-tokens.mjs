@@ -15,7 +15,6 @@
 import { readFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { CSS_TO_DTCG_MAP, DARK_CSS_TO_DTCG_MAP } from "./token-map.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -87,13 +86,14 @@ function contrastRatio(l1, l2) {
 // ─── Parse CSS tokens ───────────────────────────────────────────────────────
 
 function parseCssTokens(css) {
-  // Extract :root and .dark blocks
-  const rootMatch = css.match(/:root\s*\{([^}]+)\}/);
-  const darkMatch = css.match(/\.dark\s*\{([^}]+)\}/);
+  // Strip inline comments to avoid parsing them as token values
+  const clean = css.replace(/\/\*[\s\S]*?\*\//g, "");
+
+  const rootMatch = clean.match(/:root\s*\{([^}]+)\}/);
+  const darkMatch = clean.match(/\.dark\s*\{([^}]+)\}/);
 
   function parseBlock(block) {
     const tokens = {};
-    // Match --var-name: value; patterns
     const re = /--([\w-]+)\s*:\s*(.+?)\s*;/g;
     let m;
     while ((m = re.exec(block)) !== null) {
@@ -113,7 +113,7 @@ function parseCssTokens(css) {
 // ─── Parse HSL tokens ───────────────────────────────────────────────────────
 
 function parseHSLValue(str) {
-  const m = str.trim().match(/^(\d+)\s+(\d+)%\s+(\d+)%$/);
+  const m = str.trim().match(/^(\d+)\s+(\d+)%\s+(\d+)%(\s*\/\s*[\d.]+)?$/);
   if (!m) return null;
   return { h: parseInt(m[1]), s: parseInt(m[2]), l: parseInt(m[3]) };
 }
@@ -130,6 +130,58 @@ function flattenDTCG(obj, prefix = "") {
     }
   }
   return result;
+}
+
+// ─── Color token mapping (CSS var → DTCG path) ───────────────────────────────
+
+const CSS_TO_DTCG_MAP = {
+  "primary-50": "color.primary.50",
+  "primary-100": "color.primary.100",
+  "primary-200": "color.primary.200",
+  "primary-300": "color.primary.300",
+  "primary-400": "color.primary.400",
+  "primary-500": "color.primary.500",
+  "primary-600": "color.primary.600",
+  "primary-700": "color.primary.700",
+  "primary-800": "color.primary.800",
+  "primary-900": "color.primary.900",
+  "primary-950": "color.primary.950",
+  "bg-base": "color.surface.background",
+  "bg-elevated": "color.surface.elevated",
+  "bg-sunken": "color.surface.sunken",
+  "bg-highlight": "color.surface.highlight",
+  "bg-inset": "color.surface.inset",
+  "text-primary": "color.text.primary",
+  "text-secondary": "color.text.secondary",
+  "text-tertiary": "color.text.tertiary",
+  "text-muted": "color.text.muted",
+  "text-on-primary": "color.text.on-primary",
+  "text-link": "color.text.link",
+  "text-link-hover": "color.text.link-hover",
+  success: "color.semantic.success",
+  warning: "color.semantic.warning",
+  emergency: "color.semantic.emergency",
+  info: "color.semantic.info",
+  border: "color.border.default",
+  "border-subtle": "color.border.subtle",
+  "border-focus": "color.border.focus",
+  "terminal-bg": "color.terminal.bg",
+  "terminal-text": "color.terminal.text",
+  "terminal-prompt": "color.terminal.prompt",
+  "terminal-cursor": "color.terminal.cursor",
+  "terminal-comment": "color.terminal.comment",
+  "terminal-keyword": "color.terminal.keyword",
+  "terminal-string": "color.terminal.string",
+  // Shadows (opacity varies, skip hex check for shadows)
+  "shadow-sm": null,
+  "shadow-md": null,
+  "shadow-lg": null,
+  "shadow-xl": null,
+};
+
+const DARK_CSS_TO_DTCG_MAP = {};
+for (const [cssVar, dtcgPath] of Object.entries(CSS_TO_DTCG_MAP)) {
+  if (dtcgPath) DARK_CSS_TO_DTCG_MAP[cssVar] = "dark." + dtcgPath;
 }
 
 // ─── Main validation ─────────────────────────────────────────────────────────
@@ -155,10 +207,6 @@ async function main() {
       warnings++;
       continue;
     }
-    const cssVal = cssLight[cssVar];
-    // Skip composed values (shadows)
-    if (!parseHSLValue(cssVal)) continue;
-
     if (!(dtcgPath in dtcgFlat)) {
       console.error(`  ❌ CSS --${cssVar} → DTCG path "${dtcgPath}" not found in tokens.json`);
       errors++;
@@ -171,12 +219,9 @@ async function main() {
   console.log("\n── Check 2: Dark mode tokens in DTCG ──");
   for (const [cssVar, dtcgPath] of Object.entries(DARK_CSS_TO_DTCG_MAP)) {
     if (!dtcgPath) continue;
-    if (!(cssVar in cssDark)) {
-      continue; // Not all tokens have dark overrides
-    }
+    if (!(cssVar in cssDark)) continue; // Not all tokens have dark overrides
     if (!(dtcgPath in dtcgFlat)) {
-      // Shadows in dark have different path structure
-      if (cssVar.startsWith("shadow-")) continue;
+      if (cssVar.startsWith("shadow-")) continue; // shadows use structured format
       console.error(`  ❌ Dark CSS --${cssVar} → DTCG path "${dtcgPath}" not found`);
       errors++;
       continue;
@@ -184,9 +229,9 @@ async function main() {
     console.log(`  ✅ dark --${cssVar} → ${dtcgPath}`);
   }
 
-  // ── Check 3: HSL→hex conversion accuracy ───────────────────────────────
+  // ── Check 3: HSL→hex conversion accuracy (light) ───────────────────────
   console.log("\n── Check 3: HSL→hex conversion accuracy (light) ──");
-  const TOLERANCE = 2; // ±2 per channel tolerance
+  const TOLERANCE = 2;
   let hexOk = 0,
     hexFail = 0;
 
@@ -195,14 +240,12 @@ async function main() {
     const dtcg = dtcgFlat[dtcgPath];
     if (!dtcg || dtcg.$type !== "color" || !dtcg.$value) continue;
 
-    const cssVal = cssLight[cssVar];
-    const hsl = parseHSLValue(cssVal);
+    const hsl = parseHSLValue(cssLight[cssVar]);
     if (!hsl) continue;
 
     const computed = hslToRgb(hsl.h, hsl.s, hsl.l);
     const expected = hexToRgb(dtcg.$value);
     if (!expected) {
-      console.warn(`  ⚠️  Cannot parse hex "${dtcg.$value}" for ${dtcgPath}`);
       warnings++;
       continue;
     }
@@ -259,21 +302,15 @@ async function main() {
 
   // ── Check 5: DTCG tokens missing from CSS (stale exports) ──────────────
   console.log("\n── Check 5: DTCG tokens without CSS source ──");
-  const cssColorVars = new Set([...Object.keys(CSS_TO_DTCG_MAP).filter((k) => CSS_TO_DTCG_MAP[k])]);
+  const expectedDTCG = Object.values(CSS_TO_DTCG_MAP).filter(Boolean);
+  const foundDTCG = Object.keys(dtcgFlat).filter(
+    (k) => dtcgFlat[k].$type === "color" && !k.startsWith("dark."),
+  );
 
   let staleCount = 0;
-  // Check light color tokens
-  const expectedDTCG = Object.keys(CSS_TO_DTCG_MAP)
-    .filter((k) => CSS_TO_DTCG_MAP[k])
-    .map((k) => CSS_TO_DTCG_MAP[k]);
-  const foundDTCG = Object.keys(dtcgFlat).filter((k) => {
-    const v = dtcgFlat[k];
-    return v.$type === "color" && !k.startsWith("dark.");
-  });
-
   for (const path of foundDTCG) {
     if (!expectedDTCG.includes(path) && path !== "cta.default") {
-      console.warn(`  ⚠️  DTCG token "${path}" has no CSS --var mapping (maybe intentional?)`);
+      console.warn(`  ⚠️  DTCG token "${path}" has no CSS --var mapping (may be intentional)`);
       staleCount++;
     }
   }
@@ -285,15 +322,25 @@ async function main() {
     { fg: "text-primary", bg: "bg-base", label: "text-primary on bg-base" },
     { fg: "text-secondary", bg: "bg-base", label: "text-secondary on bg-base" },
     { fg: "text-tertiary", bg: "bg-base", label: "text-tertiary on bg-base" },
+    { fg: "text-tertiary", bg: "bg-elevated", label: "text-tertiary on bg-elevated" },
     { fg: "text-muted", bg: "bg-inset", label: "text-muted on bg-inset" },
+    { fg: "text-muted", bg: "bg-base", label: "text-muted on bg-base" },
     { fg: "text-link", bg: "bg-highlight", label: "text-link on bg-highlight" },
+    { fg: "text-on-primary", bg: "primary-400", label: "text-on-primary on primary-400 (CTA)" },
   ];
 
   const darkContrastPairs = [
     { fg: "text-primary", bg: "bg-base", label: "dark text-primary on bg-base" },
     { fg: "text-secondary", bg: "bg-base", label: "dark text-secondary on bg-base" },
     { fg: "text-tertiary", bg: "bg-base", label: "dark text-tertiary on bg-base" },
+    { fg: "text-tertiary", bg: "bg-elevated", label: "dark text-tertiary on bg-elevated" },
+    { fg: "text-muted", bg: "bg-inset", label: "dark text-muted on bg-inset" },
     { fg: "text-link", bg: "bg-base", label: "dark text-link on bg-base" },
+    {
+      fg: "text-on-primary",
+      bg: "primary-400",
+      label: "dark text-on-primary on primary-400 (CTA)",
+    },
   ];
 
   let contrastPass = 0,
@@ -338,12 +385,8 @@ async function main() {
     if (hexFail > 0 || darkFail > 0) {
       console.warn(`⚠️  ${hexFail + darkFail} HSL→hex mismatches (tolerance ±${TOLERANCE})`);
     }
-    if (errors > 0) {
-      console.error(`❌ ${errors} errors found`);
-    }
-    if (warnings > 0) {
-      console.warn(`⚠️  ${warnings} warnings`);
-    }
+    if (errors > 0) console.error(`❌ ${errors} errors found`);
+    if (warnings > 0) console.warn(`⚠️  ${warnings} warnings`);
     process.exit(errors > 0 ? 2 : 1);
   }
 }

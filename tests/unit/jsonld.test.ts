@@ -8,8 +8,6 @@ import {
 } from "@/lib/seo/jsonld";
 import { proyectoConRepo, proyectoSinRepo } from "../fixtures/content";
 
-// schema-dts tipa cada propiedad como unión muy amplia; para las aserciones
-// accedemos al objeto plano resultante como Record.
 const plain = (x: object) => x as unknown as Record<string, unknown>;
 
 describe("generadores JSON-LD", () => {

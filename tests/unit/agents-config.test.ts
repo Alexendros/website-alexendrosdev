@@ -54,7 +54,7 @@ describe("isAllowedRepairEndpoint — endpoints permitidos", () => {
     ).toBe(true);
   });
 
-  it("PATCH /api/crm/deals/{id} con underscore en ID es permitido", () => {
+  it("PATCH /api/crm/deals/{id} con underscore es permitido", () => {
     expect(isAllowedRepairEndpoint("PATCH /api/crm/deals/deal_XYZ_456")).toBe(true);
   });
 
@@ -90,7 +90,7 @@ describe("isAllowedRepairEndpoint — endpoints no permitidos", () => {
     expect(isAllowedRepairEndpoint("PATCH /api/crm/tasks/123")).toBe(false);
   });
 
-  it("PATCH /api/crm/deals sin ID no está permitido", () => {
+  it("PATCH /api/crm/deals/ sin ID no está permitido", () => {
     expect(isAllowedRepairEndpoint("PATCH /api/crm/deals/")).toBe(false);
   });
 
@@ -118,7 +118,7 @@ describe("isAllowedRepairEndpoint — formato inválido", () => {
     expect(isAllowedRepairEndpoint("/api/crm/tasks")).toBe(false);
   });
 
-  it("URL sin /api/crm/ no es permitido (otro dominio)", () => {
+  it("URL sin /api/crm/ no es permitido", () => {
     expect(isAllowedRepairEndpoint("POST /api/other/tasks")).toBe(false);
   });
 
@@ -130,7 +130,7 @@ describe("isAllowedRepairEndpoint — formato inválido", () => {
     expect(isAllowedRepairEndpoint("POST /api/crm/tasks/123/extra")).toBe(false);
   });
 
-  it("whitespace alrededor no es permitido (no hacemos trim explícito)", () => {
+  it("whitespace alrededor no es permitido", () => {
     expect(isAllowedRepairEndpoint("  POST /api/crm/tasks")).toBe(false);
   });
 });

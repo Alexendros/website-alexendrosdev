@@ -11,12 +11,9 @@
 import { readFileSync, writeFileSync, copyFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { CSS_TO_DTCG_MAP, DARK_CSS_TO_DTCG_MAP } from "./token-map.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
-
-// ─── HSL → hex (same as validate-tokens.mjs) ────────────────────────────────
 
 function hslToRgb(h, s, l) {
   s /= 100;
@@ -61,22 +58,16 @@ function rgbToHex(r, g, b) {
   return "#" + [r, g, b].map((v) => v.toString(16).padStart(2, "0")).join("");
 }
 
-// ─── Parse CSS ──────────────────────────────────────────────────────────────
-
 function parseCssTokens(css) {
   const rootMatch = css.match(/:root\s*\{([^}]+)\}/);
   const darkMatch = css.match(/\.dark\s*\{([^}]+)\}/);
-
   function parseBlock(block) {
     const tokens = {};
     const re = /--([\w-]+)\s*:\s*(.+?)\s*;/g;
     let m;
-    while ((m = re.exec(block)) !== null) {
-      tokens[m[1]] = m[2].trim();
-    }
+    while ((m = re.exec(block)) !== null) tokens[m[1]] = m[2].trim();
     return tokens;
   }
-
   return {
     light: rootMatch ? parseBlock(rootMatch[1]) : {},
     dark: darkMatch ? parseBlock(darkMatch[1]) : {},
@@ -89,8 +80,6 @@ function parseHSLValue(str) {
   return { h: parseInt(m[1]), s: parseInt(m[2]), l: parseInt(m[3]) };
 }
 
-// ─── Deep-update helper ─────────────────────────────────────────────────────
-
 function setDeep(obj, path, value) {
   const keys = path.split(".");
   let cur = obj;
@@ -101,12 +90,54 @@ function setDeep(obj, path, value) {
   cur[keys[keys.length - 1]] = value;
 }
 
-// ─── Main ───────────────────────────────────────────────────────────────────
+const CSS_TO_DTCG_MAP = {
+  "primary-50": "color.primary.50",
+  "primary-100": "color.primary.100",
+  "primary-200": "color.primary.200",
+  "primary-300": "color.primary.300",
+  "primary-400": "color.primary.400",
+  "primary-500": "color.primary.500",
+  "primary-600": "color.primary.600",
+  "primary-700": "color.primary.700",
+  "primary-800": "color.primary.800",
+  "primary-900": "color.primary.900",
+  "primary-950": "color.primary.950",
+  "bg-base": "color.surface.background",
+  "bg-elevated": "color.surface.elevated",
+  "bg-sunken": "color.surface.sunken",
+  "bg-highlight": "color.surface.highlight",
+  "bg-inset": "color.surface.inset",
+  "text-primary": "color.text.primary",
+  "text-secondary": "color.text.secondary",
+  "text-tertiary": "color.text.tertiary",
+  "text-muted": "color.text.muted",
+  "text-on-primary": "color.text.on-primary",
+  "text-link": "color.text.link",
+  "text-link-hover": "color.text.link-hover",
+  success: "color.semantic.success",
+  warning: "color.semantic.warning",
+  emergency: "color.semantic.emergency",
+  info: "color.semantic.info",
+  border: "color.border.default",
+  "border-subtle": "color.border.subtle",
+  "border-focus": "color.border.focus",
+  "terminal-bg": "color.terminal.bg",
+  "terminal-text": "color.terminal.text",
+  "terminal-prompt": "color.terminal.prompt",
+  "terminal-cursor": "color.terminal.cursor",
+  "terminal-comment": "color.terminal.comment",
+  "terminal-keyword": "color.terminal.keyword",
+  "terminal-string": "color.terminal.string",
+};
+
+const DARK_CSS_TO_DTCG_MAP = {};
+for (const [cssVar, dtcgPath] of Object.entries(CSS_TO_DTCG_MAP)) {
+  DARK_CSS_TO_DTCG_MAP[cssVar] = "dark." + dtcgPath;
+}
 
 const css = readFileSync(resolve(ROOT, "src/styles/design-tokens.css"), "utf-8");
 const dtcgPath = resolve(ROOT, "src/tokens/tokens.json");
 const dtcg = JSON.parse(readFileSync(dtcgPath, "utf-8"));
-
 const { light, dark } = parseCssTokens(css);
 
 let updated = 0;
@@ -115,13 +146,10 @@ function sync(cssTokens, mapping) {
   for (const [cssVar, dtcgPath] of Object.entries(mapping)) {
     const cssVal = cssTokens[cssVar];
     if (!cssVal) continue;
-
     const hsl = parseHSLValue(cssVal);
     if (!hsl) continue;
-
     const rgb = hslToRgb(hsl.h, hsl.s, hsl.l);
     const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
-
     setDeep(dtcg, dtcgPath + ".$value", hex);
     updated++;
   }
@@ -130,11 +158,8 @@ function sync(cssTokens, mapping) {
 sync(light, CSS_TO_DTCG_MAP);
 sync(dark, DARK_CSS_TO_DTCG_MAP);
 
-// Backup original
 copyFileSync(dtcgPath, dtcgPath.replace(/\.json$/, ".json.bak"));
-
-// Write updated
 writeFileSync(dtcgPath, JSON.stringify(dtcg, null, 2) + "\n", "utf-8");
 
-console.log(`✅ Updated ${updated} color tokens in tokens.json`);
-console.log(`📦 Backup saved to tokens.json.bak`);
+console.log("Updated " + updated + " color tokens in tokens.json");
+console.log("Backup saved to tokens.json.bak");
