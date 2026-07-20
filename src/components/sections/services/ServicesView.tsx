@@ -1,11 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { SITE } from "@/lib/content";
 import { TIERS, COMPARISON, FAQ, ADDONS } from "@/lib/content/services";
 import { Button, Icon, Reveal } from "@/components/ui";
-import { JsonLd } from "@/components/JsonLd";
-import { makeProfessionalServiceJsonLd } from "@/lib/seo/jsonld";
 
 function TierCard({ tier, index }: { tier: (typeof TIERS.proyecto)[0]; index: number }) {
   const isPro = tier.pro;
@@ -114,33 +111,34 @@ function FAQAccordion() {
 
 function AddonsSection() {
   return (
-    <section className="ak-section ak-addons">
-      <div className="ak-section-head ak-center">
-        <h2 className="ak-h2">Extras a la carta</h2>
-        <p className="ak-section-sub">Servicios puntuales sin compromiso de continuidad.</p>
-      </div>
-      <div className="ak-addons-grid">
-        {ADDONS.map((a, i) => (
-          <Reveal key={i} delay={i * 0.06}>
-            <article className="ak-addon">
-              <h3>{a.name}</h3>
-              <p>{a.desc}</p>
-              <div className="ak-addon-price">{a.price}</div>
-              <Button variant="secondary" size="sm" href="/contacto">
-                Consultar
-              </Button>
-            </article>
-          </Reveal>
-        ))}
-      </div>
-    </section>
+    <Reveal>
+      <section className="ak-section ak-addons">
+        <div className="ak-section-head ak-center">
+          <h2 className="ak-h2">Extras a la carta</h2>
+          <p className="ak-section-sub">Servicios puntuales sin compromiso de continuidad.</p>
+        </div>
+        <div className="ak-addons-grid">
+          {ADDONS.map((a, i) => (
+            <Reveal key={i} delay={i * 0.06}>
+              <article className="ak-addon">
+                <h3>{a.name}</h3>
+                <p>{a.desc}</p>
+                <div className="ak-addon-price">{a.price}</div>
+                <Button variant="secondary" size="sm" href="/contacto">
+                  Consultar
+                </Button>
+              </article>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+    </Reveal>
   );
 }
 
 export default function ServicesView() {
   return (
     <>
-      <JsonLd data={makeProfessionalServiceJsonLd()} />
       <header className="ak-page-head">
         <h1 className="ak-page-title">Servicios</h1>
         <p className="ak-page-lead">
@@ -149,26 +147,30 @@ export default function ServicesView() {
         </p>
       </header>
 
-      <section className="ak-section ak-tiers">
-        <div className="ak-section-head ak-center">
-          <h2 className="ak-h2">Planes por proyecto</h2>
-          <p className="ak-section-sub">
-            Tres niveles. Eliges el que encaja. Sin sorpresas, sin letra pequeña.
-          </p>
-        </div>
-        <div className="ak-tiers-grid">
-          {TIERS.proyecto.map((t, i) => (
-            <TierCard key={t.name} tier={t} index={i} />
-          ))}
-        </div>
-      </section>
+      <Reveal delay={0.06}>
+        <section className="ak-section ak-tiers">
+          <div className="ak-section-head ak-center">
+            <h2 className="ak-h2">Planes por proyecto</h2>
+            <p className="ak-section-sub">
+              Tres niveles. Eliges el que encaja. Sin sorpresas, sin letra pequeña.
+            </p>
+          </div>
+          <div className="ak-tiers-grid">
+            {TIERS.proyecto.map((t, i) => (
+              <TierCard key={t.name} tier={t} index={i} />
+            ))}
+          </div>
+        </section>
+      </Reveal>
 
-      <section className="ak-section ak-comparison-sec">
-        <div className="ak-section-head ak-center">
-          <h2 className="ak-h2">Comparativa rápida</h2>
-        </div>
-        <ComparisonTable />
-      </section>
+      <Reveal>
+        <section className="ak-section ak-comparison-sec">
+          <div className="ak-section-head ak-center">
+            <h2 className="ak-h2">Comparativa rápida</h2>
+          </div>
+          <ComparisonTable />
+        </section>
+      </Reveal>
 
       <FAQAccordion />
 
@@ -181,22 +183,9 @@ export default function ServicesView() {
             <p className="ak-cta-lead-sub">
               Cuéntame tu proyecto y te paso propuesta sin compromiso en 48h.
             </p>
-            <div
-              style={{
-                display: "flex",
-                gap: 12,
-                justifyContent: "center",
-                flexWrap: "wrap",
-              }}
-            >
-              <Button variant="primary" size="lg" href="/contacto">
-                Hablemos &rarr;
-              </Button>
-              <Button variant="secondary" size="lg" href={SITE.bookingUrl}>
-                <Icon name="calendar" size={16} style={{ marginRight: 8 }} />
-                Reserva 30 min
-              </Button>
-            </div>
+            <Button variant="primary" size="lg" href="/contacto">
+              Hablemos &rarr;
+            </Button>
           </div>
         </section>
       </Reveal>

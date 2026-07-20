@@ -1,13 +1,38 @@
 "use client";
 
 import Link from "next/link";
-import { Fragment, Suspense, useEffect, useState } from "react";
+import { Fragment, Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { track } from "@vercel/analytics";
 import { SITE } from "@/lib/content";
 import { Button } from "@/components/ui/Button";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { Eyebrow } from "@/components/ui/SectionHead";
+
+type UtmParams = {
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  utmTerm?: string;
+  utmContent?: string;
+};
+
+/**
+ * Extrae UTM params via useSearchParams().
+ * Este componente es el único que necesita Suspense, evitando que
+ * todo el layout de contacto se oculte del SSR (y cause CLS).
+ */
+function UtmReader({ children }: { children: (utms: UtmParams) => React.ReactNode }) {
+  const searchParams = useSearchParams();
+  const utms: UtmParams = {
+    utmSource: searchParams.get("utm_source") ?? undefined,
+    utmMedium: searchParams.get("utm_medium") ?? undefined,
+    utmCampaign: searchParams.get("utm_campaign") ?? undefined,
+    utmTerm: searchParams.get("utm_term") ?? undefined,
+    utmContent: searchParams.get("utm_content") ?? undefined,
+  };
+  return <>{children(utms)}</>;
+}
 
 const PROJ_TYPES = ["Web App", "API & backend", "Consultoría", "Otro"];
 const STEPS = ["Datos", "Proyecto", "Enviar"];
@@ -57,14 +82,6 @@ function Field({ label, value, onChange, type = "text", placeholder, error }: Fi
       )}
     </div>
   );
-}
-
-interface UtmParams {
-  utmSource?: string;
-  utmMedium?: string;
-  utmCampaign?: string;
-  utmTerm?: string;
-  utmContent?: string;
 }
 
 interface FormData {
@@ -337,96 +354,72 @@ function MultiStepForm({ utms }: { utms: UtmParams }) {
   );
 }
 
-function BookCall() {
+const MONTHS = [
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
+];
+
+function Calendar() {
+  const [sel, setSel] = useState<number | null>(null);
+  const avail = [4, 9, 10, 16, 17, 23, 24, 25];
+  const now = new Date();
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
   return (
-    <div className="ak-panel" style={{ padding: "28px 24px", textAlign: "center" }}>
-      <div
-        style={{
-          width: 56,
-          height: 56,
-          borderRadius: "50%",
-          background: "hsl(var(--bg-highlight))",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          margin: "0 auto 16px",
-        }}
-      >
-        <Icon name="calendar" size={26} />
+    <div className="ak-cal">
+      <div className="ak-cal-head">
+        <span className="ak-label">Agenda una llamada</span>
+        <span className="ak-cal-nav">
+          <button aria-label="Mes anterior">
+            <Icon name="chevron-left" size={15} />
+          </button>
+          <button aria-label="Mes siguiente">
+            <Icon name="chevron-right" size={15} />
+          </button>
+        </span>
       </div>
-      <span className="ak-label" style={{ fontSize: 15 }}>
-        Reserva una llamada gratuita
-      </span>
-      <p
-        style={{
-          fontSize: "var(--fs-body-sm)",
-          color: "hsl(var(--text-secondary))",
-          margin: "8px 0 20px",
-          lineHeight: 1.5,
-        }}
-      >
-        Conversación de 30 minutos sin compromiso. Te respondo en menos de 24h.
-      </p>
-      <div
-        style={{
-          display: "flex",
-          gap: 8,
-          justifyContent: "center",
-          flexWrap: "wrap",
-          marginBottom: 20,
-        }}
-      >
-        {["30 min", "Sin compromiso", "Online"].map((tag) => (
-          <span
-            key={tag}
-            style={{
-              fontSize: 11,
-              fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "0.04em",
-              color: "hsl(var(--text-tertiary))",
-              background: "hsl(var(--bg-inset))",
-              padding: "4px 10px",
-              borderRadius: "var(--radius-full)",
-            }}
-          >
-            {tag}
-          </span>
+      <div className="ak-byline-sub" style={{ marginBottom: 12 }}>
+        {MONTHS[now.getMonth()]} {now.getFullYear()} · zona horaria detectada
+      </div>
+      <div className="ak-cal-dow">
+        {["L", "M", "X", "J", "V", "S", "D"].map((d) => (
+          <span key={d}>{d}</span>
         ))}
       </div>
-      <Button variant="primary" size="lg" className="ak-tier-cta" href={SITE.bookingUrl}>
-        <Icon name="calendar" size={16} style={{ marginRight: 8 }} />
-        Elegir fecha y hora
-      </Button>
+      <div className="ak-cal-grid">
+        {Array.from({ length: daysInMonth }).map((_, i) => {
+          const day = i + 1;
+          const av = avail.includes(day);
+          return (
+            <span
+              key={i}
+              className={`ak-cal-day ${av ? "av" : ""} ${sel === day ? "sel" : ""}`.trim()}
+              onClick={() => av && setSel(day)}
+            >
+              {day}
+            </span>
+          );
+        })}
+      </div>
+      <div className="ak-byline-sub" style={{ marginTop: 12 }}>
+        {sel ? `Seleccionado: ${sel} · elige hora →` : "Reserva disponible · martes y jueves"}
+      </div>
     </div>
   );
 }
 
-// Componente mínimo dentro de Suspense: solo lee searchParams. No renderiza
-// nada visible, por lo que no causa layout shift al hidratarse.
-function UtmCapture({ onUtms }: { onUtms: (u: UtmParams) => void }) {
-  const searchParams = useSearchParams();
-  useEffect(() => {
-    onUtms({
-      utmSource: searchParams.get("utm_source") ?? undefined,
-      utmMedium: searchParams.get("utm_medium") ?? undefined,
-      utmCampaign: searchParams.get("utm_campaign") ?? undefined,
-      utmTerm: searchParams.get("utm_term") ?? undefined,
-      utmContent: searchParams.get("utm_content") ?? undefined,
-    });
-  }, [searchParams, onUtms]);
-  return null;
-}
-
-export function ContactView() {
-  const [utms, setUtms] = useState<UtmParams>({});
-
+function ContactViewInner({ utms }: { utms: UtmParams }) {
   return (
     <div className="ak-container">
-      <Suspense fallback={null}>
-        <UtmCapture onUtms={setUtms} />
-      </Suspense>
-
       <section className="ak-contact-hero" data-screen-label="header">
         <Eyebrow>contacto</Eyebrow>
         <h1 className="ak-page-title">¿Empezamos?</h1>
@@ -436,12 +429,11 @@ export function ContactView() {
           Disponible · respondo en ~24h
         </span>
       </section>
-
       <section className="ak-section" style={{ paddingTop: 24 }}>
         <div className="ak-contact-grid">
           <MultiStepForm utms={utms} />
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <BookCall />
+            <Calendar />
             <div className="ak-panel">
               <div className="ak-side-group-t">Otros canales</div>
               <div className="ak-channels">
@@ -454,6 +446,51 @@ export function ContactView() {
                   </a>
                 ))}
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+export function ContactView() {
+  return (
+    <Suspense fallback={<ContactViewSkeleton />}>
+      <UtmReader>{(utms) => <ContactViewInner utms={utms} />}</UtmReader>
+    </Suspense>
+  );
+}
+
+/**
+ * Skeleton SSR-friendly que ocupa el mismo espacio que el formulario real,
+ * eliminando el CLS cuando Suspense se hidrata en cliente.
+ */
+function ContactViewSkeleton() {
+  return (
+    <div className="ak-container">
+      <section className="ak-contact-hero" data-screen-label="header">
+        <div className="ak-skeleton ak-skeleton-eyebrow" />
+        <div className="ak-skeleton ak-skeleton-title" style={{ width: "50%", marginTop: 12 }} />
+        <div className="ak-skeleton ak-skeleton-text" style={{ width: "70%", marginTop: 8 }} />
+      </section>
+      <section className="ak-section" style={{ paddingTop: 24 }}>
+        <div className="ak-contact-grid">
+          <div className="ak-form-card">
+            <div style={{ display: "flex", gap: 8, marginBottom: 24 }}>
+              <div className="ak-skeleton ak-skeleton-step" />
+              <div className="ak-skeleton ak-skeleton-step" />
+              <div className="ak-skeleton ak-skeleton-step" />
+            </div>
+            <div className="ak-skeleton ak-skeleton-input" />
+            <div className="ak-skeleton ak-skeleton-input" />
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <div className="ak-cal">
+              <div className="ak-skeleton ak-skeleton-cal" />
+            </div>
+            <div className="ak-panel">
+              <div className="ak-skeleton ak-skeleton-channels" />
             </div>
           </div>
         </div>
