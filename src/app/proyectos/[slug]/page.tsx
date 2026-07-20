@@ -1,10 +1,26 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { PROJECTS, getProject, getCaseStudy } from "@/lib/content";
 import type { CaseBlock } from "@/lib/content/case-studies";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui";
 import { JsonLd } from "@/components/JsonLd";
 import { makeCreativeWorkJsonLd, makeBreadcrumbJsonLd } from "@/lib/seo/jsonld";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const p = getProject(slug);
+  if (!p) return {};
+  const study = getCaseStudy(p);
+  return {
+    title: p.title,
+    description: study?.summary ?? `${p.title} — Caso de estudio`,
+  };
+}
 
 function Block({ block }: { block: CaseBlock }) {
   switch (block.type) {
@@ -121,6 +137,7 @@ export default async function ProjectCasePage({ params }: { params: Promise<{ sl
         alt={p.title}
         className="ak-hero-img"
         loading="eager"
+        fetchPriority="high"
       />
 
       <section className="ak-case-layout">

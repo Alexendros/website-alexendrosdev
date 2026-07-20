@@ -45,16 +45,21 @@ const RUN_TIMESTAMP = new Date()
 mkdirSync(REPORTS_DIR, { recursive: true });
 
 const URLS = [
+  // Páginas principales
   { url: "https://alexendros.dev", slug: "home" },
   { url: "https://alexendros.dev/servicios", slug: "servicios" },
   { url: "https://alexendros.dev/sobre-mi", slug: "sobre-mi" },
+  { url: "https://alexendros.dev/stack", slug: "stack" },
+  { url: "https://alexendros.dev/proyectos", slug: "proyectos" },
   { url: "https://alexendros.dev/proyectos/alexendros-me", slug: "proyecto" },
-  {
-    url: "https://alexendros.dev/blog",
-    slug: "blog",
-    fallback: "https://alexendros.dev/stack",
-    fallbackSlug: "stack",
-  },
+  { url: "https://alexendros.dev/blog", slug: "blog" },
+  { url: "https://alexendros.dev/contacto", slug: "contacto" },
+  { url: "https://alexendros.dev/proximamente", slug: "proximamente" },
+  // Páginas legales
+  { url: "https://alexendros.dev/legal/cookies", slug: "cookies" },
+  { url: "https://alexendros.dev/legal/aviso-legal", slug: "aviso-legal" },
+  { url: "https://alexendros.dev/legal/condiciones", slug: "condiciones" },
+  { url: "https://alexendros.dev/legal/privacidad", slug: "privacidad" },
 ];
 
 const DEVICES = ["mobile", "desktop"];
@@ -234,16 +239,6 @@ async function runAudit(url, slug, device) {
   }
 }
 
-/** Verifica si una URL responde 200 */
-async function checkUrl(url) {
-  try {
-    const res = await fetch(url, { method: "HEAD", signal: AbortSignal.timeout(10000) });
-    return res.ok;
-  } catch {
-    return false;
-  }
-}
-
 /** Genera tabla Markdown */
 function buildMarkdownTable(results) {
   const lines = [];
@@ -324,26 +319,9 @@ async function main() {
   console.error("=== audit-lighthouse.mjs — alexendros.dev ===");
   console.error(`Directorio de reports: ${REPORTS_DIR}`);
 
-  // Resolver URLs (comprobar /blog vs /stack)
-  const resolvedUrls = [];
-  for (const entry of URLS) {
-    if (entry.fallback) {
-      const ok = await checkUrl(entry.url);
-      if (ok) {
-        resolvedUrls.push({ url: entry.url, slug: entry.slug });
-        console.error(`✅ ${entry.url} → 200, usando /blog`);
-      } else {
-        resolvedUrls.push({ url: entry.fallback, slug: entry.fallbackSlug });
-        console.error(`⚠️  ${entry.url} → no 200, usando fallback ${entry.fallback}`);
-      }
-    } else {
-      resolvedUrls.push({ url: entry.url, slug: entry.slug });
-    }
-  }
-
   const results = [];
 
-  for (const { url, slug } of resolvedUrls) {
+  for (const { url, slug } of URLS) {
     for (const device of DEVICES) {
       const result = await runAudit(url, slug, device);
       results.push(result);

@@ -63,6 +63,7 @@ export function BlogView({ posts: allPosts }: BlogViewProps) {
                 src={`https://picsum.photos/seed/${featuredPost.id}-featured/1200/675`}
                 alt=""
                 loading="eager"
+                fetchPriority="high"
                 className="ak-featured-img"
               />
               <span className="ak-featured-tag">{featuredPost.tag}</span>
