@@ -245,7 +245,7 @@ describe("auditor: integridad de capas — sin write fields en output", () => {
     expect(keys).not.toContain("method");
     expect(keys).not.toContain("url");
     // Solo debe tener type, severity, summary, requiresAction (orden no importa)
-    expect([...keys].sort()).toEqual(["type", "severity", "summary", "requiresAction"]);
+    expect([...keys].sort()).toEqual(["requiresAction", "severity", "summary", "type"]);
   });
 
   it("S5: extra fields con nombres peligrosos son strippeados por Zod", () => {

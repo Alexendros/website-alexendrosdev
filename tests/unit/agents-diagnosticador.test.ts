@@ -200,7 +200,7 @@ describe("diagnosticador: integridad de capas — sin write fields en output", (
     expect(keys).not.toContain("method");
     expect(keys).not.toContain("url");
     // Solo debe tener diagnosis, hypotheses, context (orden no importa)
-    expect([...keys].sort()).toEqual(["diagnosis", "hypotheses", "context"]);
+    expect([...keys].sort()).toEqual(["context", "diagnosis", "hypotheses"]);
   });
 
   it("S2: extra fields con nombres peligrosos son strippeados por Zod", () => {

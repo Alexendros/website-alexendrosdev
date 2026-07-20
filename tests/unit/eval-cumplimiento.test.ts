@@ -2,8 +2,27 @@ import { describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => {
   const fetchMock = vi.fn();
+
+  // Replicar la lógica de config.ts para los mocks de patrones
+  const ALLOWED_REPAIR_ENDPOINTS = ["POST tasks", "POST activities", "PATCH deals/{id}"] as const;
+
+  const ENDPOINT_DESCRIPTIONS: Record<string, string> = {
+    "POST tasks": "crear tareas de seguimiento",
+    "POST activities": "registrar actividades",
+    "PATCH deals/{id}": "actualizar deals (stage, notes, probability)",
+  };
+
+  const ALLOWED_ENDPOINT_PATTERNS: readonly RegExp[] = ALLOWED_REPAIR_ENDPOINTS.map((ep) => {
+    const [method, resource] = ep.split(" ", 2);
+    const resourcePattern = resource!.replace(/\{id\}/g, "[\\w-]+");
+    return new RegExp(`^${method} /api/crm/${resourcePattern}$`);
+  });
+
   return {
     fetchMock,
+    ALLOWED_REPAIR_ENDPOINTS,
+    ALLOWED_ENDPOINT_PATTERNS,
+    ENDPOINT_DESCRIPTIONS,
   };
 });
 
@@ -22,6 +41,16 @@ vi.mock("@/lib/agents/config", () => ({
       return ["deepseek-v4-flash-free"];
     },
   },
+  ALLOWED_REPAIR_ENDPOINTS: mocks.ALLOWED_REPAIR_ENDPOINTS,
+  ALLOWED_ENDPOINT_PATTERNS: mocks.ALLOWED_ENDPOINT_PATTERNS,
+  ENDPOINT_DESCRIPTIONS: mocks.ENDPOINT_DESCRIPTIONS,
+  isAllowedRepairEndpoint: (endpoint: string) =>
+    mocks.ALLOWED_ENDPOINT_PATTERNS.some((p: RegExp) => p.test(endpoint)),
+  describeAllowedEndpoints: () =>
+    mocks.ALLOWED_REPAIR_ENDPOINTS.map((ep: string) => {
+      const [method, resource] = ep.split(" ", 2);
+      return `- ${method} /api/crm/${resource} — ${mocks.ENDPOINT_DESCRIPTIONS[ep]}`;
+    }).join("\n"),
   hasGemini: () => false,
   hasOpenCodeZen: () => false,
   hasAnyLLM: () => false,
