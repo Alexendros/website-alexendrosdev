@@ -33,7 +33,7 @@ export const agentsConfig = {
 //
 // Fuente única de verdad. schemas.ts, reparador.ts y prompts.ts derivan de aquí.
 // Formato: "METHOD resource" ("POST tasks", "PATCH deals/{id}").
-// {id} se expande a [\w-]+ en los patrones regex.
+// {id} se expande a /[a-zA-Z0-9-]+ en los patrones regex.
 
 export const ALLOWED_REPAIR_ENDPOINTS = [
   "POST tasks",
@@ -42,6 +42,17 @@ export const ALLOWED_REPAIR_ENDPOINTS = [
 ] as const;
 
 export type AllowedRepairEndpoint = (typeof ALLOWED_REPAIR_ENDPOINTS)[number];
+
+/**
+ * Descripciones legibles de cada endpoint permitido, en castellano.
+ * Map exportable para que crm-writer.ts y otros módulos puedan reusarlo
+ * en mensajes de error o logging sin hardcodear strings.
+ */
+export const ENDPOINT_DESCRIPTIONS: Record<AllowedRepairEndpoint, string> = {
+  "POST tasks": "crear tareas de seguimiento",
+  "POST activities": "registrar actividades",
+  "PATCH deals/{id}": "actualizar deals (stage, notes, probability)",
+};
 
 /**
  * Patrones regex derivados de ALLOWED_REPAIR_ENDPOINTS.
@@ -66,14 +77,9 @@ export function isAllowedRepairEndpoint(endpoint: string): boolean {
  * Devuelve líneas como "- POST /api/crm/tasks — crear tareas de seguimiento".
  */
 export function describeAllowedEndpoints(): string {
-  const descriptions: Record<string, string> = {
-    "POST tasks": "crear tareas de seguimiento",
-    "POST activities": "registrar actividades",
-    "PATCH deals/{id}": "actualizar deals (stage, notes, probability)",
-  };
   return ALLOWED_REPAIR_ENDPOINTS.map((ep) => {
     const [method, resource] = ep.split(" ", 2);
-    return `- ${method} /api/crm/${resource} — ${descriptions[ep] ?? ""}`;
+    return `- ${method} /api/crm/${resource} — ${ENDPOINT_DESCRIPTIONS[ep]}`;
   }).join("\n");
 }
 

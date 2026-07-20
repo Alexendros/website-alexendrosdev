@@ -6,6 +6,7 @@ const ROUTES: { label: string; path: string }[] = [
   { label: "Proyectos", path: "/proyectos" },
   { label: "Stack", path: "/stack" },
   { label: "Servicios", path: "/servicios" },
+  { label: "Contacto", path: "/contacto" },
 ];
 
 for (const { label, path } of ROUTES) {

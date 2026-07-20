@@ -46,7 +46,7 @@ describe("generadores JSON-LD", () => {
     const j = plain(
       makeBreadcrumbJsonLd([
         { name: "Inicio", url: "https://alexendros.dev/" },
-        { name: "Servicios", url: "https://alexendros.dev/servicios" },
+        { name: "Proyectos", url: "https://alexendros.dev/proyectos" },
       ]),
     );
     const items = j.itemListElement as Array<{ position: number; name: string }>;

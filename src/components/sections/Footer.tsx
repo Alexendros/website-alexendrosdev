@@ -47,10 +47,8 @@ export function Footer() {
           <Link className="ak-footer-lk" href="/servicios">
             Servicios
           </Link>
-          {/* CV PDF — próximamente */}
-          {/* Uses / setup — próximamente */}
         </div>
-        <div>
+        <div className="ak-footer-newsletter">
           <div className="ak-footer-ct">Newsletter</div>
           <p className="ak-footer-tag" style={{ marginBottom: 10 }}>
             Notas sobre desarrollo web, productos digitales e ingeniería, sin spam.

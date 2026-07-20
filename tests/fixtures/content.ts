@@ -1,3 +1,5 @@
+// Fixtures tipadas para tests de lógica pura (p. ej. generadores JSON-LD), con
+// las variantes de campos opcionales que conviene ejercer explícitamente.
 import type { Project } from "@/lib/content/types";
 
 /** Proyecto con repo público y liveUrl: ejercita `codeRepository` y `url`. */
