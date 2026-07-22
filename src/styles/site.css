@@ -787,5 +787,3 @@ main { display: block; }
 .ak-skeleton-cal { width: 100%; height: 320px; border-radius: var(--radius-xl); }
 .ak-skeleton-channels { width: 100%; height: 120px; border-radius: var(--radius-xl); }
 @media (prefers-reduced-motion: reduce) { .ak-skeleton { animation: none; } }
-
-/* =====================================================================

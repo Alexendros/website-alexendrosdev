@@ -5,7 +5,6 @@ import { track } from "@vercel/analytics/react";
 
 type ConversionEvent =
   | { event: "checkout_completed"; session_id?: string }
-  | { event: "checkout_started"; item_id: string }
   | { event: "newsletter_confirmed" }
   | { event: "newsletter_failed" };
 
