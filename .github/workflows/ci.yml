@@ -81,10 +81,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - name: Semgrep SAST
-        run: pip install semgrep && semgrep scan \
-          --config=p/security-audit --config=p/secrets \
-          --config=p/typescript --config=p/react \
-          --error
+        run: pip install semgrep && semgrep scan --config=p/security-audit --config=p/secrets --config=p/typescript --config=p/react --error
       - name: Dependency audit (critical gate — moderate y high son dev/build tooling)
         run: pnpm audit --audit-level=critical --prod
       - run: npx license-checker --production --failOn "GPL-2.0;GPL-3.0;AGPL-3.0"
