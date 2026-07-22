@@ -1,0 +1,65 @@
+name: Deploy Production
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  deployments: write
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.event == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.url }}
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Deploy to Vercel Production
+        id: deploy
+        run: |
+          URL=$(vercel --prod --yes \
+            --token "$VERCEL_TOKEN" \
+          )
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "::notice::Production → $URL"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
+
+      - name: Create GitHub Deployment
+        id: deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          DEPLOY_ID=$(gh api "repos/$GITHUB_REPOSITORY/deployments" \
+            --method POST \
+            -f ref="${{ github.event.workflow_run.head_sha }}" \
+            -f environment="Production" \
+            -f auto_merge=false \
+            --jq '.id')
+          gh api "repos/$GITHUB_REPOSITORY/deployments/$DEPLOY_ID/statuses" \
+            --method POST \
+            -f state="success" \
+            -f environment_url="${{ steps.deploy.outputs.url }}"
+          echo "::notice::GitHub Deployment → $DEPLOY_ID"

@@ -13,6 +13,5 @@ export default defineConfig({
     // directUrl no está en los tipos de Prisma 7.8 pero sí es aceptado en runtime.
     // Necesario para migraciones DDL (CREATE TYPE, etc.) sin pooler PgBouncer.
     ...(process.env.DIRECT_URL ? { directUrl: process.env.DIRECT_URL } : {}),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } as any,
+  },
 });

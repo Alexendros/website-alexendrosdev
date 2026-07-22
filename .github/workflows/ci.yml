@@ -80,16 +80,10 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Semgrep — SAST
-        uses: semgrep/semgrep-action@713efdd345f3035192eaa63f56867b88e63e4e5d # v1 (archived, immutable)
-        with:
-          config: >-
-            p/security-audit
-            p/secrets
-            p/typescript
-            p/react
+      - name: Semgrep SAST
+        run: pip install semgrep && semgrep scan --config=p/security-audit --config=p/secrets --config=p/typescript --config=p/react --error
       - name: Dependency audit (critical gate — moderate y high son dev/build tooling)
-        run: pnpm audit --audit-level=critical
+        run: pnpm audit --audit-level=critical --prod
       - run: npx license-checker --production --failOn "GPL-2.0;GPL-3.0;AGPL-3.0"
       - run: pnpm format:check
       - run: pnpm lint

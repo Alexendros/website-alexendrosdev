@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/sections/Header";
@@ -71,7 +72,7 @@ export const metadata: Metadata = {
 // flash de tema incorrecto. Lee localStorage 'ao-theme' (igual que el toggle).
 const themeScript = `(function(){try{var t=localStorage.getItem('ao-theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('dark');}catch(e){}})();`;
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -79,6 +80,7 @@ export default function RootLayout({
   // En modo "próximamente" (opt-in con COMING_SOON=1) ocultamos la cabecera y el
   // pie: la landing de holding es full-screen, sin navegación al sitio completo.
   const holding = isComingSoon();
+  const nonce = (await headers()).get("x-nonce") ?? "";
 
   return (
     <html
@@ -87,11 +89,11 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script nonce={nonce || undefined} dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
-        <JsonLd data={makeWebSiteJsonLd()} />
-        <JsonLd data={makePersonJsonLd()} />
+        <JsonLd data={makeWebSiteJsonLd()} nonce={nonce} />
+        <JsonLd data={makePersonJsonLd()} nonce={nonce} />
         <div className="ak-app">
           {!holding && <Header />}
           <main>{children}</main>
