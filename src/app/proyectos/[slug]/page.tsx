@@ -141,11 +141,15 @@ export default async function ProjectCasePage({ params }: { params: Promise<{ sl
       {(() => {
         const img = getProjectImageOrGradient(p.id);
         return img.type === "image" ? (
-          <div className="ak-hero-img">
+          <div className="ak-hero-img" style={{ aspectRatio: `${img.width}/${img.height}` }}>
             <Image src={img.src} alt={p.title} fill sizes="100vw" priority />
           </div>
         ) : (
-          <div className="ak-hero-img" style={{ background: img.style }} aria-hidden="true" />
+          <div
+            className="ak-hero-img"
+            style={{ background: img.style, minHeight: 300 }}
+            aria-hidden="true"
+          />
         );
       })()}
 
