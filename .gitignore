@@ -29,13 +29,18 @@
 /.junie/
 /.ruff_cache/
 /.commandcode/
+/.claude/
+/.cursor/
+/.freebuff/
 
 # Auditoría — artefactos eliminados, se excluyen por si se regeneran
 /.audit-shots/
 /defectos.csv
 /defectos.json
+/artifacts/
+
 # Worktrees efímeros de agentes Claude Code (envenenan knip/prettier si se escanean)
-/.claude/worktrees/
+# (cubierto por /.claude/ arriba)
 
 # debug
 npm-debug.log*
