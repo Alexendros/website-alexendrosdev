@@ -1,4 +1,4 @@
-export function JsonLd({ data }: { data: object }) {
+export function JsonLd({ data, nonce = "" }: { data: object; nonce?: string }) {
   // Escapamos `<` a su forma unicode: JSON.stringify NO lo escapa, y un `</script>`
   // dentro de cualquier campo cerraría la etiqueta y abriría inyección de HTML.
   // Defensa en profundidad aunque hoy el contenido provenga de catálogos internos.
@@ -6,6 +6,7 @@ export function JsonLd({ data }: { data: object }) {
   return (
     <script
       type="application/ld+json"
+      nonce={nonce || undefined}
       // nosemgrep: typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml
       dangerouslySetInnerHTML={{ __html: json }}
     />
