@@ -160,7 +160,11 @@ export function ProjectsList() {
             {filteredProjects.map((p, i) => {
               const lcpOptimized = i === 0;
               const tile = (
-                <article className="ak-masonry-tile" role="listitem" key={p.id}>
+                <article
+                  className={lcpOptimized ? "ak-masonry-tile" : undefined}
+                  role="listitem"
+                  key={p.id}
+                >
                   <Link href={`/proyectos/${p.id}`} className="ak-tile-link">
                     <div className="ak-tile-media">
                       {(() => {
@@ -176,7 +180,7 @@ export function ProjectsList() {
                           />
                         ) : (
                           <div
-                            className="ak-tile-img ak-tile-fallback"
+                            className="ak-tile-fallback"
                             style={{ background: img.style }}
                             aria-hidden="true"
                           />
@@ -217,7 +221,7 @@ export function ProjectsList() {
               return lcpOptimized ? (
                 tile
               ) : (
-                <Reveal key={p.id} delay={i * 0.06}>
+                <Reveal className="ak-masonry-tile" key={p.id} delay={i * 0.06}>
                   {tile}
                 </Reveal>
               );

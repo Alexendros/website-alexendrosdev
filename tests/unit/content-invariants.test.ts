@@ -44,8 +44,8 @@ describe("coherencia del resto del contenido", () => {
     expect(TIERS.retainer.length).toBeGreaterThan(0);
     expect(ADDONS.length).toBeGreaterThan(0);
     expect(FAQ.length).toBeGreaterThan(0);
-    // Cada fila de la comparativa tiene exactamente 3 columnas (Starter/Pro/Scale).
-    for (const [, cols] of COMPARISON) expect(cols).toHaveLength(3);
+    // Cada fila de la comparativa tiene exactamente 4 columnas (Landing/Starter/Pro/Scale).
+    for (const [, cols] of COMPARISON) expect(cols).toHaveLength(4);
   });
 
   it("stack: cada hoja con detalle referencia una categoría conocida", () => {

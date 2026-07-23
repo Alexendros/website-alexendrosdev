@@ -102,12 +102,12 @@ export const TIERS: Tiers = {
 }
 
 export const COMPARISON: ComparisonRow[] = [
-  ['Desarrollo a medida', [true, true, true]],
-  ['Backend a medida', [false, true, true]],
-  ['Pruebas automáticas', [false, true, true]],
-  ['Despliegue continuo', [false, true, true]],
-  ['Seguridad y monitorización', [false, true, true]],
-  ['Acuerdo de servicio y soporte prioritario', [false, false, true]],
+  ['Desarrollo a medida', [true, true, true, true]],
+  ['Backend a medida', [false, true, true, true]],
+  ['Pruebas automáticas', [false, true, true, true]],
+  ['Despliegue continuo', [false, true, true, true]],
+  ['Seguridad y monitorización', [false, true, true, true]],
+  ['Acuerdo de servicio y soporte prioritario', [false, false, true, true]],
 ]
 
 // Items puntuales, derivados del catálogo unificado (F11). Los importes
