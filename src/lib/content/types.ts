@@ -92,7 +92,7 @@ export interface Tiers {
 
 export type ComparisonRow = readonly [
   string,
-  readonly [boolean, boolean, boolean],
+  readonly [boolean, boolean, boolean, boolean],
 ]
 
 export interface Addon {

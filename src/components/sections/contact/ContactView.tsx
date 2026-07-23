@@ -366,6 +366,8 @@ function Calendar() {
   const avail = [4, 9, 10, 16, 17, 23, 24, 25];
   const now = new Date();
   const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
+  const offset = (firstDay + 6) % 7; // Monday-first offset
   return (
     <div className="ak-cal">
       <div className="ak-cal-head">
@@ -388,6 +390,9 @@ function Calendar() {
         ))}
       </div>
       <div className="ak-cal-grid">
+        {Array.from({ length: offset }).map((_, i) => (
+          <span key={`empty-${i}`} className="ak-cal-day" aria-hidden="true" />
+        ))}
         {Array.from({ length: daysInMonth }).map((_, i) => {
           const day = i + 1;
           const av = avail.includes(day);
