@@ -210,6 +210,8 @@ main { display: block; }
 .ak-stackcat { font: 600 12px var(--font-sans); text-transform: uppercase; letter-spacing: 0.05em; color: hsl(var(--text-tertiary)); margin-bottom: 12px; }
 
 /* ============ /projects ============ */
+.ak-hero-img { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: var(--radius-2xl); overflow: hidden; }
+.ak-hero-img img { object-fit: cover; }
 .ak-proj-header { padding: 64px 0 8px; max-width: 720px; }
 .ak-proj-controls { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 32px; }
 .ak-search { display: flex; align-items: center; gap: 9px; background: hsl(var(--bg-inset)); border: 1px solid hsl(var(--border-subtle)); border-radius: var(--radius-md); padding: 10px 14px; min-width: 280px; color: hsl(var(--text-tertiary)); }
