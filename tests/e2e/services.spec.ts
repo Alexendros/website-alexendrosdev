@@ -7,9 +7,14 @@ test.describe("/servicios", () => {
     errors.length = 0;
     page.on("pageerror", (err) => errors.push(err.message));
     page.on("console", (msg) => {
-      // Solo console.error explícito; 404s HTTP los captura el listener de response
-      if (msg.type() === "error" && !msg.text().includes("/_vercel/"))
-        errors.push(`[console.error] ${msg.text()}`);
+      // Solo console.error() JS explícito; 404s HTTP los captura response listener
+      const text = msg.text();
+      if (
+        msg.type() === "error" &&
+        !text.includes("/_vercel/") &&
+        !text.includes("Failed to load resource")
+      )
+        errors.push(`[console.error] ${text}`);
     });
     page.on("response", (res) => {
       const status = res.status();
