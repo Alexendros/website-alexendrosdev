@@ -87,10 +87,10 @@ test.describe("/servicios", () => {
     await expect(proTier).toBeVisible();
     const styles = await proTier.evaluate((el) => {
       const s = window.getComputedStyle(el);
-      return { borderColor: s.borderColor, transform: s.transform };
+      return { borderColor: s.borderColor, scale: s.scale };
     });
     expect(styles.borderColor).not.toBe("rgba(0, 0, 0, 0)");
-    expect(styles.transform).not.toBe("none");
+    expect(styles.scale).not.toBe("none");
   });
 
   test("la sección de extras muestra 4 columnas en desktop", async ({ page }) => {
