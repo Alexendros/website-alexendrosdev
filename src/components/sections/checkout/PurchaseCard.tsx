@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { track } from "@vercel/analytics/react";
 import { formatPrice } from "@/lib/content";
 import type { PurchasableItem } from "@/lib/content";
 import { Button } from "@/components/ui/Button";
@@ -39,6 +40,7 @@ export function PurchaseCard({ item }: { item: PurchasableItem }) {
   async function buy() {
     setLoading(true);
     setError(null);
+    track("checkout_started", { item_id: item.id });
     try {
       const body: Record<string, unknown> = { itemId: item.id };
       if (isRecurring && method === "stripe") body.mode = "subscription";

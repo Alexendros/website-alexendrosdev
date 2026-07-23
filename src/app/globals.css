@@ -2,3 +2,6 @@
 @source "../../src/**/*.{ts,tsx,js,jsx,css}";
 @import "../styles/design-tokens.css";
 @import "../styles/site.css";
+@import "../styles/_services.css";
+@import "../styles/_projects.css";
+@import "../styles/_navbar.css";
