@@ -566,6 +566,7 @@ main { display: block; }
 .ak-legal { max-width: 760px; margin: 0 auto; }
 .ak-legal h2 { font: 600 var(--fs-h3) var(--font-sans); color: hsl(var(--text-primary)); margin: 28px 0 10px; }
 .ak-legal p, .ak-legal li { font-size: var(--fs-body-sm); line-height: 1.65; color: hsl(var(--text-secondary)); }
+.ak-legal a { text-decoration: underline; text-underline-offset: 2px; }
 
 /* =====================================================================
    SKELETON LOADING (stack graph)
