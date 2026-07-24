@@ -61,19 +61,19 @@ describe("design-system-fixes-batch2 — audit-token-coverage.mjs zero violation
   }, 30_000);
 });
 
-describe("design-system-fixes-batch2 — DESIGN.md §1.5 deprecation table", () => {
+describe("design-system-fixes-batch2 — DESIGN.md §1.5 reserved tokens", () => {
   let design: string;
   beforeAll(() => {
     design = readFileSync(DESIGN_MD, "utf8");
   });
 
-  // Los 18 tokens declarados-como-unused por audit-token-coverage.mjs al 2026-07-24.
-  // Fuente canonical: scripts/audit-token-coverage.mjs → unusedTokens[]
-  const EXPECTED_18 = [
-    "ease-bounce",
-    "gutter-lg",
-    "gutter-sm",
-    "radius-interactive",
+  // Los 5 tokens intencionalmente reservados (no legacy) tras depuración de 13 tokens unused.
+  // Fuente canonical: scripts/audit-token-coverage.mjs → unusedTokens[] post-cleanup 2026-07-24.
+  const EXPECTED_5 = ["ease-bounce", "z-modal", "z-overlay", "z-sticky", "z-tooltip"];
+
+  // Tokens legacy eliminados del CSS (commit 073b228 + 1cb528c).
+  // El spec heredado (batch2) los mencionaba; verificar que YA NO están en §1.5.
+  const ELIMINATED_13 = [
     "space-1",
     "space-12",
     "space-16",
@@ -84,45 +84,51 @@ describe("design-system-fixes-batch2 — DESIGN.md §1.5 deprecation table", () 
     "space-4",
     "space-6",
     "space-8",
-    "z-modal",
-    "z-overlay",
-    "z-sticky",
-    "z-tooltip",
+    "radius-interactive",
+    "gutter-lg",
+    "gutter-sm",
   ];
 
-  it("TU-1.5 — §1.5 contiene los 18 nombres de tokens unused (canonical)", () => {
-    // Extrae la sección §1.5 (entre "### 1.5 Deprecated" y el siguiente "---").
-    const re = /### 1\.5 Deprecated tokens \(considerar\)[\s\S]*?(?=\n---\n)/;
+  it("TU-1.5 — §1.5 contiene los 5 nombres de tokens reservados (canonical)", () => {
+    // Extraer solo la tabla markdown de §1.5 (entre el encabezado de tabla y el final)
+    const re = /### 1\.5 Reserved tokens \(no deprecated\)[\s\S]*?(?=\n---\n)/;
     const m = design.match(re);
     expect(m, "DESIGN.md debe contener la sección §1.5").not.toBeNull();
     const block = m![0];
-    // DESIGN.md renderiza cada token como \`--<token>\` (con dashes). Validamos
-    // la presencia literal de \`--${tok}\` para tolerancia cero al backtick layout.
-    const missing = EXPECTED_18.filter((tok) => !block.includes(`\`--${tok}\``));
+
+    // Extraer solo las filas de tabla (| ... | ... | ... | ... |)
+    const tableRows = block
+      .split("\n")
+      .filter((l) => /^\|/.test(l) && !/^-/.test(l) && !/^\|\s*Token\s*\|/.test(l));
+    const tableText = tableRows.join("\n");
+
+    const missing = EXPECTED_5.filter((tok) => !tableText.includes(`\`--${tok}\``));
+    expect(missing, `Tokens reservados que deben listarse en §1.5: ${missing.join(", ")}`).toEqual(
+      [],
+    );
+
+    // Verificar que los 13 eliminados YA NO aparecen en la tabla
+    const stillPresent = ELIMINATED_13.filter((tok) => tableText.includes(`\`--${tok}\``));
     expect(
-      missing,
-      `Tokens declared-unused que deben listarse en §1.5 (canonical): ${missing.join(", ")}`,
+      stillPresent,
+      `Tokens legacy eliminados NO deben listarse en la tabla de §1.5: ${stillPresent.join(", ")}`,
     ).toEqual([]);
   });
 
-  it("TU-1.5b — §1.5 mantiene estructura de tabla (>=18 filas con 4 columnas)", () => {
-    // Structural lock-in (evita regex-prose fragility del code-review #4):
-    // valida que cada uno de los 18 tokens vive en una fila de tabla markdown
-    // con el formato `| <n> | \`--<tok>\` | <categoría> | <acción> |`.
-    const re = /### 1\.5 Deprecated tokens \(considerar\)[\s\S]*?(?=\n---\n)/;
+  it("TU-1.5b — §1.5 mantiene estructura de tabla (5 filas con 4 columnas)", () => {
+    const re = /### 1\.5 Reserved tokens \(no deprecated\)[\s\S]*?(?=\n---\n)/;
     const m = design.match(re);
     expect(m).not.toBeNull();
     const block = m![0];
 
-    const rowsWithAllTokens = EXPECTED_18.filter((tok) => {
-      // Cada token debe aparecer dentro de una fila `| ... | ... | ... | ... |`
+    const rowsWithAllTokens = EXPECTED_5.filter((tok) => {
       const rowRe = new RegExp(`\\|[^\\n]*\\\`--${tok}\\\`[^\\n]*\\|`, "");
       return rowRe.test(block);
     });
 
     expect(
       rowsWithAllTokens.length,
-      `Los 18 tokens deben vivir en filas de tabla markdown en §1.5 (got ${rowsWithAllTokens.length}/18 en tabla)`,
-    ).toBe(18);
+      `Los 5 tokens reservados deben vivir en filas de tabla markdown en §1.5 (got ${rowsWithAllTokens.length}/5 en tabla)`,
+    ).toBe(5);
   });
 });

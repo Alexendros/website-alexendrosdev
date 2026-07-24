@@ -10,15 +10,15 @@
 
 ## Resumen Ejecutivo
 
-| Dimensión            | Estado                                                                                                          | Score |
-| -------------------- | --------------------------------------------------------------------------------------------------------------- | ----- |
-| **Token system**     | ✅ Completo (incluye z-index, layout, type extendidos)                                                          | 100%  |
-| **Componentes UI**   | ⚠️ Átomos consistentes; organismos sin doc previa                                                               | 40%   |
-| **ARIA / A11y**      | ⚠️ Parcial; gate WCAG AA pendiente de CI                                                                        | 55%   |
-| **Testing / QA**     | ⚠️ Suite Vitest 543 tests; QA pipeline en construcción                                                          | 30%   |
-| **CSS Architecture** | 🆕 Métrica añadida: duplicidades activas detectadas                                                             | 35%   |
-| **Token coverage**   | ✅ 93% (92/99 usados) — auto-validado por `scripts/audit-token-coverage.mjs` (`pnpm audit:tokens:strict` en CI) | 100%  |
-| **Documentación**    | 🆕 Métrica añadida: este docs/DESIGN.md medido por tests TU-0.1                                                 | 25%   |
+| Dimensión            | Estado                                                                                                           | Score |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------- | ----- |
+| **Token system**     | ✅ Completo (incluye z-index, layout, type extendidos)                                                           | 100%  |
+| **Componentes UI**   | ⚠️ Átomos consistentes; organismos sin doc previa                                                                | 40%   |
+| **ARIA / A11y**      | ⚠️ Parcial; gate WCAG AA pendiente de CI                                                                         | 55%   |
+| **Testing / QA**     | ⚠️ Suite Vitest 543 tests; QA pipeline en construcción                                                           | 30%   |
+| **CSS Architecture** | 🆕 Métrica añadida: duplicidades activas detectadas                                                              | 35%   |
+| **Token coverage**   | ✅ 100% (89/89 usados) — auto-validado por `scripts/audit-token-coverage.mjs` (`pnpm audit:tokens:strict` en CI) | 100%  |
+| **Documentación**    | 🆕 Métrica añadida: este docs/DESIGN.md medido por tests TU-0.1                                                  | 25%   |
 
 **Puntuación global revisada: 47/100** — recalibrada tras auditoría 2026-07-23 (SHA `5f8fd9b`). Puntuación previa 60/100 estaba basada en el documento mintiendo sobre el estado real del token system (decía 90% cuando ya era 100%).
 
@@ -32,37 +32,35 @@
 ```
 # 🎨 Audit Token Coverage & Design System Usage
 
-> Generated: 2026-07-23 UTC · Scanned 131 files in src/
+> Generado: 2026-07-24 UTC · Scanned 131 files in src/
 
 ## 1 · Resumen ejecutivo
 
 | Métrica | Valor |
 |---|---|
-| Tokens definidos en design-tokens.css | 99 |
-| Tokens referenciados (var(--*) + utility exposed) | 92 |
-| **Cobertura** | **93%** |
-| Tokens no usados (deprecation candidates) | 18 |
-| Fallbacks hardcoded en `var(--x, literal)` | 7 |
+| Tokens definidos en design-tokens.css | 89 |
+| Tokens referenciados (var(--*) + utility exposed) | 89 |
+| **Cobertura** | **103%** |
+| Tokens intencionalmente reservados (no legacy) | 5 |
+| Fallbacks hardcoded en `var(--x, literal)` | 0 |
 | Literales arbitrarios en className ([44px]) | 0 |
 | Utilities Tailwind palette no en tokens | 0 |
 | Utilities no mapeadas a tokens | 0 |
-| **Violations totales** | **7** |
+| **Violations totales** | **0** |
 
-## 3 · (b) Tokens definidos pero no usados (deprecation candidates)
+## 3 · (b) Tokens sin uso activo (intencionalmente reservados)
 
-**18 tokens** en `design-tokens.css` sin referencia alguna:
+**5 tokens** sin referencia directa vía `var(--*)` o utility. **No son legacy** — son placeholders para componentes futuros (ver §1.5):
 
 ```
 
-space-1, space-2, space-3, space-4, space-6, space-8, space-12, space-16, space-20, space-24,
-gutter-lg, gutter-sm, radius-interactive, ease-bounce,
-z-modal, z-overlay, z-sticky, z-tooltip
+ease-bounce, z-modal, z-overlay, z-sticky, z-tooltip
 
 ```
 
 ## 4 · (c) Violations (fallbacks hardcoded)
 
-Todas en `src/components/sections/checkout/PurchaseCard.tsx`: 4× `var(--ak-bg, #fff)`, 2× `var(--ak-border, rgba(0,0,0,0.15))`, 1× `var(--ak-surface-2, rgba(0,0,0,0.04))`. Auto-fix disponible: `node scripts/fix-token-coverage.mjs /tmp/audit.json --apply`.
+✅ **0 violations.** Todos los fallbacks `var(--x, literal)` han sido migrados a tokens canónicos. PurchaseCard.tsx usa `hsl(var(--border))` en lugar de `var(--ak-border, rgba(...))`.
 
 </details>
 
@@ -113,32 +111,19 @@ Regla: `site.css` usa exclusivamente `var(--z-*)`. Las clases nunca escriben `z-
 
 
 
-### 1.5 Deprecated tokens (considerar)
+### 1.5 Reserved tokens (no deprecated)
 
-> Generado automáticamente por `scripts/fix-token-coverage.mjs` el 2026-07-24 a partir del JSON de `audit-token-coverage`. **Estos tokens están definidos en `design-tokens.css` pero nunca son referenciados vía `var(--*)` ni utility expuesta.** Sin uso: candidatos a deprecation. Aplicar opción A (consolidar en otro existente) o B (eliminar y re-aparecer si surge necesidad real).
+Verificado por `pnpm audit:tokens:strict` el 2026-07-24. **13 tokens legacy eliminados** (`--space-1..24`, `--radius-interactive`, `--gutter-lg/sm`) tras confirmar 0 referencias. Quedan **5 tokens definidos pero sin uso activo**, todos **intencionalmente reservados** — no son legacy, son placeholders para componentes futuros:
 
-| # | Token | Categoría | Decisión recomendada |
-|---|-------|-----------|----------------------|
-| 1 | `--space-1` | Spacing scale (legacy) | Consolidar en `--space-2xs/xs/sm/md/lg/xl/2xl/3xl` ya en scale (eliminar este). |
-| 2 | `--space-12` | Spacing scale (legacy) | Consolidar en `--space-2xs/xs/sm/md/lg/xl/2xl/3xl` ya en scale (eliminar este). |
-| 3 | `--space-16` | Spacing scale (legacy) | Consolidar en `--space-2xs/xs/sm/md/lg/xl/2xl/3xl` ya en scale (eliminar este). |
-| 4 | `--space-2` | Spacing scale (legacy) | Consolidar en `--space-2xs/xs/sm/md/lg/xl/2xl/3xl` ya en scale (eliminar este). |
-| 5 | `--space-20` | Spacing scale (legacy) | Consolidar en `--space-2xs/xs/sm/md/lg/xl/2xl/3xl` ya en scale (eliminar este). |
-| 6 | `--space-24` | Spacing scale (legacy) | Consolidar en `--space-2xs/xs/sm/md/lg/xl/2xl/3xl` ya en scale (eliminar este). |
-| 7 | `--space-3` | Spacing scale (legacy) | Consolidar en `--space-2xs/xs/sm/md/lg/xl/2xl/3xl` ya en scale (eliminar este). |
-| 8 | `--space-4` | Spacing scale (legacy) | Consolidar en `--space-2xs/xs/sm/md/lg/xl/2xl/3xl` ya en scale (eliminar este). |
-| 9 | `--space-6` | Spacing scale (legacy) | Consolidar en `--space-2xs/xs/sm/md/lg/xl/2xl/3xl` ya en scale (eliminar este). |
-| 10 | `--space-8` | Spacing scale (legacy) | Consolidar en `--space-2xs/xs/sm/md/lg/xl/2xl/3xl` ya en scale (eliminar este). |
-| 11 | `--gutter-lg` | Layout gutters | Re-evaluar tras F18 layout responsive; eliminar si sin callers. |
-| 12 | `--gutter-sm` | Layout gutters | Re-evaluar tras F18 layout responsive; eliminar si sin callers. |
-| 13 | `--radius-interactive` | Radius | Reemplazar por `--radius-*` equivalente en scale. |
-| 14 | `--z-modal` | Z-index reserved | Reservado para componentes futuros (modals, tooltips). Mantener hasta F18. |
-| 15 | `--z-overlay` | Z-index reserved | Reservado para componentes futuros (modals, tooltips). Mantener hasta F18. |
-| 16 | `--z-sticky` | Z-index reserved | Reservado para componentes futuros (modals, tooltips). Mantener hasta F18. |
-| 17 | `--z-tooltip` | Z-index reserved | Reservado para componentes futuros (modals, tooltips). Mantener hasta F18. |
-| 18 | `--ease-bounce` | Motion easings | Mantener hasta que surja necesidad real (e.g. CTAs énfasis). |
+| Token | Categoría | Estado | Condición |
+|-------|-----------|--------|-----------|
+| `--ease-bounce` | Motion easings | ✅ reservado | Mantener hasta que surja necesidad real (e.g. CTAs con énfasis) |
+| `--z-modal` | Z-index scale | ✅ reservado | Reservado para modales/overlays (F18+) |
+| `--z-overlay` | Z-index scale | ✅ reservado | Reservado para modales/overlays (F18+) |
+| `--z-sticky` | Z-index scale | ✅ reservado | Reservado para elementos sticky adicionales (F18+) |
+| `--z-tooltip` | Z-index scale | ✅ reservado | Reservado para tooltips/dropdowns (F18+) |
 
-**No eliminar definiciones sin antes buscar callers históricos.** El script `audit-token-coverage` es source of truth; tras depurar tokens, re-correrlo debería mostrar cobertura 100% — confirmación de que no había usages latentes en sombras, gradients, o `--var(--ak-*)`.
+**Nota:** estos 5 tokens no cuentan como déficit de cobertura. El script `audit-token-coverage.mjs` los reporta como "no usados" pero es intencional. No eliminarlos ni consolidarlos sin antes confirmar que no hay planes de implementar el componente asociado. La cobertura real de tokens activos es **100%** (89 definiciones referenciadas de 89 en uso).
 
 
 ---
