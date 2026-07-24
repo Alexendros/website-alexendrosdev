@@ -63,29 +63,38 @@ test.describe("TE-3.3 · Computed style locks (token application)", () => {
   test("/contacto textarea.ak-textarea respeta min-height === 140px", async ({ page }) => {
     await page.goto("/contacto");
     await page.waitForLoadState("networkidle");
+    // El textarea vive en step 1 del MultiStepForm. Primero rellenamos
+    // step 0 (nombre + email) vía getByPlaceholder (evita honeypot)
+    // y avanzamos.
+    await page.getByPlaceholder("Tu nombre").fill("Test User");
+    await page.getByPlaceholder("tu@email.com").fill("test@example.com");
+    await page.getByRole("button", { name: /Siguiente/ }).click();
+    await expect(
+      page.locator("textarea").first(),
+      "textarea debe existir en /contacto step 1",
+    ).toBeVisible();
     const textarea = page.locator("textarea").first();
-    await expect(textarea, "textarea debe existir en /contacto").toHaveCount(1);
     const minHeight = await textarea.evaluate((el) => getComputedStyle(el).minHeight);
     expect(minHeight, "min-height debe ser literal 140px (cierre DUP ak-textarea Opción A)").toBe(
       "140px",
     );
   });
 
-  test("/proyectos tile.stat NO usa color #fff hardcoded, usa token hsl(...) (HC-1 lock)", async ({
+  test("/proyectos tile-metric b NO usa color #fff hardcoded, usa token hsl(...) (HC-1 lock)", async ({
     page,
   }) => {
     await page.goto("/proyectos");
     await page.waitForLoadState("networkidle");
-    // Strict: NO skip condicional. /proyectos debe tener tiles renderizados;
-    // si no los tiene, el test debe ROMPER (no enmascarar la regresión).
-    const stats = page.locator(".ak-tile-stat");
-    const count = await stats.count();
-    expect(count, "/proyectos debe tener al menos 1 .ak-tile-stat visible").toBeGreaterThan(0);
-    const color = await stats.first().evaluate((el) => getComputedStyle(el).color);
+    // ProjectsList renderiza .ak-tile-metric b (no .ak-tile-stat que se usaba
+    // en la versión anterior con overlay). Ver https://github.com/Iniciativas-Alexendros/website-alexendrosdev/pull/126
+    const metric = page.locator(".ak-tile-metric b").first();
+    await expect(
+      metric,
+      "/proyectos debe tener al menos 1 .ak-tile-metric b visible",
+    ).toBeVisible();
+    const color = await metric.evaluate((el) => getComputedStyle(el).color);
     // El color debe resolver a un hsl(...) — #fff hex es PROHIBIDO post-HC-1.
-    expect(color, "ak-tile-stat debe usar token var(--text-on-primary), no #fff").not.toBe(
-      "rgb(255, 255, 255)",
-    );
-    expect(color, "ak-tile-stat debe usar HSL function (token system)").toMatch(/^hsl\(/);
+    expect(color, "ak-tile-metric b debe usar token, no #fff").not.toBe("rgb(255, 255, 255)");
+    expect(color, "ak-tile-metric b debe usar HSL function (token system)").toMatch(/^hsl\(/);
   });
 });

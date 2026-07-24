@@ -11,7 +11,7 @@
 :where(a):is(
   .bg-primary, .bg-cta, .text-on-primary,
   .bg-highlight, .bg-sunken,
-  .ak-btn-primary, .ak-btn-secondary,
+  .ak-btn-primary,
   .ak-tier-pro,
   .ak-toggle button.on,
   .ak-tag.on, .ak-chip.on,
@@ -23,7 +23,7 @@
 :where(a):is(
   .bg-primary, .bg-cta, .text-on-primary,
   .bg-highlight, .bg-sunken,
-  .ak-btn-primary, .ak-btn-secondary,
+  .ak-btn-primary,
   .ak-tier-pro,
   .ak-toggle button.on,
   .ak-tag.on, .ak-chip.on,
@@ -32,6 +32,12 @@
 ):hover {
   color: hsl(var(--text-on-primary));
 }
+
+/* ak-btn-secondary on <a> needs its own dark text (not white from cascade fix above).
+   This unlayered rule (specificity 0,2,0) beats the unlayered `a { color }` (0,0,1)
+   from design-tokens.css without forcing white text. */
+:where(a):is(.ak-btn-secondary) { color: hsl(var(--text-primary)); }
+:where(a):is(.ak-btn-secondary):hover { color: hsl(var(--text-primary)); }
 
 @layer components {
 
